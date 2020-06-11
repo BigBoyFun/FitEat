@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".products_fragment">
+
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/custom_gray"
+        android:layoutDirection="rtl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/products_recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+    <Button
+        android:id="@+id/floatingActionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/custom_red"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/ic_add_black_24dp"
+        android:foregroundGravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/cardview_light_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/current_kcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2100/"
+            android:textColor="@color/custom_red"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/kcal_user_pref"
+            app:layout_constraintEnd_toStartOf="@+id/current_pro"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView21">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/current_pro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="160/"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/pro_user_pref"
+            app:layout_constraintEnd_toStartOf="@+id/current_fat"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/current_kcal"
+            app:layout_constraintTop_toTopOf="@+id/current_kcal">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/current_fat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="45/"
+            android:textColor="@android:color/holo_orange_light"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/fat_uset_pref"
+            app:layout_constraintEnd_toStartOf="@+id/current_carbo"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/current_pro"
+            app:layout_constraintTop_toTopOf="@+id/current_kcal">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/current_carbo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="450/"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/carbo_user_pref"
+            app:layout_constraintEnd_toStartOf="@+id/settings_nutrients"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/current_fat"
+            app:layout_constraintTop_toTopOf="@+id/current_kcal">
+
+        </TextView>
+
+        <Button
+            android:id="@+id/settings_nutrients"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/ic_baseline_settings_24"
+            app:layout_constraintBottom_toBottomOf="@+id/current_carbo"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/current_carbo" />
+
+        <TextView
+            android:id="@+id/kcal_user_pref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="100"
+            android:textColor="@android:color/holo_green_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/current_kcal"
+            app:layout_constraintStart_toStartOf="@+id/current_kcal"
+            app:layout_constraintTop_toBottomOf="@+id/current_kcal" />
+
+        <TextView
+            android:id="@+id/pro_user_pref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@android:color/holo_green_light"
+            app:layout_constraintBottom_toBottomOf="@+id/kcal_user_pref"
+            app:layout_constraintEnd_toEndOf="@+id/current_pro"
+            app:layout_constraintStart_toStartOf="@+id/current_pro"
+            app:layout_constraintTop_toBottomOf="@+id/current_pro" />
+
+        <TextView
+            android:id="@+id/fat_uset_pref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@android:color/holo_green_light"
+            app:layout_constraintBottom_toBottomOf="@+id/pro_user_pref"
+            app:layout_constraintEnd_toEndOf="@+id/current_fat"
+            app:layout_constraintStart_toStartOf="@+id/current_fat"
+            app:layout_constraintTop_toBottomOf="@+id/current_fat" />
+
+        <TextView
+            android:id="@+id/carbo_user_pref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@android:color/holo_green_light"
+            app:layout_constraintBottom_toBottomOf="@+id/fat_uset_pref"
+            app:layout_constraintEnd_toEndOf="@+id/current_carbo"
+            app:layout_constraintStart_toStartOf="@+id/current_carbo"
+            app:layout_constraintTop_toBottomOf="@+id/current_carbo" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Kcal"
+            android:textColor="@color/custom_red"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/current_kcal"
+            app:layout_constraintStart_toStartOf="@+id/current_kcal"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="Protein"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/current_kcal"
+            app:layout_constraintEnd_toEndOf="@+id/current_pro"
+            app:layout_constraintStart_toStartOf="@+id/current_pro"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fat"
+            android:textColor="@android:color/holo_orange_light"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/current_pro"
+            app:layout_constraintEnd_toEndOf="@+id/current_fat"
+            app:layout_constraintStart_toStartOf="@+id/current_fat"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Carbo"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/current_fat"
+            app:layout_constraintEnd_toEndOf="@+id/current_carbo"
+            app:layout_constraintStart_toStartOf="@+id/current_carbo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

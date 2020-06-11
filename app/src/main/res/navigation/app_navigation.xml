@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/home_fragment">
+
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.policinski.dev.fiteat.home_fragment"
+        android:label="fragment_home_fragment"
+        tools:layout="@layout/fragment_home_fragment" >
+        <action
+            android:id="@+id/action_home_fragment_to_meals_fragment"
+            app:destination="@id/meals_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanner_fragment"
+        android:name="com.policinski.dev.fiteat.scanner_fragment"
+        android:label="fragment_scanner_fragment"
+        tools:layout="@layout/fragment_scanner_fragment" />
+    <fragment
+        android:id="@+id/meals_fragment"
+        android:name="com.policinski.dev.fiteat.meals_fragment"
+        android:label="fragment_meals_fragment"
+        tools:layout="@layout/fragment_meals_fragment" >
+        <action
+            android:id="@+id/action_meals_fragment_to_products_fragment"
+            app:destination="@id/products_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/products_fragment"
+        android:name="com.policinski.dev.fiteat.products_fragment"
+        android:label="fragment_products_fragment"
+        tools:layout="@layout/fragment_products_fragment" >
+        <action
+            android:id="@+id/action_products_fragment_to_scanner_fragment"
+            app:destination="@id/scanner_fragment" />
+    </fragment>
+</navigation>

@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Fit&amp;Eat</string>
+    <string name="home">Home</string>
+    <string name="products">Products</string>
+    <string name="meals">Meals</string>
+    <string name="scanner">Scanner</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cant_insert_product">Cant insert new product!</string>
+    <string name="success">Success!</string>
+    <string name="add_new_product">Add new product.</string>
+    <string name="register">Register</string>
+    <string name="added_to_day">Product is added to current day</string>
+    <string name="cant_add_pro_to_day">Cant add product to current day :(</string>
+    <string name="month_01">January</string>
+    <string name="month_02">February</string>
+    <string name="month_03">March</string>
+    <string name="month_04">April</string>
+    <string name="month_05">May</string>
+    <string name="month_06">June</string>
+    <string name="month_07">July</string>
+    <string name="month_08">August</string>
+    <string name="month_09">September</string>
+    <string name="moth_10">October</string>
+    <string name="month_11">November</string>
+    <string name="month_12">December</string>
+</resources>

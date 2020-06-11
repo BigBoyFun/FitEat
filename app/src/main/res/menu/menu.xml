@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_fragment"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home_gray_24dp" />
+
+    <item
+        android:id="@+id/meals_fragment"
+        android:title="@string/meals"
+        android:icon="@drawable/ic_restaurant_menu_grey_24dp"/>
+
+    <item
+        android:id="@+id/products_fragment"
+        android:title="@string/products"
+        android:icon="@drawable/ic_receipt_gray_24dp"/>
+
+    <item
+        android:id="@+id/scanner_fragment"
+        android:title="@string/scanner"
+        android:icon="@drawable/scnnaer_qr__gray_icon"/>
+</menu>
