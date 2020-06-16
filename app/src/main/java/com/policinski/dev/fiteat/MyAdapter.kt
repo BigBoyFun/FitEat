@@ -1,7 +1,7 @@
 package com.policinski.dev.fiteat
 
 import android.app.Dialog
-import android.content.ContextWrapper
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -11,9 +11,9 @@ import android.view.*
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.add_product_to_day_layout.*
+import kotlinx.android.synthetic.main.delate_layout.*
 import kotlinx.android.synthetic.main.product_row_view.view.*
 import java.time.LocalDate
-import kotlin.coroutines.coroutineContext
 
 class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
@@ -40,19 +40,22 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
         val SUM_FAT = "SumFat"
         val SUM_CARBO = "SumCarbo"
 
+        private val deleteDialog = Dialog(itemView.context)
+
         fun bind(product: Product){
 
             val db = MyDatabaseHelper(itemView.context)
 
             //show nutrients of current product
-            name.text = product.Name
-            weight.text = "${product.Weight}g."
-            kcal.text = "Kc: ${product.Kcal}"
-            carbo.text = "Ca: ${product.Carbo}"
-            fat.text = "Fa: ${product.Fat}"
-            pro.text = "Pr: ${product.Protein}"
+            name.text = product.name
+            weight.text = "${product.weight}g."
+            kcal.text = "Kc: ${product.kcal}"
+            carbo.text = "Ca: ${product.carbo}"
+            fat.text = "Fa: ${product.fat}"
+            pro.text = "Pr: ${product.protein}"
             favorite.setImageResource(if (product.favorite == 1) R.drawable.ic_baseline_favorite_24 else R.drawable.ic_baseline_favorite_border_24) //set background for favorite status
 
+            //make product favorite or not
             favorite.setOnClickListener(){
 
                 db.updateFavorite(product.id,product.favorite)
@@ -68,7 +71,20 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
             }
 
-            delate.setOnClickListener{db.deleteProduct(product.id)}
+            //dialog - need permission for delete selected product from list
+            delate.setOnClickListener{
+
+                val deleteDialog = Dialog(itemView.context)
+                deleteDialog.setContentView(R.layout.delate_layout)
+                deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                deleteDialog.delate_dialog_product_name_tv.text = product.name
+                deleteDialog.delate_dialog_delate_but.setOnClickListener { db.deleteProduct(product.id); deleteDialog.dismiss()}
+                deleteDialog.delate_but_cancel.setOnClickListener { deleteDialog.dismiss() }
+
+                deleteDialog.show()
+
+            }
 
             addToDay.setOnClickListener{
                 val dialog = Dialog(itemView.context)
@@ -99,14 +115,14 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                 for (item in array) item.setOnClickListener(this)
 
                 //set text on all textViews and progress on seekBar, by current product specification
-                productName.text = product.Name
-                calculateKcal.text = product.Kcal.toString()
-                calculatePro.text = product.Protein.toString()
-                calculateFat.text = product.Fat.toString()
-                calculateCarbo.text = product.Carbo.toString()
-                input_weight.setText("${product.Weight}")
-                read_weight_tv.text = "${product.Weight}"
-                seekBar.progress = product.Weight
+                productName.text = product.name
+                calculateKcal.text = product.kcal.toString()
+                calculatePro.text = product.protein.toString()
+                calculateFat.text = product.fat.toString()
+                calculateCarbo.text = product.carbo.toString()
+                input_weight.setText("${product.weight}")
+                read_weight_tv.text = "${product.weight}"
+                seekBar.progress = product.weight
 
                 // setting progress on seekBar by writing in editText
                 input_weight.addTextChangedListener(object : TextWatcher{
@@ -153,10 +169,10 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                         fromUser: Boolean
                     ) {
                         read_weight_tv.setText("$progress g")
-                        calculateKcal.text = ((product.Kcal * progress) / product.Weight).toString()
-                        calculatePro.text = "%.2f".format((product.Protein * progress) / product.Weight).replace(',','.')
-                        calculateFat.text = "%.2f".format((product.Fat * progress) / product.Weight).replace(',','.')
-                        calculateCarbo.text = "%.2f".format((product.Carbo * progress) / product.Weight).replace(',','.')
+                        calculateKcal.text = ((product.kcal * progress) / product.weight).toString()
+                        calculatePro.text = "%.2f".format((product.protein * progress) / product.weight).replace(',','.')
+                        calculateFat.text = "%.2f".format((product.fat * progress) / product.weight).replace(',','.')
+                        calculateCarbo.text = "%.2f".format((product.carbo * progress) / product.weight).replace(',','.')
                     }
 
                     override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -178,7 +194,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                 //add meal to current day and close dialog
                 dialog.ok_bt.setOnClickListener{
                     db.addProductToDay(data,
-                        product.Name,
+                        product.name,
                         calculateKcal.text.toString().toInt(),
                         calculatePro.text.toString().replace(',','.').toDouble(),
                         calculateCarbo.text.toString().replace(',','.').toDouble(),
@@ -242,7 +258,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
                     for (s: Product in itemList){
 
-                        if (s.Name.toLowerCase().contains(charString.toLowerCase())){
+                        if (s.name.toLowerCase().contains(charString.toLowerCase())){
                             filterList.add(s)
                         }
                     }

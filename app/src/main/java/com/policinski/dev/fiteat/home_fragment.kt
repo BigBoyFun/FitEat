@@ -1,18 +1,13 @@
 package com.policinski.dev.fiteat
 
 import android.app.DatePickerDialog
-import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.*
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.day_sum_kcal
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.selected_date_tx
@@ -44,6 +39,9 @@ class home_fragment : Fragment() {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_home_fragment, container, false)
 
+//        val db = MyDatabaseHelper(requireContext())////////////////////////////////////////////////////////////////////////////////////////// FOR DELETE!!!!!!!!!!!!!!
+//        v.textView19.setOnClickListener{db.addRowWeight()} ////////////////////////////////////////////////////////////////////////////////// FOR DELETE!!!!!!!!!!!!!!!!
+
         val date = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDate.now()
         } else {
@@ -52,7 +50,6 @@ class home_fragment : Fragment() {
 
         val nextDay = v.next_date_bt
         val backDay = v.bcak_date_bt
-        val calenderDialog = v.calender_dialog
         var selectedDayView = v.selected_date_tx
 
         val c = Calendar.getInstance()
@@ -72,7 +69,7 @@ class home_fragment : Fragment() {
 
         selectedDayView.text = "${date.dayOfMonth} ${monthsArray[date.monthValue - 1]} ${date.year}"
 
-        calenderDialog.setOnClickListener{
+        selectedDayView.setOnClickListener{
 
             val datePickerDialog: DatePickerDialog = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{view, year, mothOfYear, dayOfMonth ->
 
@@ -84,7 +81,7 @@ class home_fragment : Fragment() {
                 showDayPropertis(v,"$year-$month-$day")
                 showMeals(v,"$year-$month-$day")
 
-                
+
             },year,month,day)
 
             datePickerDialog.show()
@@ -130,8 +127,6 @@ class home_fragment : Fragment() {
             }
         }
 
-        Toast.makeText(requireContext(), "$date", Toast.LENGTH_SHORT).show()
-
         showMeals(v,date.toString())
 
         return v
@@ -142,7 +137,6 @@ class home_fragment : Fragment() {
         //init DB, SharedPref, read nutrients from DB to array
         val db = MyDatabaseHelper(requireContext())
         val nutrientsSumArray = db.readDayTable(date)
-        val sharedPreferences = requireContext().getSharedPreferences(MAIN_PREF,0)
 
         //find view in homeFragment
         val daySumKcal = v?.day_sum_kcal
@@ -153,19 +147,29 @@ class home_fragment : Fragment() {
         val progressInPercent = v?.progress_in_percent
 
         //read pref from sharedPreferences
-        val prefKcal = sharedPreferences.getLong(PREF_KCAL,0)
-        val prefPro = sharedPreferences.getLong(PREF_PRO,0)
-        val prefFat = sharedPreferences.getLong(PREF_FAT,0)
-        val prefCarbo = sharedPreferences.getLong(PREF_CARBO,0)
+        var prefkcal = 0
+        var prefPro = 0.0
+        var prefFat = 0.0
+        var prefCarbo = 0.0
+
+        val cursor = db.readDailyGoalNutrients(date)
+
+        if (cursor.moveToFirst()){
+            prefkcal = cursor.getInt(cursor.getColumnIndex("PREF_KCAL"))
+            prefPro = cursor.getDouble(cursor.getColumnIndex("PREF_PRO"))
+            prefFat = cursor.getDouble(cursor.getColumnIndex("PREF_FAT"))
+            prefCarbo = cursor.getDouble(cursor.getColumnIndex("PREF_CARBO"))
+
+        }
 
         //set value for view in homeFragment(from db and from sharedPref)
-        daySumKcal?.text = "${nutrientsSumArray[0].toInt()}/$prefKcal"
-        daySumPro?.text = "${nutrientsSumArray[1]}/$prefPro"
-        daySumFat?.text = "${nutrientsSumArray[2]}/$prefFat"
-        daySumCarbo?.text = "${nutrientsSumArray[3]}/$prefCarbo"
-        circularProgressBar?.progressMax = prefKcal.toFloat()
+        daySumKcal?.text = "${nutrientsSumArray[0].toInt()}/$prefkcal"
+        daySumPro?.text = "${nutrientsSumArray[1]}/${prefPro.toInt()}"
+        daySumFat?.text = "${nutrientsSumArray[2]}/${prefFat.toInt()}"
+        daySumCarbo?.text = "${nutrientsSumArray[3]}/${prefCarbo.toInt()}"
+        circularProgressBar?.progressMax = prefkcal.toFloat()
         circularProgressBar?.progress = nutrientsSumArray[0].toFloat()
-        val kcalProgress= (nutrientsSumArray[0] / (prefKcal / 100)).toInt()
+        val kcalProgress= (nutrientsSumArray[0] / (prefkcal / 100)).toInt()
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
              if (kcalProgress > 100) {
                  progressInPercent?.setTextColor(resources.getColor(R.color.custom_red,null))
@@ -179,9 +183,7 @@ class home_fragment : Fragment() {
 
     private fun showMeals(v: View,date: String){
 
-        var mealList = mutableMapOf<Int,MutableList<Product>>()
         var calculatedMealNutrients: MutableList<Product> = mutableListOf()
-
 
         val db = MyDatabaseHelper(requireContext())
 
@@ -189,19 +191,17 @@ class home_fragment : Fragment() {
             var product: Product = Product()
             val cursor = db.readMealFromDay(date, i)
 
-//            mealList.put(i,cursor)
-
             for (item in cursor){
-                product.Kcal += item.Kcal
-                product.Carbo += item.Carbo
-                product.Fat += item.Fat
-                product.Protein += item.Protein
+                product.kcal += item.kcal
+                product.carbo += item.carbo
+                product.fat += item.fat
+                product.protein += item.protein
+                product.weight += item.weight
             }
 
             calculatedMealNutrients.add(product)
 
         }
-
 
         v.recycle_view_meal.apply {
             layoutManager = LinearLayoutManager(requireContext())

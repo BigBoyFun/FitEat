@@ -26,12 +26,13 @@
                 android:id="@+id/product_kcal_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:text="K: 174"
                 android:textColor="@android:color/holo_red_light"
                 app:layout_constraintBottom_toBottomOf="@+id/product_protein_row"
                 app:layout_constraintEnd_toStartOf="@+id/product_protein_row"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/product_name_row"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/product_protein_row" />
 
             <TextView
@@ -63,16 +64,17 @@
 
             <TextView
                 android:id="@+id/product_name_row"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
                 android:maxEms="30"
                 android:text="Kurczak"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/product_row_weight_tv"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/product_row_weight_tv" />
 
             <TextView
                 android:id="@+id/product_fat_row"
@@ -113,12 +115,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:text="100g"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/product_name_row"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/product_name_row"
-                app:layout_constraintTop_toTopOf="@+id/product_name_row" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4"

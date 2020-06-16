@@ -7,16 +7,16 @@ class Meal (productList: MutableList<Product>, name: String) {
     fun nutrientsMeal(nutrientsList: MutableList<Product>): Product{
 
         var mealNutrients = Product()
-        mealNutrients.Name = name
+        mealNutrients.name = name
 
         for (item in nutrientsList){
 
             mealNutrients.apply {
-                Kcal += item.Kcal
-                Protein += item.Protein
-                Fat += item.Fat
-                Carbo += item.Carbo
-                Weight += item.Weight
+                kcal += item.kcal
+                protein += item.protein
+                fat += item.fat
+                carbo += item.carbo
+                weight += item.weight
             }
 
         }

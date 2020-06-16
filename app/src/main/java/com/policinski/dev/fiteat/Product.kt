@@ -1,14 +1,57 @@
 package com.policinski.dev.fiteat
 
 data class Product(
-    var Name: String = "",
-    var Kcal: Int = 0,
-    var Protein: Double= 0.0,
-    var Carbo: Double = 0.0,
-    var Fat: Double = 0.0,
-    var Weight: Int = 0,
+    var name: String = "",
+    var kcal: Int = 0,
+    var protein: Double= 0.0,
+    var carbo: Double = 0.0,
+    var fat: Double = 0.0,
+    var weight: Int = 0,
     var favorite: Int = 0,
     val id: Int = 0
-) {
+)
+
+class ProductV2(
+    name_parm:String = "",
+    kcal_parm:Int = 0,
+    protein_parm:Double = 0.0,
+    carbo_parm:Double = 0.0,
+    fat_parm:Double = 0.0,
+    weight_parm:Int = 0,
+    favorite_parm: Int = 0,
+    id_parm: Int = 0
+){
+    var Name = name_parm
+        set(value) {
+            field = if (value.isEmpty()) value else "Item"
+        }
+
+    var kcal = kcal_parm
+        set(value) {
+            field = value ?: 0
+        }
+
+    var protein = protein_parm
+        set(value) {
+            field = value ?: 0.0
+        }
+
+    var carbo = carbo_parm
+        set(value) {
+            field = value ?: 0.0
+        }
+
+    var fat = fat_parm
+        set(value) {
+            field = value ?: 0.0
+        }
+
+    var weight = weight_parm
+        set(value) {
+            field = value ?: 0
+        }
+
+    var favorite = favorite_parm
+    var id = id_parm
 
 }

@@ -25,10 +25,10 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
         fun bind(product: Product){
 
-            mealRowKcal.text = product.Kcal.toString()
-            mealRowCarbo.text = product.Carbo.toString()
-            mealRowFat.text = product.Fat.toString()
-            mealRowPro.text = product.Protein.toString()
+            mealRowKcal.text = product.kcal.toString()
+            mealRowCarbo.text = "%.2f".format(product.carbo).replace(',','.')
+            mealRowFat.text = "%.2f".format(product.fat).replace(',','.')
+            mealRowPro.text = "%.2f".format(product.protein).replace(',','.')
 
 
         }
