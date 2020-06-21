@@ -14,9 +14,6 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
 
-        val expandableList = itemView.expandable_list
-
-        val expandableListAdapter = ExpandableListAdapter()
         val mealRowKcal = itemView.meal_row_kcal_tv
         val mealRowPro = itemView.meal_row_pro_tv
         val mealRowFat = itemView.meal_row_fat_tv

@@ -169,7 +169,7 @@ class home_fragment : Fragment() {
         daySumCarbo?.text = "${nutrientsSumArray[3]}/${prefCarbo.toInt()}"
         circularProgressBar?.progressMax = prefkcal.toFloat()
         circularProgressBar?.progress = nutrientsSumArray[0].toFloat()
-        val kcalProgress= (nutrientsSumArray[0] / (prefkcal / 100)).toInt()
+        val kcalProgress= (nutrientsSumArray[0] / (prefkcal / 100))
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
              if (kcalProgress > 100) {
                  progressInPercent?.setTextColor(resources.getColor(R.color.custom_red,null))
@@ -177,7 +177,7 @@ class home_fragment : Fragment() {
                  progressInPercent?.setTextColor(resources.getColor(R.color.colorAccent,null))
              }
         }
-        progressInPercent?.text = "$kcalProgress%"
+        progressInPercent?.text = "%.2f".format(kcalProgress).replace(',','.')
 
     }
 

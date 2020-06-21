@@ -106,7 +106,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/design_default_color_background"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/day_sum_fat"
                 app:layout_constraintDimensionRatio="h,2.5:1"
                 app:layout_constraintEnd_toEndOf="@+id/textView19"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -123,7 +122,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/design_default_color_background"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/day_sum_pro"
                 app:layout_constraintDimensionRatio="h,2.5:1"
                 app:layout_constraintEnd_toEndOf="@+id/textView30"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -134,11 +132,9 @@
                 android:id="@+id/day_sum_carbo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:text="142/200"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/progress_in_percent"
                 app:layout_constraintEnd_toEndOf="@+id/textView19"
                 app:layout_constraintStart_toStartOf="@+id/textView19"
                 app:layout_constraintTop_toBottomOf="@+id/textView19" />
@@ -150,9 +146,9 @@
                 android:text="34/50"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
                 app:layout_constraintEnd_toEndOf="@+id/textView20"
-                app:layout_constraintStart_toStartOf="@+id/textView20" />
+                app:layout_constraintStart_toStartOf="@+id/textView20"
+                app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
             <TextView
                 android:id="@+id/day_sum_pro"
@@ -161,10 +157,10 @@
                 android:text="144/160"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
                 app:layout_constraintEnd_toEndOf="@+id/textView25"
                 app:layout_constraintHorizontal_bias="0.363"
-                app:layout_constraintStart_toStartOf="@+id/textView25" />
+                app:layout_constraintStart_toStartOf="@+id/textView25"
+                app:layout_constraintTop_toBottomOf="@+id/textView25" />
 
             <Button
                 android:id="@+id/textView30"
@@ -184,11 +180,9 @@
                 android:id="@+id/day_sum_kcal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:text="2500/3500"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/progress_in_percent"
                 app:layout_constraintEnd_toEndOf="@+id/textView30"
                 app:layout_constraintStart_toStartOf="@+id/textView30"
                 app:layout_constraintTop_toBottomOf="@+id/textView30" />
