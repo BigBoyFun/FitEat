@@ -41,4 +41,7 @@ dependencies {
 
     //add Circle progress bar
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
+
+    //add expandable list library
+    implementation 'com.diegodobelo.expandingview:expanding-view:0.9.4'
 }

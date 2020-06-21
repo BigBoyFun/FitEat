@@ -35,7 +35,7 @@
         android:background="@color/custom_red"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="@drawable/ic_add_black_24dp"
+        android:foreground="@drawable/ic_add_white_24dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

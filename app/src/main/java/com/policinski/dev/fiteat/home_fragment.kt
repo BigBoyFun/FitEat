@@ -184,12 +184,15 @@ class home_fragment : Fragment() {
     private fun showMeals(v: View,date: String){
 
         var calculatedMealNutrients: MutableList<Product> = mutableListOf()
+        var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
 
         val db = MyDatabaseHelper(requireContext())
 
         for (i in 1..8) {
             var product: Product = Product()
             val cursor = db.readMealFromDay(date, i)
+
+            allDayMealListProduct.add(cursor)
 
             for (item in cursor){
                 product.kcal += item.kcal
@@ -209,7 +212,7 @@ class home_fragment : Fragment() {
             adapter = mealAdapter
         }
 
-        mealAdapter.submitList(calculatedMealNutrients)
+        mealAdapter.submitList(calculatedMealNutrients, allDayMealListProduct)
 
     }
 

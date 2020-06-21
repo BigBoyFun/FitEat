@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="custom_gray">#D7D7D7</color>
     <color name="custom_red">#FF5252</color>
+    <color name="separatorColor">#18102C</color>
 </resources>

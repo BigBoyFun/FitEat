@@ -187,8 +187,9 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
                 val protein = cursor.getDouble(cursor.getColumnIndex("Protein"))
                 val carbo = cursor.getDouble(cursor.getColumnIndex("Carbohydrates"))
                 val weight = cursor.getInt(cursor.getColumnIndex("Weight"))
+                val id = cursor.getInt(cursor.getColumnIndex("ID_date"))
 
-                productList.add(Product(name,kcal,protein,carbo,fat,weight))
+                productList.add(Product(name,kcal,protein,carbo,fat,weight,id = id))
 
             }while (cursor.moveToNext())
         }
@@ -211,6 +212,11 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
 
     fun deleteProduct(id: Int) {
         val query = "delete from $TABLE_NAME where $COL_ID_ING = $id"
+        dbWrite.execSQL(query)
+    }
+
+    fun deleteProductFromMeal(id: Int) {
+        val query = "delete from $DAY_TABLE_NAME where $COL_ID_DATE = $id"
         dbWrite.execSQL(query)
     }
 
