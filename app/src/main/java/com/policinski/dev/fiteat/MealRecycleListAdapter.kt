@@ -1,12 +1,12 @@
 package com.policinski.dev.fiteat
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
@@ -107,6 +107,42 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
             (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).setOnClickListener{
                 Toast.makeText(view.context, "Edit", Toast.LENGTH_SHORT).show()
+
+                //create dialog for editing product from selected day and meal
+                val editDialog = Dialog(itemView.context)
+                editDialog.setContentView(R.layout.product_settings_dialog)
+                editDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                //init buttons and editText's
+                val butOK = editDialog.findViewById(R.id.ok_product_settings_dialog) as Button
+                val butCancel = editDialog.findViewById(R.id.cancel_product_settings_dialog) as Button
+                val editKcal = editDialog.findViewById(R.id.kcal_product_settings_dialog) as EditText
+                val editPro = editDialog.findViewById(R.id.pro_user_product_settings_dialog) as EditText
+                val editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog) as EditText
+                val editCarbo = editDialog.findViewById(R.id.carbo_user_product_settings_dialog) as EditText
+
+                //set current nutrients from selected product
+                editKcal.setText("${product.kcal}")
+                editPro.setText("${product.protein}")
+                editFat.setText("${product.fat}")
+                editCarbo.setText("${product.carbo}")
+
+                //save new product parameter
+                butOK.setOnClickListener {
+                    myDB.editProductNutrients(
+                        editKcal.text.toString().toInt(),
+                        editPro.text.toString().toInt(),
+                        editFat.text.toString().toInt(),
+                        editCarbo.text.toString().toInt(),
+                        product.id
+                    )
+
+                    editDialog.dismiss()
+                }
+
+                //dismiss dialog
+                butCancel.setOnClickListener{ editDialog.dismiss() }
+
             }
         }
 

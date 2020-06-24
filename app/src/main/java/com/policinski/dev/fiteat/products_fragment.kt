@@ -1,7 +1,6 @@
 package com.policinski.dev.fiteat
 
 import android.app.Dialog
-import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -14,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.add_dialog_layout.*
-import kotlinx.android.synthetic.main.delate_layout.*
 import kotlinx.android.synthetic.main.fragment_products_fragment.view.*
 import kotlinx.android.synthetic.main.fragment_products_fragment.view.current_kcal
 import java.time.LocalDate
@@ -138,10 +136,10 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener {
         nutrientsSettingsDialog.setContentView(R.layout.nutrients_settings_dialog)
         nutrientsSettingsDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        var kcal = nutrientsSettingsDialog.findViewById<EditText>(R.id.kcal_user_pref_et)
-        var carbo = nutrientsSettingsDialog.findViewById<EditText>(R.id.carbo_user_pref_et)
-        var fat = nutrientsSettingsDialog.findViewById<EditText>(R.id.fat_user_pref_et)
-        var pro = nutrientsSettingsDialog.findViewById<EditText>(R.id.pro_user_pref_et)
+        var kcal = nutrientsSettingsDialog.findViewById<EditText>(R.id.kcal_product_settings_dialog)
+        var carbo = nutrientsSettingsDialog.findViewById<EditText>(R.id.carbo_user_product_settings_dialog)
+        var fat = nutrientsSettingsDialog.findViewById<EditText>(R.id.fat_user_product_settings_dialog)
+        var pro = nutrientsSettingsDialog.findViewById<EditText>(R.id.pro_user_product_settings_dialog)
 
         val readPref = requireContext().getSharedPreferences(MAIN_PREF,0)
         kcal.setText("${readPref.getInt(PREF_KCAL,0)}")
@@ -150,7 +148,7 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener {
         pro.setText("${readPref.getInt(PREF_PRO,0)}")
 
 
-        val saveBt = nutrientsSettingsDialog.findViewById<Button>(R.id.nutrients_save_data_bt)
+        val saveBt = nutrientsSettingsDialog.findViewById<Button>(R.id.ok_product_settings_dialog)
         saveBt.setOnClickListener{
 
             val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences(MAIN_PREF, 0 )

@@ -100,6 +100,13 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
             Toast.makeText(context, context.getString(R.string.added_to_day), Toast.LENGTH_SHORT).show()
     }
 
+    fun editProductNutrients(kcal: Int, protein: Int, fat: Int, carbo: Int,id: Int){
+
+        val query = "update $TABLE_NAME set $COL_KCAL = $kcal, $COL_PROTEIN = $protein, $COL_FAT = $fat, $COL_CARBO = $carbo  where $COL_ID_DATE = $id"
+        dbWrite?.execSQL(query)
+
+    }
+
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
     }
