@@ -43,7 +43,7 @@
                 android:layout_marginTop="8dp"
                 android:text="Kcal"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/textView4"
+                app:layout_constraintStart_toStartOf="@+id/textView5"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
@@ -54,7 +54,7 @@
                 android:text="Protein"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/textView13"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -63,8 +63,8 @@
                 android:layout_marginTop="8dp"
                 android:text="Carbo"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/textView5"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintStart_toStartOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -73,9 +73,8 @@
                 android:layout_marginTop="8dp"
                 android:text="Fat"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/textView3"
                 app:layout_constraintStart_toStartOf="@+id/textView13"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <TextView
                 android:id="@+id/textView"

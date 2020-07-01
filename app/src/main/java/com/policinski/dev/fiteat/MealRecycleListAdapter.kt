@@ -3,22 +3,22 @@ package com.policinski.dev.fiteat
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
 import kotlinx.android.synthetic.main.meal_row_layout.view.*
-import java.util.zip.Inflater
 
 class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     var mealNutrientsSumList: MutableList<Product> = mutableListOf()
     var allDayMealListProduckt: MutableList<MutableList<Product>> = mutableListOf()
 
-    class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val mealRowTitleMeal = itemView.meal_row_title_meal
         val mealRowKcal = itemView.meal_row_kcal_tv
@@ -26,6 +26,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         val mealRowFat = itemView.meal_row_fat_tv
         val mealRowCarbo = itemView.meal_row_carbo_tv
         val expandableListView = itemView.expanding_list
+        val constraintLayout =  itemView.constraintLayout_meal_row
         val myDB = MyDatabaseHelper(itemView.context)
         var title = "Meal"
         lateinit var item: ExpandingItem
@@ -39,24 +40,25 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
             //set name for meal
             when(position){
-                0 -> title = "1.Breakfast"
-                1 -> title = "2.Second breakfast"
-                2 -> title = "3.Dinner"
-                3 -> title = "4.Dessert"
-                4 -> title = "5.Tea"
-                5 -> title = "6.Supper"
-                6 -> title = "7.Snacks"
-                7 -> title = "8.Training"
+                0 -> title = itemView.context.getString(R.string.breakfast_1)
+                1 -> title = itemView.context.getString(R.string.second_breakfast_2)
+                2 -> title = itemView.context.getString(R.string.dinner_3)
+                3 -> title = itemView.context.getString(R.string.dessert_4)
+                4 -> title = itemView.context.getString(R.string.tea_5)
+                5 -> title = itemView.context.getString(R.string.supper_6)
+                6 -> title = itemView.context.getString(R.string.snacks_7)
+                7 -> title = itemView.context.getString(R.string.training_8)
             }
 
             mealRowTitleMeal.text = title
-            mealRowKcal.text = product.kcal.toString()
-            mealRowCarbo.text = "%.2f".format(product.carbo).replace(',','.')
-            mealRowFat.text = "%.2f".format(product.fat).replace(',','.')
-            mealRowPro.text = "%.2f".format(product.protein).replace(',','.')
+            mealRowKcal.text = "K: " + product.kcal.toString()
+            mealRowCarbo.text = "C: %.1f".format(product.carbo).replace(',','.')
+            mealRowFat.text = "F: %.1f".format(product.fat).replace(',','.')
+            mealRowPro.text = "P: %.1f".format(product.protein).replace(',','.')
 
             if (expandableListView.itemsCount == 0) { //security created to prevent duplication of the drop-down list view when recycleView is scrolling
-                createItem("DETAILS", position1)
+//                createItem("${mealRowKcal.text} | ${mealRowFat.text} | ${mealRowCarbo.text} | ${mealRowPro.text}", position1)
+                createItem("", position1)
             }
 
         }
@@ -86,6 +88,9 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                     //create some values in
                     configureSubItems(item,view,subItem[i])
                 }
+
+                // expand the list by clicking the invisible button -> this button causes a drop down list by clicking anywhere in the view
+                itemView.button_expand_list.setOnClickListener{ item.toggleExpanded() }
             }
         }
 
@@ -94,11 +99,11 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             view: View,
             product: Product
         ) {
-            view.setOnClickListener{Toast.makeText(itemView.context, "${product.name}", Toast.LENGTH_SHORT).show()}
+            view.setOnClickListener{Toast.makeText(itemView.context, "${product.name}\n ${product.weight}.g", Toast.LENGTH_SHORT).show()}
 
-            view.findViewById<TextView>(R.id.expanding_sub_item_product_name_tv).text = product.name //Set product name
+            view.findViewById<TextView>(R.id.expanding_sub_item_product_name_tv).text = "${product.name}" //Set product name
 
-            view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text = "K: ${product.kcal} / F: ${product.fat} / C: ${product.carbo} / P: ${product.protein}" //Set Nutrients
+            view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text = "${product.weight}.g | K: ${product.kcal} | F: ${product.fat} | C: ${product.carbo} | P: ${product.protein}" //Set Nutrients
 
             view.findViewById<Button>(R.id.expanding_sub_item_delete_product_bt).setOnClickListener{
                 item!!.removeSubItem(view)
@@ -106,36 +111,107 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             }
 
             (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).setOnClickListener{
-                Toast.makeText(view.context, "Edit", Toast.LENGTH_SHORT).show()
 
                 //create dialog for editing product from selected day and meal
                 val editDialog = Dialog(itemView.context)
                 editDialog.setContentView(R.layout.product_settings_dialog)
                 editDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+                //find base values of editing product for calculate new nutrients values
+                var baseProduct = myDB.findEditedProduct(product.name)
+
                 //init buttons and editText's
+                val productName = editDialog.findViewById(R.id.product_edit_name) as TextView
                 val butOK = editDialog.findViewById(R.id.ok_product_settings_dialog) as Button
                 val butCancel = editDialog.findViewById(R.id.cancel_product_settings_dialog) as Button
-                val editKcal = editDialog.findViewById(R.id.kcal_product_settings_dialog) as EditText
-                val editPro = editDialog.findViewById(R.id.pro_user_product_settings_dialog) as EditText
-                val editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog) as EditText
-                val editCarbo = editDialog.findViewById(R.id.carbo_user_product_settings_dialog) as EditText
+                val editKcal = editDialog.findViewById(R.id.kcal_product_settings_dialog) as TextView
+                val editPro = editDialog.findViewById(R.id.pro_user_product_settings_dialog) as TextView
+                val editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog) as TextView
+                val editCarbo = editDialog.findViewById(R.id.carbo_user_product_settings_dialog) as TextView
+                var editWeight = editDialog.findViewById(R.id.product_edit_weight) as EditText
 
                 //set current nutrients from selected product
+                productName.text = "${product.name}"
                 editKcal.setText("${product.kcal}")
                 editPro.setText("${product.protein}")
                 editFat.setText("${product.fat}")
                 editCarbo.setText("${product.carbo}")
+                editWeight.setText("${product.weight}")
+
+                editWeight.addTextChangedListener(object : TextWatcher{
+                    override fun afterTextChanged(s: Editable?) {
+
+                    }
+
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                        if (editWeight.text.toString().length != 0 && editWeight.text.toString().toInt() > 0) {
+                            editKcal.text = ((baseProduct.kcal * editWeight.text.toString()
+                                .toInt()) / baseProduct.weight).toString()
+                            editPro.text = "%.2f".format(
+                                (baseProduct.protein * editWeight.text.toString()
+                                    .toDouble()) / baseProduct.weight
+                            ).replace(',', '.')
+                            editFat.text = "%.2f".format(
+                                (baseProduct.fat * editWeight.text.toString()
+                                    .toDouble()) / baseProduct.weight
+                            ).replace(',', '.')
+                            editCarbo.text = "%.2f".format(
+                                (baseProduct.carbo * editWeight.text.toString()
+                                    .toDouble()) / baseProduct.weight
+                            ).replace(',', '.')
+                        }else{
+                            editKcal.text = "0"
+                            editPro.text = "0"
+                            editFat.text = "0"
+                            editCarbo.text = "0"
+                        }
+                    }
+                })
+
+                //Znajdz produkt po nazwie
+                //Odczytaj jego wage
+                //zmien jego wage
+                //oblicz nowe wartosci
+                //zapisz je w bazie
+                //zaktualizuj wartosci w liscie
 
                 //save new product parameter
                 butOK.setOnClickListener {
                     myDB.editProductNutrients(
                         editKcal.text.toString().toInt(),
-                        editPro.text.toString().toInt(),
-                        editFat.text.toString().toInt(),
-                        editCarbo.text.toString().toInt(),
+                        editPro.text.toString().toDouble(),
+                        editFat.text.toString().toDouble(),
+                        editCarbo.text.toString().toDouble(),
+                        editWeight.text.toString().toInt(),
                         product.id
                     )
+
+                    //set new values for product
+                    product.kcal = editKcal.text.toString().toInt()
+                    product.protein = editPro.text.toString().toDouble()
+                    product.fat = editFat.text.toString().toDouble()
+                    product.carbo = editCarbo.text.toString().toDouble()
+                    product.weight = editWeight.text.toString().toInt()
+
+                    //set new values in list
+                    view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text =
+                        "K: ${product.kcal} / F: ${product.fat} / C: ${product.carbo} / P: ${product.protein}" //Set Nutrients
+
+                    //calculate new nutrients values for current meal
 
                     editDialog.dismiss()
                 }
@@ -143,9 +219,11 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 //dismiss dialog
                 butCancel.setOnClickListener{ editDialog.dismiss() }
 
+                //show dialog
+                editDialog.show()
+
             }
         }
-
     }
 
     fun submitList(

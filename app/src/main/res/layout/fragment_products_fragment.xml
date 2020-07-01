@@ -47,6 +47,7 @@
         android:layout_height="0dp"
         android:background="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -170,67 +171,66 @@
 
         <TextView
             android:id="@+id/textView21"
-            android:layout_width="0dp"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/red_bt_shape"
+            android:elevation="3dp"
             android:text="Kcal"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_surface"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/textView22"
+            app:layout_constraintEnd_toStartOf="@+id/textView23"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView22"
-            android:layout_width="0dp"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:background="@drawable/blue_bt_shape"
+            android:elevation="3dp"
             android:text="Protein"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_surface"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView21"
-            app:layout_constraintEnd_toStartOf="@+id/textView23"
+            app:layout_constraintBottom_toBottomOf="@+id/textView24"
+            app:layout_constraintEnd_toStartOf="@+id/settings_nutrients"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView21" />
+            app:layout_constraintStart_toEndOf="@+id/textView24" />
 
         <TextView
             android:id="@+id/textView23"
-            android:layout_width="0dp"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:background="@drawable/yelow_bt_shape"
+            android:elevation="3dp"
             android:text="Fat"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_surface"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView22"
+            app:layout_constraintBottom_toBottomOf="@+id/textView21"
             app:layout_constraintEnd_toStartOf="@+id/textView24"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView22" />
+            app:layout_constraintStart_toEndOf="@+id/textView21" />
 
         <TextView
             android:id="@+id/textView24"
-            android:layout_width="0dp"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/purple_bt_shape"
+            android:elevation="3dp"
             android:text="Carbo"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_surface"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/textView23"
-            app:layout_constraintEnd_toStartOf="@+id/settings_nutrients"
+            app:layout_constraintEnd_toStartOf="@+id/textView22"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textView23" />
 

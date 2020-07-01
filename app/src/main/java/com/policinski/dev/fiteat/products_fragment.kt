@@ -94,9 +94,9 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener {
         val nutrientsSumArray = dbManager.readDayTable(date.toString())
 
         view.current_kcal.text = nutrientsSumArray[0].toInt().toString()
-        view.current_pro.text = nutrientsSumArray[1].toString()
-        view.current_fat.text = nutrientsSumArray[2].toString()
-        view.current_carbo.text = nutrientsSumArray[3].toString()
+        view.current_pro.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
+        view.current_fat.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
+        view.current_carbo.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
 
         //show dialog in you can add new product to data base
         view.floatingActionButton.setOnClickListener { addNewProductDialog() }
@@ -161,11 +161,11 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener {
             edit.putInt(PREF_PRO,pro.text.toString().toInt())
             edit.apply()
 
-            dbManager.saveDailyGoalNutrients(kcal.text.toString().toInt(),
-                pro.text.toString().toInt(),
-                carbo.text.toString().toInt(),
+            dbManager.updateDailyGoalNutrients(date.toString(),
+                kcal.text.toString().toInt(),
                 fat.text.toString().toInt(),
-                date.toString()
+                carbo.text.toString().toInt(),
+                pro.text.toString().toInt()
             )
 
             nutrientsSettingsDialog.let {

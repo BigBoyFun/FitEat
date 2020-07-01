@@ -5,12 +5,19 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.widget.Toast
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+private val MAIN_PREF = "MAIN_PREF"
+private val PREF_CARBO = "PREF_CARBO"
+private val PREF_FAT = "PREF_FAT"
+private val PREF_KCAL = "PREF_KCAL"
+private val PREF_PRO = "PREF_PRO"
+
 const val DATA_BASE_NAME = "PRODUCTS_SQLite_DB"
-const val TABLE_NAME = "Mats"
+const val TABLE_NAME = "Products"
 const val COL_ID_ING = "ID_pro"
 const val COL_NAME = "Name"
 const val COL_KCAL = "Kcal"
@@ -18,6 +25,7 @@ const val COL_PROTEIN = "Protein"
 const val COL_FAT = "Fat"
 const val COL_CARBO = "Carbohydrates"
 const val COL_FAVORITE = "Favorite"
+const val COL_MANUFACTURER = "Manufacturer"
 const val COL_PREF_CARBO = "PREF_CARBO"
 const val COL_PREF_FAT = "PREF_FAT"
 const val COL_PREF_KCAL = "PREF_KCAL"
@@ -34,6 +42,9 @@ const val COL_DATE = "Date"
 const val COL_ID_DATE = "ID_date"
 const val COL_MEAL = "Meal"
 const val COL_WEIGHT = "Weight"
+const val COL_PORTION = "Portion"
+
+const val DAY_NUTRIENTS_GOAL_TABLE_NAME = "DayNutrientsGoal"
 
 class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BASE_NAME, null,2) {
 
@@ -45,11 +56,13 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
         val createTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 COL_ID_ING + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_NAME + " VARCHAR(256), " +
+                COL_MANUFACTURER + " VARCHAR(256), " +
                 COL_KCAL + " INTEGER, " +
                 COL_PROTEIN + " DOUBLE, " +
                 COL_CARBO + " DOUBLE, " +
                 COL_FAT + " DOUBLE, " +
                 COL_WEIGHT + " INTEGER, " +
+                COL_PORTION + " INTEGER, " +
                 COL_FAVORITE + " BOOLEAN)"
 
         db?.execSQL(createTable)
@@ -58,15 +71,13 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
                 "($COL_ID_DATE INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " $COL_DATE STRING," +
                 " $COL_NAME VARCHAR(256)," +
+                " $COL_MANUFACTURER VARCHAR(256), " +
                 " $COL_KCAL INTEGER," +
                 " $COL_PROTEIN DOUBLE," +
                 " $COL_FAT DOUBLE," +
                 " $COL_CARBO DOUBLE," +
                 " $COL_WEIGHT INTEGER," +
                 " $COL_MEAL INTEGER," +
-                " $COL_PREF_KCAL INTEGER," +
-                " $COL_PREF_PRO INTEGER," +
-                " $COL_PREF_FAT INTEGER," +
                 " $COL_PREF_CARBO INTEGER)"
 
         db?.execSQL(createDayTable)
@@ -75,9 +86,17 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
                 "($COL_ID_MEALS INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " $MEAL_NAME STRING," +
                 " $COL_WEIGHT INTEGER," +
-                " $COL_ID_ING INTEGER)" //save product id from table Mats
+                " $COL_ID_ING INTEGER)" //save product id from table Products
 
         db?.execSQL(createMealsTable)
+
+        val createDayNutrientsGoalTable =
+            "CREATE TABLE $DAY_NUTRIENTS_GOAL_TABLE_NAME ($COL_ID_DATE INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "$COL_DATE STRING, $COL_KCAL INTEGER, " +
+                    "$COL_FAT INTEGER, $COL_CARBO INTEGER, " +
+                    "$COL_PROTEIN INTEGER)"
+
+        db?.execSQL(createDayNutrientsGoalTable)
 
     }
 
@@ -100,9 +119,16 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
             Toast.makeText(context, context.getString(R.string.added_to_day), Toast.LENGTH_SHORT).show()
     }
 
-    fun editProductNutrients(kcal: Int, protein: Int, fat: Int, carbo: Int,id: Int){
+    fun editProductNutrients(
+        kcal: Int,
+        protein: Double,
+        fat: Double,
+        carbo: Double,
+        weight: Int,
+        id: Int
+    ){
 
-        val query = "update $TABLE_NAME set $COL_KCAL = $kcal, $COL_PROTEIN = $protein, $COL_FAT = $fat, $COL_CARBO = $carbo  where $COL_ID_DATE = $id"
+        val query = "update $DAY_TABLE_NAME set $COL_KCAL = $kcal, $COL_PROTEIN = $protein, $COL_FAT = $fat, $COL_CARBO = $carbo, $COL_WEIGHT = $weight  where $COL_ID_DATE = $id"
         dbWrite?.execSQL(query)
 
     }
@@ -228,14 +254,54 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
     }
 
     fun saveDailyGoalNutrients(kcal: Int, protein: Int, carbo: Int, fat: Int, date: String){
-        val query = "UPDATE $DAY_TABLE_NAME SET $COL_PREF_KCAL = $kcal, $COL_PREF_PRO = $protein, $COL_PREF_CARBO = $carbo, $COL_PREF_FAT = $fat WHERE $COL_DATE = '$date'"
 
-        dbWrite.execSQL(query)
+        val cv = ContentValues()
+        cv.put(COL_KCAL,kcal)
+        cv.put(COL_FAT,fat)
+        cv.put(COL_CARBO,carbo)
+        cv.put(COL_PROTEIN,protein)
+        cv.put(COL_DATE,date)
+
+        val result = dbWrite?.insert(DAY_NUTRIENTS_GOAL_TABLE_NAME,null,cv)
+
+        if (result == -1.toLong()){
+            Log.i("DayGoal.", "Cant update table with day nutrients goal.")
+        }else{
+            Log.i("DayGoal.", "Day table with nutrients goal is updated.")
+        }
     }
 
     fun readDailyGoalNutrients(date: String): Cursor{
-        val query = "SELECT $COL_PREF_KCAL, $COL_PREF_PRO, $COL_PREF_CARBO, $COL_PREF_FAT FROM $DAY_TABLE_NAME WHERE $COL_DATE = '$date' LIMIT 1"
+
+        val query = "SELECT $COL_KCAL, $COL_PROTEIN, $COL_CARBO, $COL_FAT FROM $DAY_NUTRIENTS_GOAL_TABLE_NAME WHERE $COL_DATE = '$date'"
+        val result = dbRead.rawQuery(query,null)
+
+        if (result.moveToFirst()){
+            //return cursor
+        } else {
+            //read nutrients goal from shared pref and save to DB
+            val sharedPref = context.getSharedPreferences(MAIN_PREF,0)
+            val kcal = sharedPref.getInt(PREF_KCAL,0)
+            val fat = sharedPref.getInt(PREF_FAT,0)
+            val carbo = sharedPref.getInt(PREF_CARBO,0)
+            val protein = sharedPref.getInt(PREF_PRO,0)
+            saveDailyGoalNutrients(kcal, protein, carbo, fat, date)
+
+        }
         return dbRead.rawQuery(query,null)
+
+    }
+
+    fun updateDailyGoalNutrients(date: String, kcal: Int, fat: Int, carbo: Int, protein: Int){
+
+        val query ="UPDATE $DAY_NUTRIENTS_GOAL_TABLE_NAME" +
+                " SET $COL_KCAL = $kcal," +
+                " $COL_FAT = $fat," +
+                " $COL_CARBO = $carbo," +
+                " $COL_PROTEIN = $protein" +
+                " WHERE $COL_DATE = '$date'"
+        dbWrite.execSQL(query)
+
     }
 
     fun addDayToDayTable(data: String): Boolean{
@@ -276,6 +342,26 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
         dbWrite.execSQL(wuery2)
         dbWrite.execSQL(wuery3)
         dbWrite.execSQL(wuery4)
+    }
+
+    fun findEditedProduct(name: String): Product {
+        
+        var baseProduct = Product()
+        
+        val date = dbRead.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL_NAME = '$name'",null)
+        
+        if (date.moveToFirst()){
+            baseProduct.apply { 
+                kcal = date.getInt(date.getColumnIndex(COL_KCAL))
+                protein = date.getDouble(date.getColumnIndex(COL_PROTEIN))
+                fat = date.getDouble(date.getColumnIndex(COL_FAT))
+                carbo = date.getDouble(date.getColumnIndex(COL_CARBO))
+                weight = date.getInt(date.getColumnIndex(COL_WEIGHT))
+            }
+        } else {
+            Toast.makeText(context, context.getString(R.string.product_not_found), Toast.LENGTH_SHORT).show()}
+
+        return baseProduct
     }
 
 }

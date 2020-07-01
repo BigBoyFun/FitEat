@@ -6,11 +6,12 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="2:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,15 +24,15 @@
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
                 android:text="Kcal"
                 android:textColor="@color/custom_red"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/textView9"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/product_edit_name" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -66,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="64dp"
                 android:text="Carbo"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -76,7 +77,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textView10"
                 app:layout_constraintTop_toTopOf="@+id/textView10" />
 
-            <EditText
+            <TextView
                 android:id="@+id/kcal_product_settings_dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,7 +88,7 @@
                 app:layout_constraintStart_toStartOf="@+id/textView8"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-            <EditText
+            <TextView
                 android:id="@+id/fat_user_product_settings_dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,7 +98,7 @@
                 app:layout_constraintStart_toStartOf="@+id/textView10"
                 app:layout_constraintTop_toTopOf="@+id/pro_user_product_settings_dialog" />
 
-            <EditText
+            <TextView
                 android:id="@+id/carbo_user_product_settings_dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +108,7 @@
                 app:layout_constraintStart_toStartOf="@+id/textView11"
                 app:layout_constraintTop_toTopOf="@+id/fat_user_product_settings_dialog" />
 
-            <EditText
+            <TextView
                 android:id="@+id/pro_user_product_settings_dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -121,16 +122,16 @@
                 android:id="@+id/ok_product_settings_dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/green_bt_shape"
                 android:text="OK"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="2.6:1"
+                app:layout_constraintDimensionRatio="2:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/cancel_product_settings_dialog"
-                app:layout_constraintTop_toBottomOf="@+id/kcal_product_settings_dialog" />
+                app:layout_constraintTop_toBottomOf="@+id/product_edit_weight" />
 
             <Button
                 android:id="@+id/cancel_product_settings_dialog"
@@ -139,10 +140,37 @@
                 android:background="@drawable/red_bt_shape"
                 android:text="Cancel"
                 app:layout_constraintBottom_toBottomOf="@+id/ok_product_settings_dialog"
-                app:layout_constraintDimensionRatio="h,2.6:1"
+                app:layout_constraintDimensionRatio="h,2:1"
                 app:layout_constraintEnd_toStartOf="@+id/ok_product_settings_dialog"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.6"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/product_edit_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="4"
+                android:inputType="number"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pro_user_product_settings_dialog" />
+
+            <TextView
+                android:id="@+id/product_edit_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:text="Product name"
+                android:textAlignment="center"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

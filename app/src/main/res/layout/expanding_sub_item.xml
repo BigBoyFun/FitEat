@@ -21,7 +21,7 @@
     <Button
         android:id="@+id/expanding_sub_item_edit_product_bt"
         android:layout_width="0dp"
-        android:layout_height="38dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/ic_baseline_edit_black_24"
         app:layout_constraintBottom_toBottomOf="@+id/expanding_sub_item_delete_product_bt"
@@ -32,8 +32,7 @@
     <Button
         android:id="@+id/expanding_sub_item_delete_product_bt"
         android:layout_width="0dp"
-        android:layout_height="38dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="28dp"
         android:background="@drawable/ic_baseline_delete_forever_24"
         app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,15 +43,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:gravity="start"
         android:text="10/10/10/10"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/expanding_sub_item_edit_product_bt"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/expanding_sub_item_product_name_tv"
-        app:layout_constraintTop_toBottomOf="@+id/expanding_sub_item_product_name_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/expanding_sub_item_product_name_tv"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"

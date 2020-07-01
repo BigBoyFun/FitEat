@@ -1,6 +1,7 @@
 package com.policinski.dev.fiteat
 
 import android.app.DatePickerDialog
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -60,7 +61,7 @@ class home_fragment : Fragment() {
         val monthsArray = arrayOf(getString(R.string.month_01),getString(R.string.month_02),getString(
                     R.string.month_03),getString(R.string.month_04),getString(R.string.month_05),getString(
                                 R.string.month_06),getString(R.string.month_07),getString(R.string.month_08),getString(
-                                            R.string.month_09),getString(R.string.moth_10),getString(
+                                            R.string.month_09),getString(R.string.month_10),getString(
                                                         R.string.month_11),getString(R.string.month_12))
 
         var plusDay: Long = 0 //variable for detect next day
@@ -137,14 +138,19 @@ class home_fragment : Fragment() {
         //init DB, SharedPref, read nutrients from DB to array
         val db = MyDatabaseHelper(requireContext())
         val nutrientsSumArray = db.readDayTable(date)
+        val sharedPreferences = requireContext().getSharedPreferences(MAIN_PREF,0)
 
         //find view in homeFragment
         val daySumKcal = v?.day_sum_kcal
         val daySumPro = v?.day_sum_pro
         val daySumFat = v?.day_sum_fat
         val daySumCarbo = v?.day_sum_carbo
-        val circularProgressBar = v?.circularProgressBar
+        val circularProgressBar = v?.progress_barr
         val progressInPercent = v?.progress_in_percent
+        val homeUserPrefKcal = v?.home_user_pref_kcal
+        val homeUserPrefFat = v?.home_user_pref_fat
+        val homeUserPrefCarbo = v?.home_user_pref_carbo
+        val homeUserPrefPro = v?.home_user_pref_pro
 
         //read pref from sharedPreferences
         var prefkcal = 0
@@ -152,24 +158,38 @@ class home_fragment : Fragment() {
         var prefFat = 0.0
         var prefCarbo = 0.0
 
+        //read nutrients preferences at current day from database
         val cursor = db.readDailyGoalNutrients(date)
 
-        if (cursor.moveToFirst()){
-            prefkcal = cursor.getInt(cursor.getColumnIndex("PREF_KCAL"))
-            prefPro = cursor.getDouble(cursor.getColumnIndex("PREF_PRO"))
-            prefFat = cursor.getDouble(cursor.getColumnIndex("PREF_FAT"))
-            prefCarbo = cursor.getDouble(cursor.getColumnIndex("PREF_CARBO"))
+        if (cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex("Kcal")) != 0){
+            prefkcal = cursor.getInt(cursor.getColumnIndex("Kcal"))
+            prefPro = cursor.getDouble(cursor.getColumnIndex("Protein"))
+            prefFat = cursor.getDouble(cursor.getColumnIndex("Fat"))
+            prefCarbo = cursor.getDouble(cursor.getColumnIndex("Carbohydrates"))
+
+        } else {
+            //read nutrients preferences at current day from sharedPreferences and save them to database
+
+            prefkcal = sharedPreferences.getInt(PREF_KCAL,0)
+            prefPro = sharedPreferences.getInt(PREF_PRO,0).toDouble()
+            prefFat = sharedPreferences.getInt(PREF_FAT,0).toDouble()
+            prefCarbo = sharedPreferences.getInt(PREF_CARBO,0).toDouble()
 
         }
 
         //set value for view in homeFragment(from db and from sharedPref)
-        daySumKcal?.text = "${nutrientsSumArray[0].toInt()}/$prefkcal"
-        daySumPro?.text = "${nutrientsSumArray[1]}/${prefPro.toInt()}"
-        daySumFat?.text = "${nutrientsSumArray[2]}/${prefFat.toInt()}"
-        daySumCarbo?.text = "${nutrientsSumArray[3]}/${prefCarbo.toInt()}"
-        circularProgressBar?.progressMax = prefkcal.toFloat()
-        circularProgressBar?.progress = nutrientsSumArray[0].toFloat()
-        val kcalProgress= (nutrientsSumArray[0] / (prefkcal / 100))
+        daySumKcal?.text = "${nutrientsSumArray[0].toInt()}"
+        homeUserPrefKcal?.text = "$prefkcal"
+        daySumPro?.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
+        homeUserPrefPro?.text = "${prefPro.toInt()}"
+        daySumFat?.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
+        homeUserPrefFat?.text = "${prefFat.toInt()}"
+        daySumCarbo?.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
+        homeUserPrefCarbo?.text = "${prefCarbo.toInt()}"
+
+        circularProgressBar?.max = prefkcal
+        circularProgressBar?.progress = nutrientsSumArray[0].toInt()
+        val kcalProgress= (nutrientsSumArray[0] / (prefkcal / 100)).toInt()
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
              if (kcalProgress > 100) {
                  progressInPercent?.setTextColor(resources.getColor(R.color.custom_red,null))
@@ -177,7 +197,10 @@ class home_fragment : Fragment() {
                  progressInPercent?.setTextColor(resources.getColor(R.color.colorAccent,null))
              }
         }
-        progressInPercent?.text = "%.2f".format(kcalProgress).replace(',','.')
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            progressInPercent?.setTextColor(resources.getColor(R.color.custom_red,null))
+        }
+        progressInPercent?.text = "$kcalProgress%"
 
     }
 

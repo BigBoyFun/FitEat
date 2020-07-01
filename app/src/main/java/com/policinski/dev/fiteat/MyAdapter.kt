@@ -1,7 +1,6 @@
 package com.policinski.dev.fiteat
 
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -20,8 +19,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
     var itemList = mutableListOf<Product>()
     var filterItem = mutableListOf<Product>()
 
-    class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val name: TextView = itemView.product_name_row
         val kcal: TextView = itemView.product_kcal_row
@@ -100,8 +98,11 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                 var calculateCarbo = dialog.calculate_carbo
                 var read_weight_tv = dialog.read_weight_tv
                 val seekBar = dialog.seekBar
+                var mealNameTv = dialog.meal_name_tv
                 val onBt = dialog.ok_bt
                 val cancelBt = dialog.cancel_bt
+
+                //initiation of buttons responsible for choosing the right meal to which we want to add the selected product
                 array = arrayListOf<Button>(dialog.button_1,
                     dialog.button_2,
                     dialog.button_3,
@@ -112,7 +113,30 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                     dialog.button_8)
 
 
-                for (item in array) item.setOnClickListener(this)
+                for ((index, item) in array.withIndex()) item.setOnClickListener { v ->
+                    v as Button
+                    meal = v.text.toString().toInt()
+
+                    for (item in array){
+                        if (item.text.toString().toInt() != meal){
+                            item.setBackgroundResource(R.drawable.gray_bt_shape)
+                        }else{
+                            item.setBackgroundResource(R.drawable.green_bt_shape)
+                        }
+                    }
+
+                    when(array.indexOf(v)){
+                        0 -> mealNameTv.text = dialog.context.getString(R.string.breakfast_1)
+                        1 -> mealNameTv.text = dialog.context.getString(R.string.second_breakfast_2)
+                        2 -> mealNameTv.text = dialog.context.getString(R.string.dinner_3)
+                        3 -> mealNameTv.text = dialog.context.getString(R.string.dessert_4)
+                        4 -> mealNameTv.text = dialog.context.getString(R.string.tea_5)
+                        5 -> mealNameTv.text = dialog.context.getString(R.string.supper_6)
+                        6 -> mealNameTv.text = dialog.context.getString(R.string.snacks_7)
+                        7 -> mealNameTv.text = dialog.context.getString(R.string.training_8)
+                    }
+
+                }
 
                 //set text on all textViews and progress on seekBar, by current product specification
                 productName.text = product.name
@@ -206,20 +230,6 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                 dialog.cancel_bt.setOnClickListener{dialog.dismiss()}
 
                 dialog.show()
-            }
-
-        }
-
-        override fun onClick(v: View?) {
-            v as Button
-            meal = v.text.toString().toInt()
-
-            for (item in array){
-                if (item.text.toString().toInt() != meal){
-                    item.setBackgroundResource(R.drawable.gray_bt_shape)
-                }else{
-                    item.setBackgroundResource(R.drawable.green_bt_shape)
-                }
             }
 
         }
