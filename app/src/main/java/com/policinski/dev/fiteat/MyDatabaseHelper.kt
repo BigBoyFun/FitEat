@@ -5,10 +5,12 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.LocalDate
 
 private val MAIN_PREF = "MAIN_PREF"
 private val PREF_CARBO = "PREF_CARBO"
@@ -32,9 +34,9 @@ const val COL_PREF_KCAL = "PREF_KCAL"
 const val COL_PREF_PRO = "PREF_PRO"
 
 
-const val MEALS_TABLE = "Meals"
-const val MEAL_NAME = "Meal Name"
-const val COL_ID_MEALS = "ID_meals"
+const val DISH_TABLE = "Dish"
+const val DISH_NAME = "Dish Name"
+const val COL_ID_DISH = "ID_dish"
 
 
 const val DAY_TABLE_NAME = "DayTable"
@@ -77,14 +79,13 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
                 " $COL_FAT DOUBLE," +
                 " $COL_CARBO DOUBLE," +
                 " $COL_WEIGHT INTEGER," +
-                " $COL_MEAL INTEGER," +
-                " $COL_PREF_CARBO INTEGER)"
+                " $COL_MEAL INTEGER)"
 
         db?.execSQL(createDayTable)
 
-        val createMealsTable = "CREATE TABLE $MEALS_TABLE " +
-                "($COL_ID_MEALS INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " $MEAL_NAME STRING," +
+        val createMealsTable = "CREATE TABLE $DISH_TABLE " +
+                "($COL_ID_DISH INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " $DISH_NAME STRING," +
                 " $COL_WEIGHT INTEGER," +
                 " $COL_ID_ING INTEGER)" //save product id from table Products
 
@@ -279,13 +280,25 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
         if (result.moveToFirst()){
             //return cursor
         } else {
-            //read nutrients goal from shared pref and save to DB
-            val sharedPref = context.getSharedPreferences(MAIN_PREF,0)
-            val kcal = sharedPref.getInt(PREF_KCAL,0)
-            val fat = sharedPref.getInt(PREF_FAT,0)
-            val carbo = sharedPref.getInt(PREF_CARBO,0)
-            val protein = sharedPref.getInt(PREF_PRO,0)
-            saveDailyGoalNutrients(kcal, protein, carbo, fat, date)
+
+            //save to db nutrients goal if selected day is today
+            //this is to prevent you from saving your daily goals
+            // for the days that have just arrived and which have already ended
+            // you cannot create nutrition plans in advance
+            val dateNow = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDate.now().toString()
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            if (date == dateNow) {
+                //read nutrients goal from shared pref and save to DB
+                val sharedPref = context.getSharedPreferences(MAIN_PREF, 0)
+                val kcal = sharedPref.getInt(PREF_KCAL, 0)
+                val fat = sharedPref.getInt(PREF_FAT, 0)
+                val carbo = sharedPref.getInt(PREF_CARBO, 0)
+                val protein = sharedPref.getInt(PREF_PRO, 0)
+                saveDailyGoalNutrients(kcal, protein, carbo, fat, date)
+            }
 
         }
         return dbRead.rawQuery(query,null)

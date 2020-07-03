@@ -117,64 +117,9 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener {
         val proUserPref = view.pro_user_pref
         val carboUserPref = view.carbo_user_pref
 
-        view.settings_nutrients.setOnClickListener{
-            nutrientsSettingsDialog(kcalUserPref, fatUserPref, proUserPref,carboUserPref)
-        }
-
         readData(kcalUserPref,fatUserPref,proUserPref,carboUserPref)
 
         return view
-    }
-
-    fun nutrientsSettingsDialog(
-        kcalUserPref: TextView,
-        fatUserPref: TextView,
-        proUserPref: TextView,
-        carboUserPref: TextView
-    ) {
-        val nutrientsSettingsDialog = Dialog(requireContext())
-        nutrientsSettingsDialog.setContentView(R.layout.nutrients_settings_dialog)
-        nutrientsSettingsDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        var kcal = nutrientsSettingsDialog.findViewById<EditText>(R.id.kcal_product_settings_dialog)
-        var carbo = nutrientsSettingsDialog.findViewById<EditText>(R.id.carbo_user_product_settings_dialog)
-        var fat = nutrientsSettingsDialog.findViewById<EditText>(R.id.fat_user_product_settings_dialog)
-        var pro = nutrientsSettingsDialog.findViewById<EditText>(R.id.pro_user_product_settings_dialog)
-
-        val readPref = requireContext().getSharedPreferences(MAIN_PREF,0)
-        kcal.setText("${readPref.getInt(PREF_KCAL,0)}")
-        carbo.setText("${readPref.getInt(PREF_CARBO,0)}")
-        fat.setText("${readPref.getInt(PREF_FAT,0)}")
-        pro.setText("${readPref.getInt(PREF_PRO,0)}")
-
-
-        val saveBt = nutrientsSettingsDialog.findViewById<Button>(R.id.ok_product_settings_dialog)
-        saveBt.setOnClickListener{
-
-            val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences(MAIN_PREF, 0 )
-            val edit = sharedPreferences.edit()
-            val dbManager = MyDatabaseHelper(requireContext())
-
-            edit.putInt(PREF_KCAL, kcal.text.toString().toInt())
-            edit.putInt(PREF_CARBO, carbo.text.toString().toInt())
-            edit.putInt(PREF_FAT,fat.text.toString().toInt())
-            edit.putInt(PREF_PRO,pro.text.toString().toInt())
-            edit.apply()
-
-            dbManager.updateDailyGoalNutrients(date.toString(),
-                kcal.text.toString().toInt(),
-                fat.text.toString().toInt(),
-                carbo.text.toString().toInt(),
-                pro.text.toString().toInt()
-            )
-
-            nutrientsSettingsDialog.let {
-                it.dismiss()
-                readData(kcalUserPref,fatUserPref,proUserPref,carboUserPref)
-            }
-        }
-
-        nutrientsSettingsDialog.show()
     }
 
     private fun readData(

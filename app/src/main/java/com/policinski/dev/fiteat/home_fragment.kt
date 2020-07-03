@@ -2,6 +2,7 @@ package com.policinski.dev.fiteat
 
 import android.app.DatePickerDialog
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -169,7 +170,6 @@ class home_fragment : Fragment() {
 
         } else {
             //read nutrients preferences at current day from sharedPreferences and save them to database
-
             prefkcal = sharedPreferences.getInt(PREF_KCAL,0)
             prefPro = sharedPreferences.getInt(PREF_PRO,0).toDouble()
             prefFat = sharedPreferences.getInt(PREF_FAT,0).toDouble()

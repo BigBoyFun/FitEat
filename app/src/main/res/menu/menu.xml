@@ -7,7 +7,7 @@
 
     <item
         android:id="@+id/meals_fragment"
-        android:title="@string/meals"
+        android:title="@string/dish"
         android:icon="@drawable/ic_restaurant_menu_grey_24dp"/>
 
     <item
@@ -17,6 +17,6 @@
 
     <item
         android:id="@+id/scanner_fragment"
-        android:title="@string/scanner"
-        android:icon="@drawable/scnnaer_qr__gray_icon"/>
+        android:title="@string/settings"
+        android:icon="@drawable/ic_baseline_settings_24"/>
 </menu>
