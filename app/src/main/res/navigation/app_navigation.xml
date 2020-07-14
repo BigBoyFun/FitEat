@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/scanner_fragment"
-        android:name="com.policinski.dev.fiteat.scanner_fragment"
+        android:name="com.policinski.dev.fiteat.settings_fragment"
         android:label="fragment_scanner_fragment"
         tools:layout="@layout/fragment_scanner_fragment" />
     <fragment

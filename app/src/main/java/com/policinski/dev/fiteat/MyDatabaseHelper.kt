@@ -377,4 +377,27 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
         return baseProduct
     }
 
+    fun getSelectedProduct(productName: String): Product? {
+
+        var readProduct = Product()
+
+        val query = "SELECT * FROM ${TABLE_NAME} WHERE ${COL_NAME} = '${productName}'"
+
+        val result = dbRead.rawQuery(query,null)
+
+        if (result.moveToFirst()){
+            readProduct.apply {
+                name = result.getString(result.getColumnIndex(COL_NAME))
+                kcal = result.getInt(result.getColumnIndex(COL_KCAL))
+                fat = result.getDouble(result.getColumnIndex(COL_FAT))
+                carbo = result.getDouble(result.getColumnIndex(COL_CARBO))
+                protein = result.getDouble(result.getColumnIndex(COL_PROTEIN))
+                weight = result.getInt(result.getColumnIndex(COL_WEIGHT))
+            }
+        }
+
+        return readProduct
+
+    }
+
 }

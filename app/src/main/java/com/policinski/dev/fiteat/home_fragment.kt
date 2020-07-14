@@ -1,14 +1,13 @@
 package com.policinski.dev.fiteat
 
 import android.app.DatePickerDialog
-import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.collection.arrayMapOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.*
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.day_sum_kcal
@@ -29,6 +28,14 @@ class home_fragment : Fragment() {
     private val PREF_FAT = "PREF_FAT"
     private val PREF_KCAL = "PREF_KCAL"
     private val PREF_PRO = "PREF_PRO"
+    private val PREF_MEAL_BREAKFAST = "PREF_BREAKFAST"
+    private val PREF_MEAL_SECOND_BREAKFAST = "PREF_MEAL_SECOND_BREAKFAST"
+    private val PREF_MEAL_DINNER = "PREF_MEAL_DINNER"
+    private val PREF_MEAL_DESSERT = "PREF_MEAL_DESSERT"
+    private val PREF_MEAL_TEA = "PREF_MEAL_TEA"
+    private val PREF_MEAL_SUPPER = "PREF_MEAL_SUPPER"
+    private val PREF_MEAL_SNACKS = "PREF_MEAL_SNACKS"
+    private val PREF_MEAL_TRAINING = "PREF_MEAL_TRAINING"
     private val header: MutableList<String> = ArrayList()
     private lateinit var mealAdapter: MealRecycleListAdapter
     private lateinit var mealList: MutableList<Meal>
@@ -204,14 +211,15 @@ class home_fragment : Fragment() {
 
     }
 
-    private fun showMeals(v: View,date: String){
+    private fun showMeals(v: View,date: String){ //// DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI
 
         var calculatedMealNutrients: MutableList<Product> = mutableListOf()
         var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
+        val selectedMeals = readSelectedMealsByUser()
 
         val db = MyDatabaseHelper(requireContext())
 
-        for (i in 1..8) {
+        for (i in selectedMeals.keys) {
             var product: Product = Product()
             val cursor = db.readMealFromDay(date, i)
 
@@ -235,8 +243,34 @@ class home_fragment : Fragment() {
             adapter = mealAdapter
         }
 
-        mealAdapter.submitList(calculatedMealNutrients, allDayMealListProduct)
+        mealAdapter.submitList(calculatedMealNutrients, allDayMealListProduct, selectedMeals)
 
+    }
+
+    private fun readSelectedMealsByUser(): Map<Int, String> {
+
+        val mealSelectedArray = arrayMapOf<Int, String>()
+
+        val sharedPreferences = requireContext().getSharedPreferences(MAIN_PREF,0)
+        val breakfast = sharedPreferences.getBoolean(PREF_MEAL_BREAKFAST,true)
+        val secondBreakfast = sharedPreferences.getBoolean(PREF_MEAL_SECOND_BREAKFAST,true)
+        val dinner = sharedPreferences.getBoolean(PREF_MEAL_DINNER,true)
+        val dessert = sharedPreferences.getBoolean(PREF_MEAL_DESSERT,true)
+        val tea = sharedPreferences.getBoolean(PREF_MEAL_TEA,true)
+        val supper = sharedPreferences.getBoolean(PREF_MEAL_SUPPER,true)
+        val snacks = sharedPreferences.getBoolean(PREF_MEAL_SNACKS,true)
+        val training = sharedPreferences.getBoolean(PREF_MEAL_TRAINING,true)
+
+        if (breakfast) mealSelectedArray[1] = "Breakfast"
+        if (secondBreakfast) mealSelectedArray[2] = "Second breakfast"
+        if (dinner) mealSelectedArray[3] = "Dinner"
+        if (dessert) mealSelectedArray[4] = "Dessert"
+        if (tea) mealSelectedArray[5] = "Tea"
+        if (supper) mealSelectedArray[6] = "Supper"
+        if (snacks) mealSelectedArray[7] = "Snacks"
+        if (training) mealSelectedArray[8] = "Training"
+
+        return mealSelectedArray
     }
 
     companion object {

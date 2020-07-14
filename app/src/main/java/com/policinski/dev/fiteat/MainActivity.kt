@@ -1,5 +1,6 @@
 package com.policinski.dev.fiteat
 
+import android.app.Activity
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
@@ -10,7 +11,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
+import androidx.navigation.navOptions
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,6 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView.setupWithNavController(navController)
 
-
     }
+
 }

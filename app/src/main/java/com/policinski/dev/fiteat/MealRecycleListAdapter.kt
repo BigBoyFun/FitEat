@@ -16,39 +16,31 @@ import kotlinx.android.synthetic.main.meal_row_layout.view.*
 class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     var mealNutrientsSumList: MutableList<Product> = mutableListOf()
-    var allDayMealListProduckt: MutableList<MutableList<Product>> = mutableListOf()
+    private var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
+    var selectedMeals = ArrayList<String>()
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val mealRowTitleMeal = itemView.meal_row_title_meal
-        val mealRowKcal = itemView.meal_row_kcal_tv
-        val mealRowPro = itemView.meal_row_pro_tv
-        val mealRowFat = itemView.meal_row_fat_tv
-        val mealRowCarbo = itemView.meal_row_carbo_tv
-        val expandableListView = itemView.expanding_list
-        val constraintLayout =  itemView.constraintLayout_meal_row
-        val myDB = MyDatabaseHelper(itemView.context)
-        var title = "Meal"
+        private val mealRowTitleMeal = itemView.meal_row_title_meal!!
+        private val mealRowKcal = itemView.meal_row_kcal_tv!!
+        private val mealRowPro = itemView.meal_row_pro_tv!!
+        private val mealRowFat = itemView.meal_row_fat_tv!!
+        private val mealRowCarbo = itemView.meal_row_carbo_tv!!
+        private val expandableListView = itemView.expanding_list!!
+        private val constraintLayout =  itemView.constraintLayout_meal_row!!
+        private val myDB = MyDatabaseHelper(itemView.context)
+        private var title = "Meal"
         lateinit var item: ExpandingItem
 
 
         fun bind(
             product: Product,
             position1: MutableList<Product>,
+            position2: String,
             position: Int
         ){
-
             //set name for meal
-            when(position){
-                0 -> title = itemView.context.getString(R.string.breakfast_1)
-                1 -> title = itemView.context.getString(R.string.second_breakfast_2)
-                2 -> title = itemView.context.getString(R.string.dinner_3)
-                3 -> title = itemView.context.getString(R.string.dessert_4)
-                4 -> title = itemView.context.getString(R.string.tea_5)
-                5 -> title = itemView.context.getString(R.string.supper_6)
-                6 -> title = itemView.context.getString(R.string.snacks_7)
-                7 -> title = itemView.context.getString(R.string.training_8)
-            }
+            title = position2
 
             mealRowTitleMeal.text = title
             mealRowKcal.text = "K: " + product.kcal.toString()
@@ -57,7 +49,6 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             mealRowPro.text = "P: %.1f".format(product.protein).replace(',','.')
 
             if (expandableListView.itemsCount == 0) { //security created to prevent duplication of the drop-down list view when recycleView is scrolling
-//                createItem("${mealRowKcal.text} | ${mealRowFat.text} | ${mealRowCarbo.text} | ${mealRowPro.text}", position1)
                 createItem("", position1)
             }
 
@@ -228,10 +219,12 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     fun submitList(
         list: MutableList<Product>,
-        mealList: MutableList<MutableList<Product>>
+        mealList: MutableList<MutableList<Product>>,
+        readSelectedMealsByUser: Map<Int, String>
     ){
         mealNutrientsSumList = list
-        allDayMealListProduckt = mealList
+        allDayMealListProduct = mealList
+        for (title in readSelectedMealsByUser) selectedMeals.add(title.value)
 
     }
 
@@ -246,7 +239,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
 
-            is ViewHolder -> { holder.bind(mealNutrientsSumList[position],allDayMealListProduckt[position],position) }
+            is ViewHolder -> { holder.bind(mealNutrientsSumList[position],allDayMealListProduct[position],selectedMeals[position],position) }
 
         }
     }

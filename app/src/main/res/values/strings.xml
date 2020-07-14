@@ -29,14 +29,14 @@
     <string name="delete">Delete</string>
     <string name="are_you_sure_you_want_delete">Are you sure, you want delete:</string>
     <string name="product_not_found">Product not found.</string>
-    <string name="breakfast_1">1.Breakfast</string>
-    <string name="second_breakfast_2">2.Second breakfast</string>
-    <string name="dinner_3">3.Dinner</string>
-    <string name="dessert_4">4.Dessert</string>
-    <string name="tea_5">5.Tea</string>
-    <string name="supper_6">6.Supper</string>
-    <string name="snacks_7">7.Snacks</string>
-    <string name="training_8">8.Training</string>
+    <string name="breakfast_1">Breakfast</string>
+    <string name="second_breakfast_2">Second breakfast</string>
+    <string name="dinner_3">Dinner</string>
+    <string name="dessert_4">Dessert</string>
+    <string name="tea_5">Tea</string>
+    <string name="supper_6">Supper</string>
+    <string name="snacks_7">Snacks</string>
+    <string name="training_8">Training</string>
     <string name="dish">Dish</string>
     <string name="settings">Settings</string>
     <string name="title_activity_settings">SettingsActivity</string>
@@ -57,4 +57,6 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="nutrients_goal">Nutrients goal</string>
     <string name="data_has_been_saved">Data has been saved!</string>
+    <string name="product_registered">New product is registered</string>
+    <string name="already_exist">Already exist!</string>
 </resources>
