@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.delate_layout.*
+import kotlinx.android.synthetic.main.delate_layout.view.*
 import kotlinx.android.synthetic.main.fragment_products_fragment.view.*
 import kotlinx.android.synthetic.main.fragment_products_fragment.view.current_kcal
 import java.time.LocalDate
@@ -97,6 +99,13 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener {
         view?.current_pro?.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
         view?.current_fat?.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
         view?.current_carbo?.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
+
+        Handler().postDelayed({
+            productList.clear()
+            Toast.makeText(requireContext(), "Fragment has beet refreshed", Toast.LENGTH_SHORT).show()
+            loadProdactsFromDataBase()
+            refreshFragment()
+        },100)
 
 
     }

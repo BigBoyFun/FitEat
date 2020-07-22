@@ -203,6 +203,21 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
 
     }
 
+    //read meals from selected day
+    fun readMealsFromSelectedDay(date: String): ArrayList<Int>{
+        val mealsFromDay = arrayListOf<Int>()
+        val query = "SELECT $COL_MEAL FROM $DAY_TABLE_NAME WHERE $COL_DATE = '$date'"
+        val cursor = dbRead.rawQuery(query,null)
+
+        if (cursor.moveToNext()){
+            do{
+                mealsFromDay.add(cursor.getInt(cursor.getColumnIndex(COL_MEAL)))
+            }while (cursor.moveToNext())
+        }
+
+        return mealsFromDay
+    }
+
     //reading products from a specific meal
     fun readMealFromDay(date: String, meal: Int) : MutableList<Product>{
 

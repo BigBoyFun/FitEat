@@ -1,6 +1,7 @@
 package com.policinski.dev.fiteat
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.text.Editable
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
 import kotlinx.android.synthetic.main.meal_row_layout.view.*
@@ -16,7 +18,7 @@ import kotlinx.android.synthetic.main.meal_row_layout.view.*
 class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     var mealNutrientsSumList: MutableList<Product> = mutableListOf()
-    private var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
+    var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
     var selectedMeals = ArrayList<String>()
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -99,6 +101,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             view.findViewById<Button>(R.id.expanding_sub_item_delete_product_bt).setOnClickListener{
                 item!!.removeSubItem(view)
                 myDB.deleteProductFromMeal(product.id)
+                refreshActivity()
             }
 
             (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).setOnClickListener{
@@ -205,6 +208,8 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                     //calculate new nutrients values for current meal
 
                     editDialog.dismiss()
+
+                    refreshActivity()
                 }
 
                 //dismiss dialog
@@ -214,6 +219,11 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 editDialog.show()
 
             }
+        }
+
+        private fun refreshActivity() {
+            val intent = Intent(itemView.context, RefreshtActivity::class.java)
+            ContextCompat.startActivity(itemView.context,intent,null)
         }
     }
 

@@ -7,11 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.collection.arrayMapOf
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.*
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.day_sum_kcal
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.selected_date_tx
+import org.w3c.dom.Text
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,6 +43,26 @@ class home_fragment : Fragment() {
     private val header: MutableList<String> = ArrayList()
     private lateinit var mealAdapter: MealRecycleListAdapter
     private lateinit var mealList: MutableList<Meal>
+    //find view in homeFragment
+    lateinit var daySumKcal: TextView
+    lateinit var daySumPro: TextView
+    lateinit var daySumFat: TextView
+    lateinit var daySumCarbo: TextView
+    lateinit var circularProgressBar: ContentLoadingProgressBar
+    lateinit var progressInPercent: TextView
+    lateinit var homeUserPrefKcal: TextView
+    lateinit var homeUserPrefFat: TextView
+    lateinit var homeUserPrefCarbo: TextView
+    lateinit var homeUserPrefPro: TextView
+    lateinit var recycle_view_meal: RecyclerView
+
+    //read pref from sharedPreferences
+    var prefkcal = 0
+    var prefPro = 0.0
+    var prefFat = 0.0
+    var prefCarbo = 0.0
+
+    val date = LocalDate.now()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,15 +71,6 @@ class home_fragment : Fragment() {
 
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_home_fragment, container, false)
-
-//        val db = MyDatabaseHelper(requireContext())////////////////////////////////////////////////////////////////////////////////////////// FOR DELETE!!!!!!!!!!!!!!
-//        v.textView19.setOnClickListener{db.addRowWeight()} ////////////////////////////////////////////////////////////////////////////////// FOR DELETE!!!!!!!!!!!!!!!!
-
-        val date = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDate.now()
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
 
         val nextDay = v.next_date_bt
         val backDay = v.bcak_date_bt
@@ -87,8 +102,8 @@ class home_fragment : Fragment() {
                 minusDay = 0.toLong()
                 val month = "%02d".format(mothOfYear + 1)
                 val day ="%02d".format(dayOfMonth)
-                showDayPropertis(v,"$year-$month-$day")
-                showMeals(v,"$year-$month-$day")
+                showDayPropertis("$year-$month-$day")
+                showMeals("$year-$month-$day")
 
 
             },year,month,day)
@@ -97,7 +112,23 @@ class home_fragment : Fragment() {
 
         }
 
-        showDayPropertis(v,date.toString())
+        val db = MyDatabaseHelper(requireContext())
+        val nutrientsSumArray = db.readDayTable(date.toString())
+
+        //find view in homeFragment
+        daySumKcal = v.day_sum_kcal
+        daySumPro = v.day_sum_pro
+        daySumFat = v.day_sum_fat
+        daySumCarbo = v.day_sum_carbo
+        circularProgressBar = v.progress_barr
+        progressInPercent = v.progress_in_percent
+        homeUserPrefKcal = v.home_user_pref_kcal
+        homeUserPrefFat = v.home_user_pref_fat
+        homeUserPrefCarbo = v.home_user_pref_carbo
+        homeUserPrefPro = v.home_user_pref_pro
+        recycle_view_meal = v.recycle_view_meal
+
+        showDayPropertis(date.toString())
 
         //select date by button
         //one day back
@@ -106,15 +137,15 @@ class home_fragment : Fragment() {
                 minusDay -= 1
                 newDate = date.minusDays(minusDay)
                 selectedDayView.text = "${newDate.dayOfMonth} ${monthsArray[newDate.monthValue - 1]} ${newDate.year}"
-                showDayPropertis(v,newDate.toString())
-                showMeals(v,newDate.toString())
+                showDayPropertis(newDate.toString())
+                showMeals(newDate.toString())
 
             } else if (minusDay == 0.toLong()){
                 plusDay += 1
                 newDate = date.plusDays(plusDay)
                 selectedDayView.text = "${newDate.dayOfMonth} ${monthsArray[newDate.monthValue - 1]} ${newDate.year}"
-                showDayPropertis(v,newDate.toString())
-                showMeals(v,newDate.toString())
+                showDayPropertis(newDate.toString())
+                showMeals(newDate.toString())
 
             }
         }
@@ -125,46 +156,29 @@ class home_fragment : Fragment() {
                 plusDay -= 1
                 newDate = date.plusDays(plusDay)
                 selectedDayView.text = "${newDate.dayOfMonth} ${monthsArray[newDate.monthValue - 1]} ${newDate.year}"
-                showDayPropertis(v,newDate.toString())
-                showMeals(v,newDate.toString())
+                showDayPropertis(newDate.toString())
+                showMeals(newDate.toString())
             } else if (plusDay == 0.toLong()){
                 minusDay += 1
                 newDate = date.minusDays(minusDay)
                 selectedDayView.text = "${newDate.dayOfMonth} ${monthsArray[newDate.monthValue - 1]} ${newDate.year}"
-                showDayPropertis(v,newDate.toString())
-                showMeals(v,newDate.toString())
+                showDayPropertis(newDate.toString())
+                showMeals(newDate.toString())
             }
         }
 
-        showMeals(v,date.toString())
+        showMeals(date.toString())
 
         return v
     }
 
-    private fun showDayPropertis(v: View?, date: String) {
+    private fun showDayPropertis(date: String) {
 
         //init DB, SharedPref, read nutrients from DB to array
         val db = MyDatabaseHelper(requireContext())
         val nutrientsSumArray = db.readDayTable(date)
         val sharedPreferences = requireContext().getSharedPreferences(MAIN_PREF,0)
 
-        //find view in homeFragment
-        val daySumKcal = v?.day_sum_kcal
-        val daySumPro = v?.day_sum_pro
-        val daySumFat = v?.day_sum_fat
-        val daySumCarbo = v?.day_sum_carbo
-        val circularProgressBar = v?.progress_barr
-        val progressInPercent = v?.progress_in_percent
-        val homeUserPrefKcal = v?.home_user_pref_kcal
-        val homeUserPrefFat = v?.home_user_pref_fat
-        val homeUserPrefCarbo = v?.home_user_pref_carbo
-        val homeUserPrefPro = v?.home_user_pref_pro
-
-        //read pref from sharedPreferences
-        var prefkcal = 0
-        var prefPro = 0.0
-        var prefFat = 0.0
-        var prefCarbo = 0.0
 
         //read nutrients preferences at current day from database
         val cursor = db.readDailyGoalNutrients(date)
@@ -211,13 +225,20 @@ class home_fragment : Fragment() {
 
     }
 
-    private fun showMeals(v: View,date: String){ //// DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI DO POPRAWKI
+    private fun showMeals(date: String){
 
         var calculatedMealNutrients: MutableList<Product> = mutableListOf()
         var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
-        val selectedMeals = readSelectedMealsByUser()
-
+        var selectedMeals = mapOf<Int,String>()
         val db = MyDatabaseHelper(requireContext())
+
+        //show selected meals if day is today, else show the meals that the user has made
+        if (date.equals(LocalDate.now().toString())) {
+            selectedMeals = readSelectedMealsByUser()
+        } else {
+            selectedMeals = readMealsFromSelectedDay(db.readMealsFromSelectedDay(date))
+        }
+
 
         for (i in selectedMeals.keys) {
             var product: Product = Product()
@@ -237,7 +258,7 @@ class home_fragment : Fragment() {
 
         }
 
-        v.recycle_view_meal.apply {
+        recycle_view_meal.apply {
             layoutManager = LinearLayoutManager(requireContext())
             mealAdapter = MealRecycleListAdapter()
             adapter = mealAdapter
@@ -245,6 +266,22 @@ class home_fragment : Fragment() {
 
         mealAdapter.submitList(calculatedMealNutrients, allDayMealListProduct, selectedMeals)
 
+    }
+
+    private fun readMealsFromSelectedDay(mealArray: ArrayList<Int>): Map<Int,String>{
+        val meals = arrayMapOf<Int,String>()
+
+        for (meal in mealArray){
+            if (meal == 1) { meals[meal] = "Breakfast"}
+            if (meal == 2) { meals[meal] = "Second breakfast"}
+            if (meal == 3) { meals[meal] = "Dinner"}
+            if (meal == 4) { meals[meal] = "Dessert"}
+            if (meal == 5) { meals[meal] = "Tea"}
+            if (meal == 6) { meals[meal] = "Supper"}
+            if (meal == 7) { meals[meal] = "Snacks"}
+            if (meal == 8) { meals[meal] = "Training"}
+        }
+        return meals
     }
 
     private fun readSelectedMealsByUser(): Map<Int, String> {
@@ -273,6 +310,10 @@ class home_fragment : Fragment() {
         return mealSelectedArray
     }
 
-    companion object {
+    override fun onResume() {
+        super.onResume()
+        showDayPropertis(date.toString())
+//        showMeals(date.toString())
     }
+
 }

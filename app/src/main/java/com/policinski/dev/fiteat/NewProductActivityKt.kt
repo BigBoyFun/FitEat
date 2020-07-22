@@ -5,10 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.create_product_layout.*
+import kotlinx.android.synthetic.main.activity_new_product.*
 
 class newProductActivity : AppCompatActivity() {
 

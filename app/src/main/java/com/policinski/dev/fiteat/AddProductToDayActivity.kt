@@ -10,7 +10,7 @@ import android.text.TextWatcher
 import android.widget.Button
 import android.widget.SeekBar
 import androidx.collection.arrayMapOf
-import kotlinx.android.synthetic.main.add_product_to_day_layout.*
+import kotlinx.android.synthetic.main.activity_add_product_to_day.*
 import java.time.LocalDate
 
 lateinit var array: ArrayList<Button>

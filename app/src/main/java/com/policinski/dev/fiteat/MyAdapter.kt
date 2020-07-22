@@ -4,21 +4,13 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 import androidx.collection.arrayMapOf
-import androidx.core.app.ActivityCompat.startActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.add_product_to_day_layout.*
 import kotlinx.android.synthetic.main.delate_layout.*
 import kotlinx.android.synthetic.main.product_row_view.view.*
-import java.time.LocalDate
-import kotlin.coroutines.coroutineContext
 
 class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
@@ -91,7 +83,12 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                 deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
                 deleteDialog.delate_dialog_product_name_tv.text = product.name
-                deleteDialog.delate_dialog_delate_but.setOnClickListener { db.deleteProduct(product.id); deleteDialog.dismiss()}
+                deleteDialog.delate_dialog_delate_but.setOnClickListener {
+                    db.deleteProduct(product.id)
+                    deleteDialog.dismiss()
+                    val intent = Intent(itemView.context, RefreshtActivity::class.java)
+                    ContextCompat.startActivity(itemView.context,intent,null)
+                }
                 deleteDialog.delate_but_cancel.setOnClickListener { deleteDialog.dismiss() }
 
                 deleteDialog.show()
@@ -104,156 +101,6 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                 intent.putExtra("PRODUCT_NAME",product.name)
                 ContextCompat.startActivity(itemView.context,intent,null)
 
-//                val dialog = Dialog(itemView.context)
-//                dialog.setContentView(R.layout.add_product_to_day_layout)
-//                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//
-//                //init views
-//                val productName = dialog.product_name
-//                var input_weight = dialog.input_weight
-//                var calculateKcal = dialog.calculate_kcal
-//                var calculatePro = dialog.calculate_pro
-//                var calculateFat = dialog.calculate_fat
-//                var calculateCarbo = dialog.calculate_carbo
-//                var read_weight_tv = dialog.read_weight_tv
-//                val seekBar = dialog.seekBar
-//                var mealNameTv = dialog.meal_name_tv
-//                val onBt = dialog.ok_bt
-//                val cancelBt = dialog.cancel_bt
-//
-//                //initiation of buttons responsible for choosing the right meal to which we want to add the selected product
-//                array = arrayListOf<Button>(dialog.button_1,
-//                    dialog.button_2,
-//                    dialog.button_3,
-//                    dialog.button_4,
-//                    dialog.button_5,
-//                    dialog.button_6,
-//                    dialog.button_7,
-//                    dialog.button_8)
-//
-//                val mealArray = readSelectedMealsByUser()
-//
-//                //FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK
-//                //enables buttons that are responsible for selecting available meals (selected by the user)
-//                for (i in mealArray.keys) array[i-1].isEnabled = true
-//
-//                for ((index, item) in array.withIndex()) item.setOnClickListener { v ->
-//                    v as Button
-//                    meal = v.text.toString().toInt()
-//
-//                    for (item in array){
-//                        if (item.text.toString().toInt() != meal){
-//                            item.setBackgroundResource(R.drawable.gray_bt_shape)
-//                        }else{
-//                            item.setBackgroundResource(R.drawable.green_bt_shape)
-//                        }
-//                    }
-//
-//                    when(array.indexOf(v)){
-//                        0 -> mealNameTv.text = dialog.context.getString(R.string.breakfast_1)
-//                        1 -> mealNameTv.text = dialog.context.getString(R.string.second_breakfast_2)
-//                        2 -> mealNameTv.text = dialog.context.getString(R.string.dinner_3)
-//                        3 -> mealNameTv.text = dialog.context.getString(R.string.dessert_4)
-//                        4 -> mealNameTv.text = dialog.context.getString(R.string.tea_5)
-//                        5 -> mealNameTv.text = dialog.context.getString(R.string.supper_6)
-//                        6 -> mealNameTv.text = dialog.context.getString(R.string.snacks_7)
-//                        7 -> mealNameTv.text = dialog.context.getString(R.string.training_8)
-//                    }
-//
-//                }
-//
-//                //set text on all textViews and progress on seekBar, by current product specification
-//                productName.text = product.name
-//                calculateKcal.text = product.kcal.toString()
-//                calculatePro.text = product.protein.toString()
-//                calculateFat.text = product.fat.toString()
-//                calculateCarbo.text = product.carbo.toString()
-//                input_weight.setText("${product.weight}")
-//                read_weight_tv.text = "${product.weight}"
-//                seekBar.progress = product.weight
-//
-//                // setting progress on seekBar by writing in editText
-//                input_weight.addTextChangedListener(object : TextWatcher{
-//                    override fun afterTextChanged(s: Editable?) {
-//
-//                    }
-//
-//                    override fun beforeTextChanged(
-//                        s: CharSequence?,
-//                        start: Int,
-//                        count: Int,
-//                        after: Int
-//                    ) {
-//
-//                    }
-//
-//                    override fun onTextChanged(
-//                        s: CharSequence?,
-//                        start: Int,
-//                        before: Int,
-//                        count: Int
-//                    ) {
-//                        if (s.toString().isEmpty()){
-//                            seekBar.progress = 0
-//                            read_weight_tv.text = "0 g"
-//                        }else {
-//                            seekBar.progress = s.toString().toInt()
-//                            if (s.toString().toLong() > 300){
-//                                read_weight_tv.text = "300 g"
-//                            }else {
-//                                read_weight_tv.text = "$s g"
-//                            }
-//                        }
-//
-//                    }
-//
-//                })
-//
-//                //calculate nutrients by change seekBar state
-//                seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//                    override fun onProgressChanged(
-//                        seekBar: SeekBar?,
-//                        progress: Int,
-//                        fromUser: Boolean
-//                    ) {
-//                        read_weight_tv.setText("$progress g")
-//                        calculateKcal.text = ((product.kcal * progress) / product.weight).toString()
-//                        calculatePro.text = "%.2f".format((product.protein * progress) / product.weight).replace(',','.')
-//                        calculateFat.text = "%.2f".format((product.fat * progress) / product.weight).replace(',','.')
-//                        calculateCarbo.text = "%.2f".format((product.carbo * progress) / product.weight).replace(',','.')
-//                    }
-//
-//                    override fun onStartTrackingTouch(seekBar: SeekBar?) {
-//
-//                    }
-//
-//                    override fun onStopTrackingTouch(seekBar: SeekBar?) {
-//
-//                    }
-//
-//                })
-//
-//                val data = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                    LocalDate.now().toString()
-//                } else {
-//                    TODO("VERSION.SDK_INT < O")
-//                }
-//
-//                //add meal to current day and close dialog
-//                dialog.ok_bt.setOnClickListener{
-//                    db.addProductToDay(data,
-//                        product.name,
-//                        calculateKcal.text.toString().toInt(),
-//                        calculatePro.text.toString().replace(',','.').toDouble(),
-//                        calculateCarbo.text.toString().replace(',','.').toDouble(),
-//                        calculateFat.text.toString().replace(',','.').toDouble(),
-//                        meal,seekBar.progress)
-//                    dialog.dismiss()}
-//
-//                //close dialog with no adding meal to current day
-//                dialog.cancel_bt.setOnClickListener{dialog.dismiss()}
-//
-//                dialog.show()
             }
 
         }
