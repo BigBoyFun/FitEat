@@ -143,6 +143,16 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationSnacksSwitch.isChecked = readPref.getBoolean(PREF_SNACKS_NOTIFICATION,false)
         notificationTrainingSwitch.isChecked = readPref.getBoolean(PREF_TRAINING_NOTIFICATION,false)
 
+        //set time picker enables based on the notification swift state
+        notificationBreakfastTime.isEnabled = notificationBreakfastSwitch.isChecked
+        notificationSecondBreakfastTime.isEnabled = notificationSecondBreakfastSwitch.isChecked
+        notificationDinnerTime.isEnabled = notificationDinnerSwitch.isChecked
+        notificationDessertTime.isEnabled = notificationDessertSwitch.isChecked
+        notificationTeaTime.isEnabled = notificationTeaSwitch.isChecked
+        notificationSupperTime.isEnabled = notificationSupperSwitch.isChecked
+        notificationSnacksTime.isEnabled = notificationSnacksSwitch.isChecked
+        notificationTrainingTime.isEnabled = notificationTrainingSwitch.isChecked
+
         notificationBreakfastTime.text = readPref.getString(PREF_BREAKFAST_NOTIFICATION_TIME,"00:00")
         notificationSecondBreakfastTime.text = readPref.getString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,"00:00")
         notificationDinnerTime.text = readPref.getString(PREF_DINNER_NOTIFICATION_TIME,"00:00")
@@ -152,15 +162,40 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationSnacksTime.text = readPref.getString(PREF_SNACKS_NOTIFICATION_TIME,"00:00")
         notificationTrainingTime.text = readPref.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
 
-        //add changeListener to the notification switch -> change notification switch state based on the meals selected
-        breakfast.setOnCheckedChangeListener { buttonView, isChecked -> notificationBreakfastSwitch.apply { this.isChecked = false; this.isEnabled = isChecked } }
-        secondBreakfast.setOnCheckedChangeListener { buttonView, isChecked -> notificationSecondBreakfastSwitch.apply { this.isChecked = false; this.isEnabled = isChecked } }
-        dinner.setOnCheckedChangeListener { buttonView, isChecked -> notificationDinnerSwitch.apply { this.isChecked = false; this.isEnabled = isChecked } }
-        dessert.setOnCheckedChangeListener { buttonView, isChecked -> notificationDessertSwitch.apply { this.isChecked = false; this.isEnabled = isChecked } }
-        tea.setOnCheckedChangeListener { buttonView, isChecked -> notificationTeaSwitch.apply { this.isChecked = false; this.isEnabled = isChecked } }
-        supper.setOnCheckedChangeListener { buttonView, isChecked -> notificationSupperSwitch.apply { this.isChecked = false; this.isEnabled = isChecked } }
-        snacks.setOnCheckedChangeListener { buttonView, isChecked -> notificationSnacksSwitch.apply { this.isChecked = false; this.isEnabled = isChecked } }
-        training.setOnCheckedChangeListener { buttonView, isChecked -> notificationTrainingSwitch.apply { this.isChecked = false; this.isEnabled = isChecked } }
+        //add changeListener to the notification switch -> change notification switch & time state based on the meals selected
+        breakfast.setOnCheckedChangeListener { buttonView, isChecked ->
+            notificationBreakfastSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+        }
+        secondBreakfast.setOnCheckedChangeListener { buttonView, isChecked ->
+            notificationSecondBreakfastSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+        }
+        dinner.setOnCheckedChangeListener { buttonView, isChecked ->
+            notificationDinnerSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+        }
+        dessert.setOnCheckedChangeListener { buttonView, isChecked ->
+            notificationDessertSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+        }
+        tea.setOnCheckedChangeListener { buttonView, isChecked ->
+            notificationTeaSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+        }
+        supper.setOnCheckedChangeListener { buttonView, isChecked ->
+            notificationSupperSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+        }
+        snacks.setOnCheckedChangeListener { buttonView, isChecked ->
+            notificationSnacksSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+        }
+        training.setOnCheckedChangeListener { buttonView, isChecked ->
+            notificationTrainingSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+        }
+
+        notificationBreakfastSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationBreakfastTime.isEnabled = isChecked }
+        notificationSecondBreakfastSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationSecondBreakfastTime.isEnabled = isChecked }
+        notificationDinnerSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationDinnerTime.isEnabled = isChecked }
+        notificationDessertSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationDessertTime.isEnabled = isChecked }
+        notificationTeaSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationTeaTime.isEnabled = isChecked }
+        notificationSupperSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationSupperTime.isEnabled = isChecked }
+        notificationSnacksSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationSnacksTime.isEnabled = isChecked }
+        notificationTrainingSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationTrainingTime.isEnabled = isChecked }
 
         //save settings button
         val saveBt = view.findViewById<Button>(R.id.ok_product_settings_dialog)

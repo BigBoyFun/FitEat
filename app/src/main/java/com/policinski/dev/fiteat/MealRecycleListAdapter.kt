@@ -14,12 +14,16 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
 import kotlinx.android.synthetic.main.meal_row_layout.view.*
+import java.time.LocalDate
+import kotlin.collections.ArrayList
+import kotlin.math.abs
 
 class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     var mealNutrientsSumList: MutableList<Product> = mutableListOf()
     var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
     var selectedMeals = ArrayList<String>()
+    public var date: String = ""
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -31,36 +35,51 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private val expandableListView = itemView.expanding_list!!
         private val constraintLayout =  itemView.constraintLayout_meal_row!!
         private val myDB = MyDatabaseHelper(itemView.context)
-        private var title = "Meal"
+        private var mealTitle = "Meal"
         lateinit var item: ExpandingItem
 
 
         fun bind(
-            product: Product,
+            productMeal: Product,
             position1: MutableList<Product>,
             position2: String,
-            position: Int
+            position: Int,
+            date: String
         ){
             //set name for meal
-            title = position2
+            mealTitle = position2
 
-            mealRowTitleMeal.text = title
-            mealRowKcal.text = "K: " + product.kcal.toString()
-            mealRowCarbo.text = "C: %.1f".format(product.carbo).replace(',','.')
-            mealRowFat.text = "F: %.1f".format(product.fat).replace(',','.')
-            mealRowPro.text = "P: %.1f".format(product.protein).replace(',','.')
+            mealRowTitleMeal.text = mealTitle
+            mealRowKcal.text = "K: " + productMeal.kcal.toString()
+            mealRowCarbo.text = "C: %.1f".format(productMeal.carbo).replace(',','.')
+            mealRowFat.text = "F: %.1f".format(productMeal.fat).replace(',','.')
+            mealRowPro.text = "P: %.1f".format(productMeal.protein).replace(',','.')
 
             if (expandableListView.itemsCount == 0) { //security created to prevent duplication of the drop-down list view when recycleView is scrolling
-                createItem("", position1)
+                createItem("", position1,date,productMeal, mealTitle)
             }
 
         }
 
-        fun createItem(title: String, productList: MutableList<Product>){
-            addItem(title,productList,R.color.colorAccent,R.drawable.ic_restaurant_menu_white_24dp)
+        fun createItem(
+            title: String,
+            productList: MutableList<Product>,
+            date: String,
+            productMeal: Product,
+            mealTitle: String
+        ){
+            addItem(title,productList,R.color.colorAccent,R.drawable.ic_restaurant_menu_white_24dp,date,productMeal,mealTitle)
         }
 
-        fun addItem(title: String, subItem: MutableList<Product>, colorRes: Int, iconRes: Int){
+        fun addItem(
+            title: String,
+            subItem: MutableList<Product>,
+            colorRes: Int,
+            iconRes: Int,
+            date: String,
+            productMeal: Product,
+            mealTitle: String
+        ){
 
             //Create item with R.layout.expanding_layout
             item = expandableListView.createNewItem(R.layout.expanding_layout)
@@ -79,7 +98,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                     val view = item.getSubItemView(i)
 
                     //create some values in
-                    configureSubItems(item,view,subItem[i])
+                    configureSubItems(item,view,subItem[i],date,productMeal,mealTitle)
                 }
 
                 // expand the list by clicking the invisible button -> this button causes a drop down list by clicking anywhere in the view
@@ -90,7 +109,10 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         fun configureSubItems(
             item: ExpandingItem,
             view: View,
-            product: Product
+            product: Product,
+            date: String,
+            productMeal: Product,
+            mealTitle: String
         ) {
             view.setOnClickListener{Toast.makeText(itemView.context, "${product.name}\n ${product.weight}.g", Toast.LENGTH_SHORT).show()}
 
@@ -98,9 +120,21 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
             view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text = "${product.weight}.g | K: ${product.kcal} | F: ${product.fat} | C: ${product.carbo} | P: ${product.protein}" //Set Nutrients
 
+            //set visibility for edit and delete buttons when selected date is today else buttons are gone -> user cant change history
+            (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
+            (view.findViewById(R.id.expanding_sub_item_delete_product_bt) as Button).visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
+
             view.findViewById<Button>(R.id.expanding_sub_item_delete_product_bt).setOnClickListener{
+
+                //Delete product drom expanding list
                 item!!.removeSubItem(view)
+
+                //Delete product from day table in database
                 myDB.deleteProductFromMeal(product.id)
+
+                //refresh Nutrients Values In Expanding Layout Title
+                refreshNutrientsValuesInExpandingLayoutTitle(date)
+
                 refreshActivity()
             }
 
@@ -126,10 +160,10 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
                 //set current nutrients from selected product
                 productName.text = "${product.name}"
-                editKcal.setText("${product.kcal}")
-                editPro.setText("${product.protein}")
-                editFat.setText("${product.fat}")
-                editCarbo.setText("${product.carbo}")
+                editKcal.text = "${product.kcal}"
+                editPro.text = "${product.protein}"
+                editFat.text = "${product.fat}"
+                editCarbo.text = "${product.carbo}"
                 editWeight.setText("${product.weight}")
 
                 editWeight.addTextChangedListener(object : TextWatcher{
@@ -167,6 +201,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                                 (baseProduct.carbo * editWeight.text.toString()
                                     .toDouble()) / baseProduct.weight
                             ).replace(',', '.')
+
                         }else{
                             editKcal.text = "0"
                             editPro.text = "0"
@@ -176,12 +211,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                     }
                 })
 
-                //Znajdz produkt po nazwie
-                //Odczytaj jego wage
-                //zmien jego wage
-                //oblicz nowe wartosci
-                //zapisz je w bazie
-                //zaktualizuj wartosci w liscie
+
 
                 //save new product parameter
                 butOK.setOnClickListener {
@@ -194,6 +224,8 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         product.id
                     )
 
+                    refreshNutrientsValuesInExpandingLayoutTitle(date)
+
                     //set new values for product
                     product.kcal = editKcal.text.toString().toInt()
                     product.protein = editPro.text.toString().toDouble()
@@ -201,11 +233,12 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                     product.carbo = editCarbo.text.toString().toDouble()
                     product.weight = editWeight.text.toString().toInt()
 
+
+
                     //set new values in list
                     view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text =
                         "K: ${product.kcal} / F: ${product.fat} / C: ${product.carbo} / P: ${product.protein}" //Set Nutrients
 
-                    //calculate new nutrients values for current meal
 
                     editDialog.dismiss()
 
@@ -221,17 +254,57 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             }
         }
 
+        private fun refreshNutrientsValuesInExpandingLayoutTitle(date: String){
+
+            var calculatedProduct: Product = Product()
+
+            val db = MyDatabaseHelper(itemView.context)
+            val cursor = db.readMealFromDay(date, findMealByTitle(mealTitle))
+
+            for (item in cursor){
+                calculatedProduct.kcal += item.kcal
+                calculatedProduct.carbo += item.carbo
+                calculatedProduct.fat += item.fat
+                calculatedProduct.protein += item.protein
+                calculatedProduct.weight += item.weight
+            }
+
+            mealRowKcal.text = "K: " + calculatedProduct.kcal.toString()
+            mealRowCarbo.text = "C: %.1f".format(calculatedProduct.carbo).replace(',','.')
+            mealRowFat.text = "F: %.1f".format(calculatedProduct.fat).replace(',','.')
+            mealRowPro.text = "P: %.1f".format(calculatedProduct.protein).replace(',','.')
+        }
+
         private fun refreshActivity() {
             val intent = Intent(itemView.context, RefreshtActivity::class.java)
             ContextCompat.startActivity(itemView.context,intent,null)
         }
+
+        private fun findMealByTitle(title: String): Int{
+
+            return when(title){
+                "Breakfast" -> 1
+                "Second breakfast" -> 2
+                "Dinner" -> 3
+                "Dessert" -> 4
+                "Tea" -> 5
+                "Supper" -> 6
+                "Snacks" -> 7
+                "Training" -> 8
+                else -> 1
+            }
+
+        }
+
     }
 
     fun submitList(
         list: MutableList<Product>,
         mealList: MutableList<MutableList<Product>>,
-        readSelectedMealsByUser: Map<Int, String>
+        readSelectedMealsByUser: Map<Int, String>,
+        selectedDate: String
     ){
+        date = selectedDate
         mealNutrientsSumList = list
         allDayMealListProduct = mealList
         for (title in readSelectedMealsByUser) selectedMeals.add(title.value)
@@ -249,7 +322,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
 
-            is ViewHolder -> { holder.bind(mealNutrientsSumList[position],allDayMealListProduct[position],selectedMeals[position],position) }
+            is ViewHolder -> { holder.bind(mealNutrientsSumList[position],allDayMealListProduct[position],selectedMeals[position],position,date) }
 
         }
     }

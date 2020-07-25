@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.*
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.day_sum_kcal
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.selected_date_tx
-import org.w3c.dom.Text
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
@@ -211,6 +210,10 @@ class home_fragment : Fragment() {
         circularProgressBar?.max = prefkcal
         circularProgressBar?.progress = nutrientsSumArray[0].toInt()
         val kcalProgress= (nutrientsSumArray[0] / (prefkcal / 100)).toInt()
+
+        //FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK
+        //FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK
+        //FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
              if (kcalProgress > 100) {
                  progressInPercent?.setTextColor(resources.getColor(R.color.custom_red,null))
@@ -264,7 +267,7 @@ class home_fragment : Fragment() {
             adapter = mealAdapter
         }
 
-        mealAdapter.submitList(calculatedMealNutrients, allDayMealListProduct, selectedMeals)
+        mealAdapter.submitList(calculatedMealNutrients, allDayMealListProduct, selectedMeals,date)
 
     }
 
