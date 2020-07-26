@@ -9,14 +9,15 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
 import kotlinx.android.synthetic.main.meal_row_layout.view.*
 import java.time.LocalDate
-import kotlin.collections.ArrayList
-import kotlin.math.abs
 
 class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -27,6 +28,29 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        private val MAIN_PREF = "MAIN_PREF"
+
+        private var sharedPreferences = itemView.context.getSharedPreferences(MAIN_PREF,0)
+        private var edit = sharedPreferences.edit()
+
+        private val PREF_BREAKFAST_NOTIFICATION = "PREF_BREAKFAST_NOTIFICATION"
+        private val PREF_SECOND_BREAKFAST_NOTIFICATION = "PREF_SECOND_BREAKFAST_NOTIFICATION"
+        private val PREF_DINNER_NOTIFICATION = "PREF_DINNER_NOTIFICATION"
+        private val PREF_DESSERT_NOTIFICATION = "PREF_DESSERT_NOTIFICATION"
+        private val PREF_TEA_NOTIFICATION = "PREF_TEA_NOTIFICATION"
+        private val PREF_SUPPER_NOTIFICATION = "PREF_SUPPER_NOTIFICATION"
+        private val PREF_SNACKS_NOTIFICATION = "PREF_SNACKS_NOTIFICATION"
+        private val PREF_TRAINING_NOTIFICATION = "PREF_TRAINING_NOTIFICATION"
+
+        private val PREF_BREAKFAST_NOTIFICATION_TIME = "PREF_BREAKFAST_NOTIFICATION_TIME"
+        private val PREF_SECOND_BREAKFAST_NOTIFICATION_TIME = "PREF_SECOND_BREAKFAST_NOTIFICATION_TIME"
+        private val PREF_DINNER_NOTIFICATION_TIME = "PREF_DINNER_NOTIFICATION_TIME"
+        private val PREF_DESSERT_NOTIFICATION_TIME = "PREF_DESSERT_NOTIFICATION_TIME"
+        private val PREF_TEA_NOTIFICATION_TIME = "PREF_TEA_NOTIFICATION_TIME"
+        private val PREF_SUPPER_NOTIFICATION_TIME = "PREF_SUPPER_NOTIFICATION_TIME"
+        private val PREF_SNACKS_NOTIFICATION_TIME = "PREF_SNACKS_NOTIFICATION_TIME"
+        private val PREF_TRAINING_NOTIFICATION_TIME = "PREF_TRAINING_NOTIFICATION_TIME"
+
         private val mealRowTitleMeal = itemView.meal_row_title_meal!!
         private val mealRowKcal = itemView.meal_row_kcal_tv!!
         private val mealRowPro = itemView.meal_row_pro_tv!!
@@ -36,6 +60,9 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private val constraintLayout =  itemView.constraintLayout_meal_row!!
         private val myDB = MyDatabaseHelper(itemView.context)
         private var mealTitle = "Meal"
+        private var notificationState =itemView.notification_meal_state_but
+        private var mealTimePicker = itemView.meal_time_tv
+        private var state: Boolean = false
         lateinit var item: ExpandingItem
 
 
@@ -48,6 +75,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         ){
             //set name for meal
             mealTitle = position2
+            readMealNotificationState(position2)
 
             mealRowTitleMeal.text = mealTitle
             mealRowKcal.text = "K: " + productMeal.kcal.toString()
@@ -55,9 +83,77 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             mealRowFat.text = "F: %.1f".format(productMeal.fat).replace(',','.')
             mealRowPro.text = "P: %.1f".format(productMeal.protein).replace(',','.')
 
+            notificationState.setOnClickListener {
+                when(state){
+                    true -> it.setBackgroundResource(R.drawable.ic_baseline_notifications_24)
+                    false -> it.setBackgroundResource(R.drawable.ic_baseline_notifications_active_24)
+                }
+
+                state = when(state){
+                    true -> false
+                    false -> true
+                }
+
+                mealTimePicker.isEnabled = state
+
+                when(state){
+                    true -> saveMealNotificationState(state, position2)
+                    false -> saveMealNotificationState(state, position2)
+                }
+
+            }
+
             if (expandableListView.itemsCount == 0) { //security created to prevent duplication of the drop-down list view when recycleView is scrolling
                 createItem("", position1,date,productMeal, mealTitle)
             }
+
+        }
+
+        private fun saveMealNotificationState(state: Boolean, title: String) {
+
+            when(title){
+                "Breakfast" -> edit.putBoolean(PREF_BREAKFAST_NOTIFICATION,state).apply()
+                "Second breakfast" -> edit.putBoolean(PREF_SECOND_BREAKFAST_NOTIFICATION,state).apply()
+                "Dinner" -> edit.putBoolean(PREF_DINNER_NOTIFICATION,state).apply()
+                "Dessert" -> edit.putBoolean(PREF_DESSERT_NOTIFICATION,state).apply()
+                "Tea" -> edit.putBoolean(PREF_TEA_NOTIFICATION,state).apply()
+                "Supper" -> edit.putBoolean(PREF_SUPPER_NOTIFICATION,state).apply()
+                "Snacks" -> edit.putBoolean(PREF_SNACKS_NOTIFICATION,state).apply()
+                "Training" -> edit.putBoolean(PREF_TRAINING_NOTIFICATION,state).apply()
+            }
+
+        }
+
+        private fun readMealNotificationState(title: String){
+
+            when(title){
+                "Breakfast" -> state = sharedPreferences.getBoolean(PREF_BREAKFAST_NOTIFICATION,false)
+                "Second breakfast" -> state = sharedPreferences.getBoolean(PREF_SECOND_BREAKFAST_NOTIFICATION,false)
+                "Dinner" -> state = sharedPreferences.getBoolean(PREF_DINNER_NOTIFICATION,false)
+                "Dessert" -> state = sharedPreferences.getBoolean(PREF_DESSERT_NOTIFICATION,false)
+                "Tea" -> state = sharedPreferences.getBoolean(PREF_TEA_NOTIFICATION,false)
+                "Supper" -> state = sharedPreferences.getBoolean(PREF_SUPPER_NOTIFICATION,false)
+                "Snacks" -> state = sharedPreferences.getBoolean(PREF_SNACKS_NOTIFICATION,false)
+                "Training" -> state = sharedPreferences.getBoolean(PREF_TRAINING_NOTIFICATION,false)
+            }
+
+            when(title){
+                "Breakfast" -> mealTimePicker.text = sharedPreferences.getString(PREF_BREAKFAST_NOTIFICATION_TIME,"00:00")
+                "Second breakfast" -> mealTimePicker.text = sharedPreferences.getString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,"00:00")
+                "Dinner" -> mealTimePicker.text = sharedPreferences.getString(PREF_DINNER_NOTIFICATION_TIME,"00:00")
+                "Dessert" -> mealTimePicker.text = sharedPreferences.getString(PREF_DESSERT_NOTIFICATION_TIME,"00:00")
+                "Tea" -> mealTimePicker.text = sharedPreferences.getString(PREF_TEA_NOTIFICATION_TIME,"00:00")
+                "Supper" -> mealTimePicker.text = sharedPreferences.getString(PREF_SUPPER_NOTIFICATION_TIME,"00:00")
+                "Snacks" -> mealTimePicker.text = sharedPreferences.getString(PREF_SNACKS_NOTIFICATION_TIME,"00:00")
+                "Training" -> mealTimePicker.text = sharedPreferences.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
+            }
+
+            when(state){
+                true -> notificationState.setBackgroundResource(R.drawable.ic_baseline_notifications_active_24)
+                false -> notificationState.setBackgroundResource(R.drawable.ic_baseline_notifications_24)
+            }
+
+            mealTimePicker.isEnabled = state
 
         }
 

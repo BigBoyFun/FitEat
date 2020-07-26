@@ -125,18 +125,29 @@
             app:layout_constraintBottom_toBottomOf="@+id/meal_row_kcal_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/meal_row_kcal_tv"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/notification_meal_state_but" />
 
         <TextView
             android:id="@+id/meal_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10:00 -> 11:00"
+            android:text="11:00"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/meal_row_title_meal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/meal_row_carbo_tv" />
+            app:layout_constraintEnd_toEndOf="@+id/meal_row_pro_tv" />
+
+        <Button
+            android:id="@+id/notification_meal_state_but"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_baseline_notifications_24"
+            app:layout_constraintBottom_toBottomOf="@+id/meal_time_tv"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/meal_time_tv"
+            app:layout_constraintTop_toTopOf="@+id/meal_time_tv" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
