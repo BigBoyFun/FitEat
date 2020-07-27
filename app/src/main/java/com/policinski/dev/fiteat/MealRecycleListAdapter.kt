@@ -1,6 +1,7 @@
 package com.policinski.dev.fiteat
 
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,15 +10,15 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
 import kotlinx.android.synthetic.main.meal_row_layout.view.*
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -103,9 +104,31 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
             }
 
+            //open timePickerDialog by click on hour next to notification bell
+            mealTimePicker.setOnClickListener {v ->
+
+                v as TextView
+                val cal = Calendar.getInstance()
+                val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                    cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                    cal.set(Calendar.MINUTE, minute)
+
+                    //set time to the notificationTime TextView
+                    mealTimePicker.text = SimpleDateFormat("HH:mm").format(cal.time)
+
+                    //save meal time notification do memory
+                    saveNotificationTIme(mealTitle,SimpleDateFormat("HH:mm").format(cal.time))
+                }
+
+                TimePickerDialog(itemView.context,timeSetListener,cal.get(Calendar.HOUR_OF_DAY), cal.get(
+                    Calendar.MINUTE),true).show()
+
+            }
+
             if (expandableListView.itemsCount == 0) { //security created to prevent duplication of the drop-down list view when recycleView is scrolling
                 createItem("", position1,date,productMeal, mealTitle)
             }
+
 
         }
 
@@ -120,6 +143,21 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 "Supper" -> edit.putBoolean(PREF_SUPPER_NOTIFICATION,state).apply()
                 "Snacks" -> edit.putBoolean(PREF_SNACKS_NOTIFICATION,state).apply()
                 "Training" -> edit.putBoolean(PREF_TRAINING_NOTIFICATION,state).apply()
+            }
+
+        }
+
+        private fun saveNotificationTIme(title: String, time: String){
+
+            when(title){
+                "Breakfast" -> edit.putString(PREF_BREAKFAST_NOTIFICATION_TIME,time).apply()
+                "Second breakfast" -> edit.putString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,time).apply()
+                "Dinner" -> edit.putString(PREF_DINNER_NOTIFICATION_TIME,time).apply()
+                "Dessert" -> edit.putString(PREF_DESSERT_NOTIFICATION_TIME,time).apply()
+                "Tea" -> edit.putString(PREF_TEA_NOTIFICATION_TIME,time).apply()
+                "Supper" -> edit.putString(PREF_SUPPER_NOTIFICATION_TIME,time).apply()
+                "Snacks" -> edit.putString(PREF_SNACKS_NOTIFICATION_TIME,time).apply()
+                "Training" -> edit.putString(PREF_TRAINING_NOTIFICATION_TIME,time).apply()
             }
 
         }
@@ -212,7 +250,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         ) {
             view.setOnClickListener{Toast.makeText(itemView.context, "${product.name}\n ${product.weight}.g", Toast.LENGTH_SHORT).show()}
 
-            view.findViewById<TextView>(R.id.expanding_sub_item_product_name_tv).text = "${product.name}" //Set product name
+            view.findViewById<TextView>(R.id.expanding_sub_item_product_name_tv).text = "${product.name} " //Set product name
 
             view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text = "${product.weight}.g | K: ${product.kcal} | F: ${product.fat} | C: ${product.carbo} | P: ${product.protein}" //Set Nutrients
 
@@ -220,19 +258,6 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
             (view.findViewById(R.id.expanding_sub_item_delete_product_bt) as Button).visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
 
-            view.findViewById<Button>(R.id.expanding_sub_item_delete_product_bt).setOnClickListener{
-
-                //Delete product drom expanding list
-                item!!.removeSubItem(view)
-
-                //Delete product from day table in database
-                myDB.deleteProductFromMeal(product.id)
-
-                //refresh Nutrients Values In Expanding Layout Title
-                refreshNutrientsValuesInExpandingLayoutTitle(date)
-
-                refreshActivity()
-            }
 
             (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).setOnClickListener{
 
@@ -247,7 +272,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 //init buttons and editText's
                 val productName = editDialog.findViewById(R.id.product_edit_name) as TextView
                 val butOK = editDialog.findViewById(R.id.ok_product_settings_dialog) as Button
-                val butCancel = editDialog.findViewById(R.id.cancel_product_settings_dialog) as Button
+                val butDelete = editDialog.findViewById(R.id.cancel_product_settings_dialog) as Button
                 val editKcal = editDialog.findViewById(R.id.kcal_product_settings_dialog) as TextView
                 val editPro = editDialog.findViewById(R.id.pro_user_product_settings_dialog) as TextView
                 val editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog) as TextView
@@ -341,8 +366,23 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                     refreshActivity()
                 }
 
-                //dismiss dialog
-                butCancel.setOnClickListener{ editDialog.dismiss() }
+                //delete product from current day
+                butDelete.setOnClickListener{
+
+                    //Delete product drom expanding list
+                    item!!.removeSubItem(view)
+
+                    //Delete product from day table in database
+                    myDB.deleteProductFromMeal(product.id)
+
+                    //refresh Nutrients Values In Expanding Layout Title
+                    refreshNutrientsValuesInExpandingLayoutTitle(date)
+
+                    editDialog.dismiss()
+
+                    refreshActivity()
+
+                }
 
                 //show dialog
                 editDialog.show()

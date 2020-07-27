@@ -68,4 +68,9 @@
     <string name="notification">Notification</string>
     <string name="nummeret_breakfast_1">1 Breakfast</string>
     <string name="nummeret_breakfast_2">2 Breakfast</string>
+    <string name="kcal">kcal</string>
+    <string name="protein_with_tabs">"  Protein  "</string>
+    <string name="fat">Fat</string>
+    <string name="carbo">Carbo</string>
+    <string name="close">CLOSE</string>
 </resources>

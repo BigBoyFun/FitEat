@@ -105,8 +105,6 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
         }
 
-
-
         private fun readSelectedMealsByUser(): Map<Int, String> {
 
             val mealSelectedArray = arrayMapOf<Int, String>()
