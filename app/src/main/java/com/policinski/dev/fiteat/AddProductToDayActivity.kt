@@ -126,8 +126,8 @@ class AddProductToDayActivity : AppCompatActivity() {
                     read_weight_tv.text = "0 g"
                 }else {
                     seekBar.progress = s.toString().toInt()
-                    if (s.toString().toLong() > 300){
-                        read_weight_tv.text = "300 g"
+                    if (s.toString().toLong() > 999){
+                        read_weight_tv.text = "999 g"
                     }else {
                         read_weight_tv.text = "$s g"
                     }

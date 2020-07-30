@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
+import kotlinx.android.synthetic.main.delate_layout.*
 import kotlinx.android.synthetic.main.meal_row_layout.view.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -275,7 +276,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 //init buttons and editText's
                 val productName = editDialog.findViewById(R.id.product_edit_name) as TextView
                 val butOK = editDialog.findViewById(R.id.ok_product_settings_dialog) as Button
-                val butDelete = editDialog.findViewById(R.id.cancel_product_settings_dialog) as Button
+                val butDelete = editDialog.findViewById(R.id.delete_product_settings_dialog) as Button
                 val editKcal = editDialog.findViewById(R.id.kcal_product_settings_dialog) as TextView
                 val editPro = editDialog.findViewById(R.id.pro_user_product_settings_dialog) as TextView
                 val editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog) as TextView
@@ -372,20 +373,36 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 //delete product from current day
                 butDelete.setOnClickListener{
 
-                    //Delete product drom expanding list
-                    item!!.removeSubItem(view)
+                    val deleteDialog = Dialog(itemView.context)
+                    deleteDialog.setContentView(R.layout.delate_layout)
+                    deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-                    //Delete product from day table in database
-                    myDB.deleteProductFromMeal(product.id)
+                    deleteDialog.delate_dialog_product_name_tv.text = product.name
+                    deleteDialog.delate_dialog_delate_but.setOnClickListener {
 
-                    //refresh Nutrients Values In Expanding Layout Title
-                    refreshNutrientsValuesInExpandingLayoutTitle(date)
+                        //Delete product from expanding list
+                        item!!.removeSubItem(view)
 
-                    editDialog.dismiss()
+                        //Delete product from day table in database
+                        myDB.deleteProductFromMeal(product.id)
 
-                    refreshActivity()
+                        //refresh Nutrients Values In Expanding Layout Title
+                        refreshNutrientsValuesInExpandingLayoutTitle(date)
+
+                        refreshActivity()
+
+                        editDialog.dismiss()
+
+                        deleteDialog.dismiss()
+                    }
+
+                    deleteDialog.delate_but_cancel.setOnClickListener { deleteDialog.dismiss() }
+
+                    deleteDialog.show()
 
                 }
+
+                (editDialog.findViewById(R.id.close_product_settings_dialog) as Button).setOnClickListener { editDialog.dismiss() }
 
                 //show dialog
                 editDialog.show()
