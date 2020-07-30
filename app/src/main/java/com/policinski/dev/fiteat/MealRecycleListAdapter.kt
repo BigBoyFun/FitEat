@@ -84,6 +84,10 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             mealRowFat.text = "F: %.1f".format(productMeal.fat).replace(',','.')
             mealRowPro.text = "P: %.1f".format(productMeal.protein).replace(',','.')
 
+            //set visible if date is today, else set invisible(cant change past and future )
+            notificationState.visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
+            mealTimePicker.visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
+
             notificationState.setOnClickListener {
                 when(state){
                     true -> it.setBackgroundResource(R.drawable.ic_baseline_notifications_24)
@@ -256,7 +260,6 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
             //set visibility for edit and delete buttons when selected date is today else buttons are gone -> user cant change history
             (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
-            (view.findViewById(R.id.expanding_sub_item_delete_product_bt) as Button).visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
 
 
             (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).setOnClickListener{
@@ -358,7 +361,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
                     //set new values in list
                     view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text =
-                        "K: ${product.kcal} / F: ${product.fat} / C: ${product.carbo} / P: ${product.protein}" //Set Nutrients
+                        "${product.weight}.g | K: ${product.kcal} | F: ${product.fat} | C: ${product.carbo} | P: ${product.protein}" //Set Nutrients
 
 
                     editDialog.dismiss()
