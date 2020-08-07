@@ -3,6 +3,7 @@
     package="com.policinski.dev.fiteat">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -35,6 +36,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".ReminderBroadcastBreakfast"/>
+        <receiver android:name=".ReminderBroadcastSecondBreakfast"/>
+        <receiver android:name=".ReminderBroadcastDinner"/>
+        <receiver android:name=".ReminderBroadcastDessert"/>
+        <receiver android:name=".ReminderBroadcastTea"/>
+        <receiver android:name=".ReminderBroadcastSupper"/>
+        <receiver android:name=".ReminderBroadcastSnacks"/>
+        <receiver android:name=".ReminderBroadcastTraining"/>
     </application>
 
 </manifest>

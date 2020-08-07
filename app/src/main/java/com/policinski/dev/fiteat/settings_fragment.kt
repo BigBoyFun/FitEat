@@ -1,6 +1,10 @@
 package com.policinski.dev.fiteat
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -239,6 +243,15 @@ class settings_fragment : Fragment(), View.OnClickListener {
 
             edit.apply()
 
+            setupNotificationAlarm(notificationBreakfastTime.text.toString(),0,notificationBreakfastSwitch.isChecked)
+            setupNotificationAlarm(notificationSecondBreakfastTime.text.toString(),1,notificationSecondBreakfastSwitch.isChecked)
+            setupNotificationAlarm(notificationDinnerTime.text.toString(),2,notificationDinnerSwitch.isChecked)
+            setupNotificationAlarm(notificationDessertTime.text.toString(),3,notificationDessertSwitch.isChecked)
+            setupNotificationAlarm(notificationTeaTime.text.toString(),4,notificationTeaSwitch.isChecked)
+            setupNotificationAlarm(notificationSupperTime.text.toString(),5,notificationSupperSwitch.isChecked)
+            setupNotificationAlarm(notificationSnacksTime.text.toString(),6,notificationSnacksSwitch.isChecked)
+            setupNotificationAlarm(notificationTrainingTime.text.toString(),7,notificationTrainingSwitch.isChecked)
+
             dbManager.updateDailyGoalNutrients(date.toString(),
                 kcal.text.toString().toInt(),
                 fat.text.toString().toInt(),
@@ -253,9 +266,49 @@ class settings_fragment : Fragment(), View.OnClickListener {
         return view
     }
 
+    private fun setupNotificationAlarm(time: String, broadcast: Int , status: Boolean) {
+
+        val hour = time.subSequence(0,2)
+        val min = time.subSequence(3,5)
+
+        val calender: Calendar = Calendar.getInstance()
+        calender.set(Calendar.HOUR_OF_DAY,hour.toString().toInt())
+        calender.set(Calendar.MINUTE,min.toString().toInt())
+
+        val alarmManager: AlarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        var intent = Intent()
+
+        when(broadcast){
+            0 -> intent = Intent(context,ReminderBroadcastBreakfast::class.java)
+            1 -> intent = Intent(context,ReminderBroadcastSecondBreakfast::class.java)
+            2 -> intent = Intent(context,ReminderBroadcastDinner::class.java)
+            3 -> intent = Intent(context,ReminderBroadcastDessert::class.java)
+            4 -> intent = Intent(context,ReminderBroadcastTea::class.java)
+            5 -> intent = Intent(context,ReminderBroadcastSupper::class.java)
+            6 -> intent = Intent(context,ReminderBroadcastSnacks::class.java)
+            7 -> intent = Intent(context,ReminderBroadcastTraining::class.java)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(context,broadcast,intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        if (calender.before(Calendar.getInstance())){
+            calender.add(Calendar.DATE,broadcast)
+        }
+
+        if (!status){
+            alarmManager.cancel(pendingIntent)
+        }else{
+            alarmManager.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calender.timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent)
+        }
+    }
+
     override fun onClick(v: View?) {
 
         v as TextView
+        var requestCode:Int = 0
         val cal = Calendar.getInstance()
         val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
@@ -274,6 +327,17 @@ class settings_fragment : Fragment(), View.OnClickListener {
                 v.training_notification_time -> v.text = SimpleDateFormat("HH:mm").format(cal.time)
 
 
+            }
+
+            when(v){
+                v.breakfast_notification_time -> requestCode = 0
+                v.second_breakfast_notification_time -> requestCode = 1
+                v.dinner_notification_time -> requestCode = 2
+                v.dessert_notification_time -> requestCode = 3
+                v.tea_notification_time -> requestCode = 4
+                v.supper_notification_time -> requestCode = 5
+                v.snacks_notification_time -> requestCode = 6
+                v.training_notification_time -> requestCode = 7
             }
         }
 

@@ -73,4 +73,6 @@
     <string name="fat">Fat</string>
     <string name="carbo">Carbo</string>
     <string name="close">CLOSE</string>
+    <string name="channel_name">meal_time_allert</string>
+    <string name="channel_description">Allert time for begin eat meal</string>
 </resources>
