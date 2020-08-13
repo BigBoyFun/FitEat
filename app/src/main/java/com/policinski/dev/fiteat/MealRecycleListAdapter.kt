@@ -1,7 +1,10 @@
 package com.policinski.dev.fiteat
 
+import android.app.AlarmManager
 import android.app.Dialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -103,8 +106,16 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 mealTimePicker.isEnabled = state
 
                 when(state){
-                    true -> saveMealNotificationState(state, position2)
-                    false -> saveMealNotificationState(state, position2)
+
+
+                }
+
+                if (state){
+                    saveMealNotificationState(state, position2)
+                    setupNotificationAlarm(mealTimePicker.text.toString(),findMealByTitle(mealTitle)-1,state)
+                }else{
+                    saveMealNotificationState(state, position2)
+                    setupNotificationAlarm(mealTimePicker.text.toString(),findMealByTitle(mealTitle)-1,state)
                 }
 
             }
@@ -123,6 +134,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
                     //save meal time notification do memory
                     saveNotificationTIme(mealTitle,SimpleDateFormat("HH:mm").format(cal.time))
+                    setupNotificationAlarm(SimpleDateFormat("HH:mm").format(cal.time),findMealByTitle(mealTitle)-1,state)
                 }
 
                 TimePickerDialog(itemView.context,timeSetListener,cal.get(Calendar.HOUR_OF_DAY), cal.get(
@@ -135,6 +147,45 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             }
 
 
+        }
+
+        private fun setupNotificationAlarm(time: String, broadcast: Int , status: Boolean) {
+
+            val hour = time.subSequence(0,2)
+            val min = time.subSequence(3,5)
+
+            val calender: Calendar = Calendar.getInstance()
+            calender.set(Calendar.HOUR_OF_DAY,hour.toString().toInt())
+            calender.set(Calendar.MINUTE,min.toString().toInt())
+
+            val alarmManager: AlarmManager = itemView.context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            var intent = Intent()
+
+            when(broadcast){
+                0 -> intent = Intent(itemView.context,ReminderBroadcastBreakfast::class.java)
+                1 -> intent = Intent(itemView.context,ReminderBroadcastSecondBreakfast::class.java)
+                2 -> intent = Intent(itemView.context,ReminderBroadcastDinner::class.java)
+                3 -> intent = Intent(itemView.context,ReminderBroadcastDessert::class.java)
+                4 -> intent = Intent(itemView.context,ReminderBroadcastTea::class.java)
+                5 -> intent = Intent(itemView.context,ReminderBroadcastSupper::class.java)
+                6 -> intent = Intent(itemView.context,ReminderBroadcastSnacks::class.java)
+                7 -> intent = Intent(itemView.context,ReminderBroadcastTraining::class.java)
+            }
+            val pendingIntent = PendingIntent.getBroadcast(itemView.context,broadcast,intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+            if (calender.before(Calendar.getInstance())){
+                calender.add(Calendar.DATE,broadcast)
+            }
+
+            if (!status){
+                alarmManager.cancel(pendingIntent)
+            }else{
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calender.timeInMillis,
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent)
+            }
         }
 
         private fun saveMealNotificationState(state: Boolean, title: String) {
@@ -200,7 +251,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
         }
 
-        fun createItem(
+        private fun createItem(
             title: String,
             productList: MutableList<Product>,
             date: String,
@@ -210,7 +261,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             addItem(title,productList,R.color.colorAccent,R.drawable.ic_restaurant_menu_white_24dp,date,productMeal,mealTitle)
         }
 
-        fun addItem(
+        private fun addItem(
             title: String,
             subItem: MutableList<Product>,
             colorRes: Int,
@@ -245,7 +296,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             }
         }
 
-        fun configureSubItems(
+        private fun configureSubItems(
             item: ExpandingItem,
             view: View,
             product: Product,
