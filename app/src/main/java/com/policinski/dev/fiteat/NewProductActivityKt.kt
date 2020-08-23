@@ -1,7 +1,6 @@
 package com.policinski.dev.fiteat
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -9,7 +8,6 @@ import android.text.TextWatcher
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doOnTextChanged
 import kotlinx.android.synthetic.main.activity_new_product.*
 
 class newProductActivity : AppCompatActivity() {
@@ -55,6 +53,29 @@ class newProductActivity : AppCompatActivity() {
             carboNewProduct.isEnabled = true
             proteinNewProduct.isEnabled = true
         }
+
+        fatNewProduct.setOnFocusChangeListener {view, b ->
+            if (fatNewProduct.length() == 0 && carboNewProduct.length() > 0 && proteinNewProduct.length() > 0){
+                val calcFat = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 9.0
+                fatNewProduct.setText("$calcFat")
+        }}
+
+        carboNewProduct.setOnFocusChangeListener {view, b ->
+            if (carboNewProduct.length() == 0 && proteinNewProduct.length() > 0 && fatNewProduct.length() > 0){
+                val calcCarbo = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 4.0
+                carboNewProduct.setText("$calcCarbo")
+            }
+        }
+
+        proteinNewProduct.setOnFocusChangeListener { view, b ->
+
+            if (proteinNewProduct.length() == 0 && carboNewProduct.length() > 0 && fatNewProduct.length() > 0){
+                val calcPro = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 4.0
+                proteinNewProduct.setText("$calcPro")
+            }
+
+        }
+
 
         kcalNewProduct.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {

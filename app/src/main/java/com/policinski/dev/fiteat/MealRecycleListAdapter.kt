@@ -29,7 +29,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     var mealNutrientsSumList: MutableList<Product> = mutableListOf()
     var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
     var selectedMeals = ArrayList<String>()
-    public var date: String = ""
+    var date: String = ""
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -105,18 +105,14 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
                 mealTimePicker.isEnabled = state
 
-                when(state){
+//                if (state){
+//                    saveMealNotificationState(state, position2)
+//                    setupNotificationAlarm(mealTimePicker.text.toString(),findMealByTitle(mealTitle)-1,state)
+//                }else{
+//                }
 
-
-                }
-
-                if (state){
-                    saveMealNotificationState(state, position2)
-                    setupNotificationAlarm(mealTimePicker.text.toString(),findMealByTitle(mealTitle)-1,state)
-                }else{
-                    saveMealNotificationState(state, position2)
-                    setupNotificationAlarm(mealTimePicker.text.toString(),findMealByTitle(mealTitle)-1,state)
-                }
+                saveMealNotificationState(state, position2)
+                setupNotificationAlarm(mealTimePicker.text.toString(),findMealByTitle(mealTitle)-1,state)
 
             }
 
@@ -174,7 +170,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             val pendingIntent = PendingIntent.getBroadcast(itemView.context,broadcast,intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
             if (calender.before(Calendar.getInstance())){
-                calender.add(Calendar.DATE,broadcast)
+                calender.add(Calendar.DATE,1)
             }
 
             if (!status){
@@ -304,7 +300,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             productMeal: Product,
             mealTitle: String
         ) {
-            view.setOnClickListener{Toast.makeText(itemView.context, "${product.name}\n ${product.weight}.g", Toast.LENGTH_SHORT).show()}
+            view.setOnClickListener{Toast.makeText(itemView.context, "${product.name}\nWeight: ${product.weight}.g\nFat: ${product.fat}.g\nCarbo: ${product.carbo}.g\nProtein: ${product.protein}.g", Toast.LENGTH_SHORT).show()}
 
             view.findViewById<TextView>(R.id.expanding_sub_item_product_name_tv).text = "${product.name} " //Set product name
 

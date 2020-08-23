@@ -24,7 +24,6 @@ class ReminderBroadcastBreakfast: BroadcastReceiver() {
                 .setContentText("Don't waste your opportunity for eat something great!!!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH).setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-
         }
 
         with(NotificationManagerCompat.from(context!!)) {

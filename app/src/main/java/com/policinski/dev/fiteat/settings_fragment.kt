@@ -291,7 +291,7 @@ class settings_fragment : Fragment(), View.OnClickListener {
         val pendingIntent = PendingIntent.getBroadcast(context,broadcast,intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         if (calender.before(Calendar.getInstance())){
-            calender.add(Calendar.DATE,broadcast)
+            calender.add(Calendar.DATE,1)
         }
 
         if (!status){
@@ -308,7 +308,7 @@ class settings_fragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
 
         v as TextView
-        var requestCode:Int = 0
+        var requestCode: Int = 0
         val cal = Calendar.getInstance()
         val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
