@@ -6,4 +6,5 @@
     <color name="custom_gray">#D7D7D7</color>
     <color name="custom_red">#FF5252</color>
     <color name="separatorColor">#18102C</color>
+    <color name="light_gray_custom">#F1F1F1</color>
 </resources>

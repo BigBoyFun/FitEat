@@ -98,8 +98,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         val notificationDessertTime = view.dessert_notification_time
         val notificationTeaTime = view.tea_notification_time
         val notificationSupperTime = view.supper_notification_time
-        val notificationSnacksTime = view.snacks_notification_time
-        val notificationTrainingTime = view.training_notification_time
+//        val notificationSnacksTime = view.snacks_notification_time
+//        val notificationTrainingTime = view.training_notification_time
 
         //set onClick for notification Time for get TImePicker
         notificationBreakfastTime.setOnClickListener(this)
@@ -108,8 +108,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationDessertTime.setOnClickListener(this)
         notificationTeaTime.setOnClickListener(this)
         notificationSupperTime.setOnClickListener(this)
-        notificationSnacksTime.setOnClickListener(this)
-        notificationTrainingTime.setOnClickListener(this)
+//        notificationSnacksTime.setOnClickListener(this)
+//        notificationTrainingTime.setOnClickListener(this)
 
         //read settings from sharedPreferences
         val readPref = requireContext().getSharedPreferences(MAIN_PREF,0)
@@ -134,8 +134,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationDessertSwitch.isEnabled = dessert.isChecked
         notificationTeaSwitch.isEnabled = tea.isChecked
         notificationSupperSwitch.isEnabled = supper.isChecked
-        notificationSnacksSwitch.isEnabled = snacks.isChecked
-        notificationTrainingSwitch.isEnabled = training.isChecked
+//        notificationSnacksSwitch.isEnabled = snacks.isChecked
+//        notificationTrainingSwitch.isEnabled = training.isChecked
 
         //read notification state from sharedPreferences -> SWITCH & TIME
         notificationBreakfastSwitch.isChecked = readPref.getBoolean(PREF_BREAKFAST_NOTIFICATION,false)
@@ -154,8 +154,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationDessertTime.isEnabled = notificationDessertSwitch.isChecked
         notificationTeaTime.isEnabled = notificationTeaSwitch.isChecked
         notificationSupperTime.isEnabled = notificationSupperSwitch.isChecked
-        notificationSnacksTime.isEnabled = notificationSnacksSwitch.isChecked
-        notificationTrainingTime.isEnabled = notificationTrainingSwitch.isChecked
+//        notificationSnacksTime.isEnabled = notificationSnacksSwitch.isChecked
+//        notificationTrainingTime.isEnabled = notificationTrainingSwitch.isChecked
 
         notificationBreakfastTime.text = readPref.getString(PREF_BREAKFAST_NOTIFICATION_TIME,"00:00")
         notificationSecondBreakfastTime.text = readPref.getString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,"00:00")
@@ -163,8 +163,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationDessertTime.text = readPref.getString(PREF_DESSERT_NOTIFICATION_TIME,"00:00")
         notificationTeaTime.text = readPref.getString(PREF_TEA_NOTIFICATION_TIME,"00:00")
         notificationSupperTime.text = readPref.getString(PREF_SUPPER_NOTIFICATION_TIME,"00:00")
-        notificationSnacksTime.text = readPref.getString(PREF_SNACKS_NOTIFICATION_TIME,"00:00")
-        notificationTrainingTime.text = readPref.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
+//        notificationSnacksTime.text = readPref.getString(PREF_SNACKS_NOTIFICATION_TIME,"00:00")
+//        notificationTrainingTime.text = readPref.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
 
         //add changeListener to the notification switch -> change notification switch & time state based on the meals selected
         breakfast.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -198,8 +198,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationDessertSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationDessertTime.isEnabled = isChecked }
         notificationTeaSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationTeaTime.isEnabled = isChecked }
         notificationSupperSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationSupperTime.isEnabled = isChecked }
-        notificationSnacksSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationSnacksTime.isEnabled = isChecked }
-        notificationTrainingSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationTrainingTime.isEnabled = isChecked }
+//        notificationSnacksSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationSnacksTime.isEnabled = isChecked }
+//        notificationTrainingSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationTrainingTime.isEnabled = isChecked }
 
         //save settings button
         val saveBt = view.findViewById<Button>(R.id.ok_product_settings_dialog)
@@ -229,8 +229,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
             edit.putBoolean(PREF_DESSERT_NOTIFICATION, notificationDessertSwitch.isChecked)
             edit.putBoolean(PREF_TEA_NOTIFICATION,notificationTeaSwitch.isChecked)
             edit.putBoolean(PREF_SUPPER_NOTIFICATION,notificationSupperSwitch.isChecked)
-            edit.putBoolean(PREF_SNACKS_NOTIFICATION,notificationSnacksSwitch.isChecked)
-            edit.putBoolean(PREF_TRAINING_NOTIFICATION,notificationTrainingSwitch.isChecked)
+//            edit.putBoolean(PREF_SNACKS_NOTIFICATION,notificationSnacksSwitch.isChecked)
+//            edit.putBoolean(PREF_TRAINING_NOTIFICATION,notificationTrainingSwitch.isChecked)
 
             edit.putString(PREF_BREAKFAST_NOTIFICATION_TIME,notificationBreakfastTime.text.toString())
             edit.putString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,notificationSecondBreakfastTime.text.toString())
@@ -238,8 +238,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
             edit.putString(PREF_DESSERT_NOTIFICATION_TIME,notificationDessertTime.text.toString())
             edit.putString(PREF_TEA_NOTIFICATION_TIME,notificationTeaTime.text.toString())
             edit.putString(PREF_SUPPER_NOTIFICATION_TIME,notificationSupperTime.text.toString())
-            edit.putString(PREF_SNACKS_NOTIFICATION_TIME,notificationSnacksTime.text.toString())
-            edit.putString(PREF_TRAINING_NOTIFICATION_TIME,notificationTrainingTime.text.toString())
+//            edit.putString(PREF_SNACKS_NOTIFICATION_TIME,notificationSnacksTime.text.toString())
+//            edit.putString(PREF_TRAINING_NOTIFICATION_TIME,notificationTrainingTime.text.toString())
 
             edit.apply()
 
@@ -249,8 +249,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
             setupNotificationAlarm(notificationDessertTime.text.toString(),3,notificationDessertSwitch.isChecked)
             setupNotificationAlarm(notificationTeaTime.text.toString(),4,notificationTeaSwitch.isChecked)
             setupNotificationAlarm(notificationSupperTime.text.toString(),5,notificationSupperSwitch.isChecked)
-            setupNotificationAlarm(notificationSnacksTime.text.toString(),6,notificationSnacksSwitch.isChecked)
-            setupNotificationAlarm(notificationTrainingTime.text.toString(),7,notificationTrainingSwitch.isChecked)
+//            setupNotificationAlarm(notificationSnacksTime.text.toString(),6,notificationSnacksSwitch.isChecked)
+//            setupNotificationAlarm(notificationTrainingTime.text.toString(),7,notificationTrainingSwitch.isChecked)
 
             dbManager.updateDailyGoalNutrients(date.toString(),
                 kcal.text.toString().toInt(),
@@ -285,8 +285,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
             3 -> intent = Intent(context,ReminderBroadcastDessert::class.java)
             4 -> intent = Intent(context,ReminderBroadcastTea::class.java)
             5 -> intent = Intent(context,ReminderBroadcastSupper::class.java)
-            6 -> intent = Intent(context,ReminderBroadcastSnacks::class.java)
-            7 -> intent = Intent(context,ReminderBroadcastTraining::class.java)
+//            6 -> intent = Intent(context,ReminderBroadcastSnacks::class.java)
+//            7 -> intent = Intent(context,ReminderBroadcastTraining::class.java)
         }
         val pendingIntent = PendingIntent.getBroadcast(context,broadcast,intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -323,8 +323,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
                 v.dessert_notification_time -> v.text = SimpleDateFormat("HH:mm").format(cal.time)
                 v.tea_notification_time -> v.text = SimpleDateFormat("HH:mm").format(cal.time)
                 v.supper_notification_time -> v.text = SimpleDateFormat("HH:mm").format(cal.time)
-                v.snacks_notification_time -> v.text = SimpleDateFormat("HH:mm").format(cal.time)
-                v.training_notification_time -> v.text = SimpleDateFormat("HH:mm").format(cal.time)
+//                v.snacks_notification_time -> v.text = SimpleDateFormat("HH:mm").format(cal.time)
+//                v.training_notification_time -> v.text = SimpleDateFormat("HH:mm").format(cal.time)
 
 
             }
@@ -336,8 +336,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
                 v.dessert_notification_time -> requestCode = 3
                 v.tea_notification_time -> requestCode = 4
                 v.supper_notification_time -> requestCode = 5
-                v.snacks_notification_time -> requestCode = 6
-                v.training_notification_time -> requestCode = 7
+//                v.snacks_notification_time -> requestCode = 6
+//                v.training_notification_time -> requestCode = 7
             }
         }
 

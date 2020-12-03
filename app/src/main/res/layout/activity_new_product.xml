@@ -32,7 +32,7 @@
         android:text="Kcal"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <TextView
@@ -43,7 +43,8 @@
         android:text="Protein / g"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
@@ -54,7 +55,7 @@
         android:text="Carbo / g"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
@@ -65,7 +66,7 @@
         android:text="Fat / g"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView4"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
@@ -75,7 +76,7 @@
         android:text="Name"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView13"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -152,7 +153,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView4" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/fa_new_product"
+        android:id="@+id/fat_new_product"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -210,11 +211,12 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Favorite"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/cancel_new_product"
         app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/protein_new_product" />
 
     <TextView
         android:id="@+id/textView13"
@@ -224,8 +226,7 @@
         android:text="Weight / g."
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
@@ -258,6 +259,36 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/textView40" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/textView7"
+        app:layout_constraintDimensionRatio="h,5:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView40">
+
+        <Button
+            android:id="@+id/but_100g"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/selected_frame_shape_but"
+            android:text="100g" />
+
+        <Button
+            android:id="@+id/but_portion"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/frame_shape_but"
+            android:text="Portion" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

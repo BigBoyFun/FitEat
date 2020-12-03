@@ -62,6 +62,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private val mealRowFat = itemView.meal_row_fat_tv!!
         private val mealRowCarbo = itemView.meal_row_carbo_tv!!
         private val expandableListView = itemView.expanding_list!!
+        private val mealCardView = itemView.meal_card_view!!
         private val constraintLayout =  itemView.constraintLayout_meal_row!!
         private val myDB = MyDatabaseHelper(itemView.context)
         private var mealTitle = "Meal"
@@ -82,6 +83,19 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             mealTitle = position2
             readMealNotificationState(position2)
 
+            if (productMeal.kcal != 0){
+                mealCardView.foreground = null
+                mealRowKcal.setBackgroundResource(R.drawable.red_bt_shape)
+                mealRowFat.setBackgroundResource(R.drawable.yelow_bt_shape)
+                mealRowCarbo.setBackgroundResource(R.drawable.purple_bt_shape)
+                mealRowPro.setBackgroundResource(R.drawable.blue_bt_shape)
+            } else {
+                mealRowKcal.setBackgroundResource(R.drawable.gray_bt_shape)
+                mealRowCarbo.setBackgroundResource(R.drawable.gray_bt_shape)
+                mealRowFat.setBackgroundResource(R.drawable.gray_bt_shape)
+                mealRowPro.setBackgroundResource(R.drawable.gray_bt_shape)
+            }
+
             mealRowTitleMeal.text = mealTitle
             mealRowKcal.text = "K: " + productMeal.kcal.toString()
             mealRowCarbo.text = "C: %.1f".format(productMeal.carbo).replace(',','.')
@@ -89,8 +103,8 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             mealRowPro.text = "P: %.1f".format(productMeal.protein).replace(',','.')
 
             //set visible if date is today, else set invisible(cant change past and future )
-            notificationState.visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
-            mealTimePicker.visibility = when(date){ LocalDate.now().toString() -> View.VISIBLE else -> View.GONE}
+            notificationState.visibility = if (date == LocalDate.now().toString() && mealTitle != itemView.context.getString(R.string.snacks_7) && mealTitle != itemView.context.getString(R.string.training_8)) View.VISIBLE else View.GONE
+            mealTimePicker.visibility = if (date == LocalDate.now().toString() && mealTitle != itemView.context.getString(R.string.snacks_7) && mealTitle != itemView.context.getString(R.string.training_8)) View.VISIBLE else View.GONE
 
             notificationState.setOnClickListener {
                 when(state){
@@ -187,14 +201,14 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private fun saveMealNotificationState(state: Boolean, title: String) {
 
             when(title){
-                "Breakfast" -> edit.putBoolean(PREF_BREAKFAST_NOTIFICATION,state).apply()
-                "Second breakfast" -> edit.putBoolean(PREF_SECOND_BREAKFAST_NOTIFICATION,state).apply()
-                "Dinner" -> edit.putBoolean(PREF_DINNER_NOTIFICATION,state).apply()
-                "Dessert" -> edit.putBoolean(PREF_DESSERT_NOTIFICATION,state).apply()
-                "Tea" -> edit.putBoolean(PREF_TEA_NOTIFICATION,state).apply()
-                "Supper" -> edit.putBoolean(PREF_SUPPER_NOTIFICATION,state).apply()
-                "Snacks" -> edit.putBoolean(PREF_SNACKS_NOTIFICATION,state).apply()
-                "Training" -> edit.putBoolean(PREF_TRAINING_NOTIFICATION,state).apply()
+                itemView.context.getString(R.string.breakfast_1) -> edit.putBoolean(PREF_BREAKFAST_NOTIFICATION,state).apply()
+                itemView.context.getString(R.string.second_breakfast_2) -> edit.putBoolean(PREF_SECOND_BREAKFAST_NOTIFICATION,state).apply()
+                itemView.context.getString(R.string.dinner_3) -> edit.putBoolean(PREF_DINNER_NOTIFICATION,state).apply()
+                itemView.context.getString(R.string.dessert_4) -> edit.putBoolean(PREF_DESSERT_NOTIFICATION,state).apply()
+                itemView.context.getString(R.string.tea_5) -> edit.putBoolean(PREF_TEA_NOTIFICATION,state).apply()
+                itemView.context.getString(R.string.supper_6) -> edit.putBoolean(PREF_SUPPER_NOTIFICATION,state).apply()
+//                itemView.context.getString(R.string.snacks_7) -> edit.putBoolean(PREF_SNACKS_NOTIFICATION,state).apply()
+//                itemView.context.getString(R.string.training_8) -> edit.putBoolean(PREF_TRAINING_NOTIFICATION,state).apply()
             }
 
         }
@@ -202,14 +216,14 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private fun saveNotificationTIme(title: String, time: String){
 
             when(title){
-                "Breakfast" -> edit.putString(PREF_BREAKFAST_NOTIFICATION_TIME,time).apply()
-                "Second breakfast" -> edit.putString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,time).apply()
-                "Dinner" -> edit.putString(PREF_DINNER_NOTIFICATION_TIME,time).apply()
-                "Dessert" -> edit.putString(PREF_DESSERT_NOTIFICATION_TIME,time).apply()
-                "Tea" -> edit.putString(PREF_TEA_NOTIFICATION_TIME,time).apply()
-                "Supper" -> edit.putString(PREF_SUPPER_NOTIFICATION_TIME,time).apply()
-                "Snacks" -> edit.putString(PREF_SNACKS_NOTIFICATION_TIME,time).apply()
-                "Training" -> edit.putString(PREF_TRAINING_NOTIFICATION_TIME,time).apply()
+                itemView.context.getString(R.string.breakfast_1) -> edit.putString(PREF_BREAKFAST_NOTIFICATION_TIME,time).apply()
+                itemView.context.getString(R.string.second_breakfast_2) -> edit.putString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,time).apply()
+                itemView.context.getString(R.string.dinner_3) -> edit.putString(PREF_DINNER_NOTIFICATION_TIME,time).apply()
+                itemView.context.getString(R.string.dessert_4) -> edit.putString(PREF_DESSERT_NOTIFICATION_TIME,time).apply()
+                itemView.context.getString(R.string.tea_5) -> edit.putString(PREF_TEA_NOTIFICATION_TIME,time).apply()
+                itemView.context.getString(R.string.supper_6) -> edit.putString(PREF_SUPPER_NOTIFICATION_TIME,time).apply()
+//                itemView.context.getString(R.string.snacks_7) -> edit.putString(PREF_SNACKS_NOTIFICATION_TIME,time).apply()
+//                itemView.context.getString(R.string.training_8) -> edit.putString(PREF_TRAINING_NOTIFICATION_TIME,time).apply()
             }
 
         }
@@ -217,25 +231,26 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private fun readMealNotificationState(title: String){
 
             when(title){
-                "Breakfast" -> state = sharedPreferences.getBoolean(PREF_BREAKFAST_NOTIFICATION,false)
-                "Second breakfast" -> state = sharedPreferences.getBoolean(PREF_SECOND_BREAKFAST_NOTIFICATION,false)
-                "Dinner" -> state = sharedPreferences.getBoolean(PREF_DINNER_NOTIFICATION,false)
-                "Dessert" -> state = sharedPreferences.getBoolean(PREF_DESSERT_NOTIFICATION,false)
-                "Tea" -> state = sharedPreferences.getBoolean(PREF_TEA_NOTIFICATION,false)
-                "Supper" -> state = sharedPreferences.getBoolean(PREF_SUPPER_NOTIFICATION,false)
-                "Snacks" -> state = sharedPreferences.getBoolean(PREF_SNACKS_NOTIFICATION,false)
-                "Training" -> state = sharedPreferences.getBoolean(PREF_TRAINING_NOTIFICATION,false)
+                itemView.context.getString(R.string.breakfast_1) -> state = sharedPreferences.getBoolean(PREF_BREAKFAST_NOTIFICATION,false)
+                itemView.context.getString(R.string.second_breakfast_2) -> state = sharedPreferences.getBoolean(PREF_SECOND_BREAKFAST_NOTIFICATION,false)
+                itemView.context.getString(R.string.dinner_3) -> state = sharedPreferences.getBoolean(PREF_DINNER_NOTIFICATION,false)
+                itemView.context.getString(R.string.dessert_4) -> state = sharedPreferences.getBoolean(PREF_DESSERT_NOTIFICATION,false)
+                itemView.context.getString(R.string.tea_5) -> state = sharedPreferences.getBoolean(PREF_TEA_NOTIFICATION,false)
+                itemView.context.getString(R.string.supper_6) -> state = sharedPreferences.getBoolean(PREF_SUPPER_NOTIFICATION,false)
+//                itemView.context.getString(R.string.snacks_7) -> state = sharedPreferences.getBoolean(PREF_SNACKS_NOTIFICATION,false)
+//                itemView.context.getString(R.string.training_8) -> state = sharedPreferences.getBoolean(PREF_TRAINING_NOTIFICATION,false)
             }
 
             when(title){
-                "Breakfast" -> mealTimePicker.text = sharedPreferences.getString(PREF_BREAKFAST_NOTIFICATION_TIME,"00:00")
-                "Second breakfast" -> mealTimePicker.text = sharedPreferences.getString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,"00:00")
-                "Dinner" -> mealTimePicker.text = sharedPreferences.getString(PREF_DINNER_NOTIFICATION_TIME,"00:00")
-                "Dessert" -> mealTimePicker.text = sharedPreferences.getString(PREF_DESSERT_NOTIFICATION_TIME,"00:00")
-                "Tea" -> mealTimePicker.text = sharedPreferences.getString(PREF_TEA_NOTIFICATION_TIME,"00:00")
-                "Supper" -> mealTimePicker.text = sharedPreferences.getString(PREF_SUPPER_NOTIFICATION_TIME,"00:00")
-                "Snacks" -> mealTimePicker.text = sharedPreferences.getString(PREF_SNACKS_NOTIFICATION_TIME,"00:00")
-                "Training" -> mealTimePicker.text = sharedPreferences.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
+                itemView.context.getString(R.string.breakfast_1) -> mealTimePicker.text = sharedPreferences.getString(PREF_BREAKFAST_NOTIFICATION_TIME,"00:00")
+                itemView.context.getString(R.string.second_breakfast_2) -> mealTimePicker.text = sharedPreferences.getString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,"00:00")
+                itemView.context.getString(R.string.dinner_3) -> mealTimePicker.text = sharedPreferences.getString(PREF_DINNER_NOTIFICATION_TIME,"00:00")
+                itemView.context.getString(R.string.dessert_4) -> mealTimePicker.text = sharedPreferences.getString(PREF_DESSERT_NOTIFICATION_TIME,"00:00")
+                itemView.context.getString(R.string.tea_5) -> mealTimePicker.text = sharedPreferences.getString(PREF_TEA_NOTIFICATION_TIME,"00:00")
+                itemView.context.getString(R.string.supper_6) -> mealTimePicker.text = sharedPreferences.getString(PREF_SUPPER_NOTIFICATION_TIME,"00:00")
+                itemView.context.getString(R.string.snacks_7) -> mealTimePicker.text = sharedPreferences.getString(PREF_SNACKS_NOTIFICATION_TIME,"00:00")
+//                itemView.context.getString(R.string.training_8) -> mealTimePicker.text = sharedPreferences.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
+//                itemView.context.getString(R.string.training_8) -> mealTimePicker.text = sharedPreferences.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
             }
 
             when(state){
@@ -254,7 +269,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             productMeal: Product,
             mealTitle: String
         ){
-            addItem(title,productList,R.color.colorAccent,R.drawable.ic_restaurant_menu_white_24dp,date,productMeal,mealTitle)
+            addItem(title,productList,if(productList.size != 0)R.color.colorAccent else R.color.custom_gray,R.drawable.ic_restaurant_menu_white_24dp,date,productMeal,mealTitle)
         }
 
         private fun addItem(
@@ -329,6 +344,8 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 val editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog) as TextView
                 val editCarbo = editDialog.findViewById(R.id.carbo_user_product_settings_dialog) as TextView
                 var editWeight = editDialog.findViewById(R.id.product_edit_weight) as EditText
+                val seeakBarWeight = editDialog.findViewById(R.id.seak_bar_product_settings) as SeekBar
+                var readWeight = editDialog.findViewById(R.id.read_weight_tv) as TextView
 
                 //set current nutrients from selected product
                 productName.text = "${product.name}"
@@ -336,11 +353,25 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 editPro.text = "${product.protein}"
                 editFat.text = "${product.fat}"
                 editCarbo.text = "${product.carbo}"
-                editWeight.setText("${product.weight}")
+                seeakBarWeight.progress = product.weight
+                readWeight.text = "${product.weight}"
+
+                fun calculate(weight: Int){
+                    editKcal.text = ((baseProduct.kcal * weight) / 100).toString()
+                    editPro.text = "%.2f".format(
+                        (baseProduct.protein * (weight.toDouble() / 100.0))
+                    ).replace(',', '.')
+                    editFat.text = "%.2f".format(
+                        (baseProduct.fat * (weight.toDouble() / 100.0))
+                    ).replace(',', '.')
+                    editCarbo.text = "%.2f".format(
+                        (baseProduct.carbo * (weight.toDouble() / 100.0))
+                    ).replace(',', '.')
+                }
 
                 editWeight.addTextChangedListener(object : TextWatcher{
                     override fun afterTextChanged(s: Editable?) {
-
+                        seeakBarWeight.progress = if (s?.isEmpty()!!) 0 else s.toString().toInt()
                     }
 
                     override fun beforeTextChanged(
@@ -358,31 +389,40 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         before: Int,
                         count: Int
                     ) {
-                        if (editWeight.text.toString().length != 0 && editWeight.text.toString().toInt() > 0) {
-                            editKcal.text = ((baseProduct.kcal * editWeight.text.toString()
-                                .toInt()) / baseProduct.weight).toString()
-                            editPro.text = "%.2f".format(
-                                (baseProduct.protein * editWeight.text.toString()
-                                    .toDouble()) / baseProduct.weight
-                            ).replace(',', '.')
-                            editFat.text = "%.2f".format(
-                                (baseProduct.fat * editWeight.text.toString()
-                                    .toDouble()) / baseProduct.weight
-                            ).replace(',', '.')
-                            editCarbo.text = "%.2f".format(
-                                (baseProduct.carbo * editWeight.text.toString()
-                                    .toDouble()) / baseProduct.weight
-                            ).replace(',', '.')
-
-                        }else{
+//                        readWeight.text = if (s?.isEmpty()!!) "0" else s
+                        if(s.toString().isEmpty() || s.toString().toInt() == 0){
                             editKcal.text = "0"
                             editPro.text = "0"
                             editFat.text = "0"
                             editCarbo.text = "0"
+                            readWeight.text = "0"
+                            seeakBarWeight.progress = 0
+                        }else{
+                            readWeight.text = s
+                            calculate(s.toString().toInt())
                         }
                     }
                 })
 
+                seeakBarWeight.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(
+                        seekBar: SeekBar?,
+                        progress: Int,
+                        fromUser: Boolean
+                    ) {
+                        readWeight.text = "$progress"
+                        calculate(progress)
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                        editWeight.clearFocus()
+                    }
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+
+                    }
+
+                })
 
 
                 //save new product parameter
@@ -486,14 +526,14 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private fun findMealByTitle(title: String): Int{
 
             return when(title){
-                "Breakfast" -> 1
-                "Second breakfast" -> 2
-                "Dinner" -> 3
-                "Dessert" -> 4
-                "Tea" -> 5
-                "Supper" -> 6
-                "Snacks" -> 7
-                "Training" -> 8
+                itemView.context.getString(R.string.breakfast_1) -> 1
+                itemView.context.getString(R.string.second_breakfast_2) -> 2
+                itemView.context.getString(R.string.dinner_3) -> 3
+                itemView.context.getString(R.string.dessert_4) -> 4
+                itemView.context.getString(R.string.tea_5) -> 5
+                itemView.context.getString(R.string.supper_6) -> 6
+                itemView.context.getString(R.string.snacks_7) -> 7
+                itemView.context.getString(R.string.training_8) -> 8
                 else -> 1
             }
 

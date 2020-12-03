@@ -5,14 +5,13 @@
     <string name="meals">Meals</string>
     <string name="scanner">Scanner</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cant_insert_product">Cant insert new product!</string>
     <string name="success">Success!</string>
     <string name="add_new_product">Add new product.</string>
     <string name="register">Register</string>
     <string name="added_to_day">Product is added to current day</string>
-    <string name="cant_add_pro_to_day">Cant add product to current day :(</string>
+    <string name="cant_add_pro_to_day">Adding the selected product to the day failed.:(</string>
     <string name="month_01">January</string>
     <string name="month_02">February</string>
     <string name="month_03">March</string>
@@ -37,7 +36,7 @@
     <string name="supper_6">Supper</string>
     <string name="snacks_7">Snacks</string>
     <string name="training_8">Training</string>
-    <string name="dish">Dish</string>
+    <string name="dish">Denmark</string>
     <string name="settings">Settings</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
@@ -55,9 +54,9 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="nutrients_goal">Nutrients goal</string>
+    <string name="nutrients_goal">Nutrients goal.</string>
     <string name="data_has_been_saved">Data has been saved!</string>
-    <string name="product_registered">New product is registered</string>
+    <string name="product_registered">New product is registered.</string>
     <string name="already_exist">Already exist!</string>
     <string name="title_activity_delate_product">DelateProductActivity</string>
     <!--
@@ -65,14 +64,14 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
-    <string name="notification">Notification</string>
+    <string name="notification">Notification.</string>
     <string name="nummeret_breakfast_1">1 Breakfast</string>
     <string name="nummeret_breakfast_2">2 Breakfast</string>
     <string name="kcal">kcal</string>
-    <string name="protein_with_tabs">"  Protein  "</string>
+    <string name="protein_with_tabs">" Protein"</string>
     <string name="fat">Fat</string>
     <string name="carbo">Carbo</string>
     <string name="close">CLOSE</string>
     <string name="channel_name">meal_time_allert</string>
-    <string name="channel_description">Allert time for begin eat meal</string>
+    <string name="channel_description">Notification for begin eat meal!</string>
 </resources>

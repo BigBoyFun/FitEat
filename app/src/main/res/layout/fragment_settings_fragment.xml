@@ -88,7 +88,7 @@
                 android:text="@string/training_8"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/snacks_check_box"
-                app:layout_constraintTop_toBottomOf="@+id/notification_snacks_switch" />
+                app:layout_constraintTop_toBottomOf="@+id/snacks_check_box" />
 
             <EditText
                 android:id="@+id/pro_user_product_settings_dialog"
@@ -237,6 +237,7 @@
                 android:layout_marginTop="8dp"
                 android:text="All"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/training_check_box"
                 app:layout_constraintTop_toBottomOf="@+id/notification_training_switch" />
 
@@ -356,6 +357,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/snacks_check_box"
                 app:layout_constraintEnd_toStartOf="@+id/snacks_notification_time"
                 app:layout_constraintTop_toTopOf="@+id/snacks_check_box" />
@@ -367,6 +369,7 @@
                 android:layout_marginEnd="24dp"
                 android:text="10:30"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/notification_snacks_switch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/notification_snacks_switch" />
@@ -376,6 +379,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/training_check_box"
                 app:layout_constraintEnd_toStartOf="@+id/training_notification_time"
                 app:layout_constraintTop_toTopOf="@+id/training_check_box" />
@@ -387,6 +391,7 @@
                 android:layout_marginEnd="24dp"
                 android:text="10:30"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/notification_training_switch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/notification_training_switch" />

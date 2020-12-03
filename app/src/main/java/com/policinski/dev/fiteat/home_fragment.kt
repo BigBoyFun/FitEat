@@ -275,14 +275,14 @@ class home_fragment : Fragment() {
         val meals = arrayMapOf<Int,String>()
 
         for (meal in mealArray){
-            if (meal == 1) { meals[meal] = "Breakfast"}
-            if (meal == 2) { meals[meal] = "Second breakfast"}
-            if (meal == 3) { meals[meal] = "Dinner"}
-            if (meal == 4) { meals[meal] = "Dessert"}
-            if (meal == 5) { meals[meal] = "Tea"}
-            if (meal == 6) { meals[meal] = "Supper"}
-            if (meal == 7) { meals[meal] = "Snacks"}
-            if (meal == 8) { meals[meal] = "Training"}
+            if (meal == 1) { meals[meal] = getString(R.string.breakfast_1) }
+            if (meal == 2) { meals[meal] = getString(R.string.second_breakfast_2) }
+            if (meal == 3) { meals[meal] = getString(R.string.dinner_3) }
+            if (meal == 4) { meals[meal] = getString(R.string.dessert_4) }
+            if (meal == 5) { meals[meal] = getString(R.string.tea_5) }
+            if (meal == 6) { meals[meal] = getString(R.string.supper_6) }
+            if (meal == 7) { meals[meal] = getString(R.string.snacks_7) }
+            if (meal == 8) { meals[meal] = getString(R.string.training_8) }
         }
         return meals
     }
@@ -301,14 +301,14 @@ class home_fragment : Fragment() {
         val snacks = sharedPreferences.getBoolean(PREF_MEAL_SNACKS,true)
         val training = sharedPreferences.getBoolean(PREF_MEAL_TRAINING,true)
 
-        if (breakfast) mealSelectedArray[1] = "Breakfast"
-        if (secondBreakfast) mealSelectedArray[2] = "Second breakfast"
-        if (dinner) mealSelectedArray[3] = "Dinner"
-        if (dessert) mealSelectedArray[4] = "Dessert"
-        if (tea) mealSelectedArray[5] = "Tea"
-        if (supper) mealSelectedArray[6] = "Supper"
-        if (snacks) mealSelectedArray[7] = "Snacks"
-        if (training) mealSelectedArray[8] = "Training"
+        if (breakfast) mealSelectedArray[1] = getString(R.string.breakfast_1)
+        if (secondBreakfast) mealSelectedArray[2] = getString(R.string.second_breakfast_2)
+        if (dinner) mealSelectedArray[3] = getString(R.string.dinner_3)
+        if (dessert) mealSelectedArray[4] = getString(R.string.dessert_4)
+        if (tea) mealSelectedArray[5] = getString(R.string.tea_5)
+        if (supper) mealSelectedArray[6] = getString(R.string.supper_6)
+        if (snacks) mealSelectedArray[7] = getString(R.string.snacks_7)
+        if (training) mealSelectedArray[8] = getString(R.string.training_8)
 
         return mealSelectedArray
     }

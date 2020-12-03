@@ -1,10 +1,12 @@
 package com.policinski.dev.fiteat
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +34,7 @@ class newProductActivity : AppCompatActivity() {
         var kcalNewProduct = kcal_new_product
         var proteinNewProduct = protein_new_product
         var carboNewProduct = carbo_new_product
-        var fatNewProduct = fa_new_product
+        var fatNewProduct = fat_new_product
         var weightNewProduct = weight_new_product
         var favoriteChaek: CheckBox = favorite_new_product
         var sumKcalSample = sum_kcal_sample
@@ -40,9 +42,31 @@ class newProductActivity : AppCompatActivity() {
         val cancel = cancel_new_product
         var leftKcal = 0.0
         var leftWeight = 0.0
+        val but100 = but_100g
+        val portion = but_portion
+        val weightTv = textView13
+        weightTv.visibility = View.GONE
+        weightNewProduct.visibility = View.INVISIBLE
 
 //        weightNewProduct.setSelection(weightNewProduct.text.length)
         weightNewProduct.append("100")
+
+        but100.setOnClickListener {
+            it.setBackgroundResource(R.drawable.selected_frame_shape_but)
+            portion.setBackgroundResource(R.drawable.frame_shape_but)
+            weightNewProduct.setText("100")
+            weightNewProduct.visibility = View.INVISIBLE
+            weightTv.visibility = View.GONE
+        }
+
+        but_portion.setOnClickListener {
+            it.setBackgroundResource(R.drawable.selected_frame_shape_but)
+            but_100g.setBackgroundResource(R.drawable.frame_shape_but)
+//            weightNewProduct.setText("")
+            weightNewProduct.visibility = View.VISIBLE
+            weightNewProduct.setText("")
+            weightTv.visibility = View.VISIBLE
+        }
 
         if (kcalNewProduct.length() <= 0){
             fatNewProduct.isEnabled = false

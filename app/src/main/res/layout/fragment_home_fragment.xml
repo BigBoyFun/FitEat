@@ -17,6 +17,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/light_gray_bt_shape"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
+            app:layout_constraintEnd_toEndOf="@+id/textView25"
+            app:layout_constraintStart_toStartOf="@+id/textView30"
+            app:layout_constraintTop_toTopOf="@+id/textView30">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/gray_bt_shape"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/progress_barr"
+            app:layout_constraintEnd_toEndOf="@+id/textView25"
+            app:layout_constraintStart_toStartOf="@+id/textView30"
+            app:layout_constraintTop_toBottomOf="@+id/day_sum_kcal"></LinearLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,6 +55,7 @@
 
             <Button
                 android:id="@+id/bcak_date_bt"
+                style="@style/Widget.MyApp.WhiteMyButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -39,6 +66,7 @@
 
             <Button
                 android:id="@+id/next_date_bt"
+                style="@style/Widget.MyApp.WhiteMyButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -88,7 +116,7 @@
             android:background="@drawable/purple_bt_shape"
             android:clickable="false"
             android:elevation="1dp"
-            android:text="CARBS"
+            android:text="@string/carbo"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_background"
             android:textSize="14sp"
@@ -106,7 +134,7 @@
             android:background="@drawable/yelow_bt_shape"
             android:clickable="false"
             android:elevation="1dp"
-            android:text="FAT"
+            android:text="@string/fat"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_background"
             android:textSize="14sp"
@@ -125,7 +153,7 @@
             android:background="@drawable/blue_bt_shape"
             android:clickable="false"
             android:elevation="1dp"
-            android:text="PROTEIN"
+            android:text="@string/protein_with_tabs"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_background"
             android:textSize="14sp"
@@ -186,7 +214,7 @@
             android:background="@drawable/red_bt_shape"
             android:clickable="false"
             android:elevation="1dp"
-            android:text="CALORIES"
+            android:text="@string/kcal"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_background"
             android:textSize="14sp"
@@ -226,8 +254,9 @@
             android:id="@+id/home_user_pref_kcal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="3500"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/design_default_color_secondary_variant"
             android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="visible"
@@ -239,8 +268,9 @@
             android:id="@+id/home_user_pref_pro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="160"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/design_default_color_secondary_variant"
             android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="visible"
@@ -252,8 +282,9 @@
             android:id="@+id/home_user_pref_fat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="60"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/design_default_color_secondary_variant"
             android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="visible"
@@ -265,8 +296,9 @@
             android:id="@+id/home_user_pref_carbo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="450"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/design_default_color_secondary_variant"
             android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="visible"

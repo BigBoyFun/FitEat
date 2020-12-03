@@ -95,7 +95,7 @@
                 android:id="@+id/add_to_day_button_row"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/colorAccent"
+                android:background="@drawable/green_bt_shape"
                 android:foreground="@drawable/ic_add_white_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="w,1:1"
@@ -136,6 +136,7 @@
 
             <Button
                 android:id="@+id/delate_product_fomr_db"
+                style="@style/Widget.MyApp.CustomGrayMyButton"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="8dp"

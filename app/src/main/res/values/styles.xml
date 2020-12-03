@@ -6,6 +6,25 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
+
+    <style name="Widget.MyApp.CustomGrayMyButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/custom_gray</item>
+    </style>
+
+    <style name="Widget.MyApp.AccentMyButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.MyApp.WhiteMyButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/design_default_color_surface</item>
+    </style>
+
+    <style name="Widget.MyApp.Button.AccentOutLineStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="rippleColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
 
 </resources>

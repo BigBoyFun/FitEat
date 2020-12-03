@@ -5,11 +5,15 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.arrayMapOf
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_add_product_to_day.*
+import kotlinx.android.synthetic.main.activity_add_product_to_day.read_weight_tv
+import kotlinx.android.synthetic.main.product_settings_dialog.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -71,6 +75,50 @@ class AddProductToDayActivity : AppCompatActivity() {
         var mealNameTv = meal_name_tv
         val onBt = ok_bt
         val cancelBt = cancel_bt
+        val x1But = findViewById<Button>(R.id.multiplier_but_x1)
+        val x2But = findViewById<Button>(R.id.multiplier_but_x2)
+        val x3But = findViewById<Button>(R.id.multiplier_but_x3)
+        val x4But = findViewById<Button>(R.id.multiplier_but_x4)
+
+        x1But.setOnClickListener {
+            x1But.setBackgroundResource(R.drawable.selected_frame_shape_but)
+            x2But.setBackgroundResource(R.drawable.frame_shape_but)
+            x3But.setBackgroundResource(R.drawable.frame_shape_but)
+            x4But.setBackgroundResource(R.drawable.frame_shape_but)
+            read_weight_tv.text = "${product.weight}.g"
+            seekBar.progress = product.weight
+
+        }
+        x2But.setOnClickListener {
+            x1But.setBackgroundResource(R.drawable.frame_shape_but)
+            x2But.setBackgroundResource(R.drawable.selected_frame_shape_but)
+            x3But.setBackgroundResource(R.drawable.frame_shape_but)
+            x4But.setBackgroundResource(R.drawable.frame_shape_but)
+            read_weight_tv.text = "${product.weight * 2}.g"
+            seekBar.progress = product.weight * 2
+
+        }
+
+        x3But.setOnClickListener {
+            x1But.setBackgroundResource(R.drawable.frame_shape_but)
+            x2But.setBackgroundResource(R.drawable.frame_shape_but)
+            x3But.setBackgroundResource(R.drawable.selected_frame_shape_but)
+            x4But.setBackgroundResource(R.drawable.frame_shape_but)
+            read_weight_tv.text = "${product.weight * 3}.g"
+            seekBar.progress = product.weight * 3
+
+        }
+
+        x4But.setOnClickListener {
+            x1But.setBackgroundResource(R.drawable.frame_shape_but)
+            x2But.setBackgroundResource(R.drawable.frame_shape_but)
+            x3But.setBackgroundResource(R.drawable.frame_shape_but)
+            x4But.setBackgroundResource(R.drawable.selected_frame_shape_but)
+            read_weight_tv.text = "${product.weight * 4}.g"
+            seekBar.progress = product.weight * 4
+
+        }
+
 
         //initiation of buttons responsible for choosing the right meal to which we want to add the selected product
         array = arrayListOf<Button>(button_1,
@@ -90,10 +138,10 @@ class AddProductToDayActivity : AppCompatActivity() {
         //searching meal with should be upgraded by selected product
         meal = readNotificationAlertTime()+1
         //highlights the button that is responsible for selecting a meal that should be enriched with the selected product
-        array[if (meal > 0) meal-1 else 0].setBackgroundResource(R.drawable.green_bt_shape)
+        array[if (meal > 0) meal-1 else 0].setBackgroundResource(R.drawable.selected_frame_shape_but)
 
         //show selected meal name
-        when(readNotificationAlertTime()+1){
+        when(meal){
             1 -> mealNameTv.text = getString(R.string.breakfast_1)
             2 -> mealNameTv.text = getString(R.string.second_breakfast_2)
             3 -> mealNameTv.text = getString(R.string.dinner_3)
@@ -111,10 +159,10 @@ class AddProductToDayActivity : AppCompatActivity() {
             meal = v.text.toString().toInt()
 
             for (item in array){
-                if (item.text.toString().toInt() != meal){
-                    item.setBackgroundResource(R.drawable.gray_bt_shape)
-                }else{
-                    item.setBackgroundResource(R.drawable.green_bt_shape)
+                if (item.text.toString().toInt() != meal && item.isEnabled){
+                    item.setBackgroundResource(R.drawable.frame_shape_but)
+                }else if (item.text.toString().toInt() == meal){
+                    item.setBackgroundResource(R.drawable.selected_frame_shape_but)
                 }
             }
 
@@ -195,6 +243,11 @@ class AddProductToDayActivity : AppCompatActivity() {
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
 
+                x1But.setBackgroundResource(R.drawable.selected_frame_shape_but)
+                x2But.setBackgroundResource(R.drawable.frame_shape_but)
+                x3But.setBackgroundResource(R.drawable.frame_shape_but)
+                x4But.setBackgroundResource(R.drawable.frame_shape_but)
+
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
@@ -246,14 +299,14 @@ class AddProductToDayActivity : AppCompatActivity() {
         val snacks = sharedPreferences.getBoolean(PREF_MEAL_SNACKS,true)
         val training = sharedPreferences.getBoolean(PREF_MEAL_TRAINING,true)
 
-        if (breakfast) mealSelectedArray[1] = "Breakfast"
-        if (secondBreakfast) mealSelectedArray[2] = "Second breakfast"
-        if (dinner) mealSelectedArray[3] = "Dinner"
-        if (dessert) mealSelectedArray[4] = "Dessert"
-        if (tea) mealSelectedArray[5] = "Tea"
-        if (supper) mealSelectedArray[6] = "Supper"
-        if (snacks) mealSelectedArray[7] = "Snacks"
-        if (training) mealSelectedArray[8] = "Training"
+        if (breakfast) mealSelectedArray[1] = getString(R.string.breakfast_1) else button_1.setBackgroundResource(R.drawable.state_frame_shape_but)
+        if (secondBreakfast) mealSelectedArray[2] = getString(R.string.second_breakfast_2) else button_2.setBackgroundResource(R.drawable.state_frame_shape_but)
+        if (dinner) mealSelectedArray[3] = getString(R.string.dinner_3) else button_3.setBackgroundResource(R.drawable.state_frame_shape_but)
+        if (dessert) mealSelectedArray[4] = getString(R.string.dessert_4) else button_4.setBackgroundResource(R.drawable.state_frame_shape_but)
+        if (tea) mealSelectedArray[5] = getString(R.string.tea_5) else button_5.setBackgroundResource(R.drawable.state_frame_shape_but)
+        if (supper) mealSelectedArray[6] = getString(R.string.supper_6) else button_6.setBackgroundResource(R.drawable.state_frame_shape_but)
+        if (snacks) mealSelectedArray[7] = getString(R.string.snacks_7) else button_7.setBackgroundResource(R.drawable.state_frame_shape_but)
+        if (training) mealSelectedArray[8] = getString(R.string.training_8) else button_8.setBackgroundResource(R.drawable.state_frame_shape_but)
 
         return mealSelectedArray
     }

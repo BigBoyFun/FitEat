@@ -119,14 +119,14 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
             val snacks = sharedPreferences.getBoolean(PREF_MEAL_SNACKS,true)
             val training = sharedPreferences.getBoolean(PREF_MEAL_TRAINING,true)
 
-            if (breakfast) mealSelectedArray[1] = "Breakfast"
-            if (secondBreakfast) mealSelectedArray[2] = "Second breakfast"
-            if (dinner) mealSelectedArray[3] = "Dinner"
-            if (dessert) mealSelectedArray[4] = "Dessert"
-            if (tea) mealSelectedArray[5] = "Tea"
-            if (supper) mealSelectedArray[6] = "Supper"
-            if (snacks) mealSelectedArray[7] = "Snacks"
-            if (training) mealSelectedArray[8] = "Training"
+            if (breakfast) mealSelectedArray[1] = "${R.string.breakfast_1}"
+            if (secondBreakfast) mealSelectedArray[2] = "${R.string.second_breakfast_2}"
+            if (dinner) mealSelectedArray[3] = "${R.string.dinner_3}"
+            if (dessert) mealSelectedArray[4] = "${R.string.dessert_4}"
+            if (tea) mealSelectedArray[5] = "${R.string.tea_5}"
+            if (supper) mealSelectedArray[6] = "${R.string.supper_6}"
+            if (snacks) mealSelectedArray[7] = "${R.string.snacks_7}"
+            if (training) mealSelectedArray[8] = "${R.string.training_8}"
 
             return mealSelectedArray
         }
