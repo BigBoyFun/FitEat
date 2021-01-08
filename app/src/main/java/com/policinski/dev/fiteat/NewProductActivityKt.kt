@@ -1,7 +1,6 @@
 package com.policinski.dev.fiteat
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -11,6 +10,7 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_new_product.*
+import java.text.DecimalFormat
 
 class newProductActivity : AppCompatActivity() {
 
@@ -45,6 +45,8 @@ class newProductActivity : AppCompatActivity() {
         val but100 = but_100g
         val portion = but_portion
         val weightTv = textView13
+        val cb_calculate_portion = checkBox_calculate_portion
+        val et_porion_value = et_portion_value
         weightTv.visibility = View.GONE
         weightNewProduct.visibility = View.INVISIBLE
 
@@ -57,6 +59,7 @@ class newProductActivity : AppCompatActivity() {
             weightNewProduct.setText("100")
             weightNewProduct.visibility = View.INVISIBLE
             weightTv.visibility = View.GONE
+            cb_calculate_portion.isEnabled = true
         }
 
         but_portion.setOnClickListener {
@@ -66,6 +69,7 @@ class newProductActivity : AppCompatActivity() {
             weightNewProduct.visibility = View.VISIBLE
             weightNewProduct.setText("")
             weightTv.visibility = View.VISIBLE
+            cb_calculate_portion.isEnabled = false
         }
 
         if (kcalNewProduct.length() <= 0){
@@ -272,6 +276,14 @@ class newProductActivity : AppCompatActivity() {
 
         })
 
+        cb_calculate_portion.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                et_porion_value.isEnabled = true
+            }else{
+                et_porion_value.isEnabled = false
+                et_porion_value.setText("")
+            }
+        }
 
         val productList = arrayListOf<Product>()
         val dbManager = MyDatabaseHelper(this)
@@ -313,14 +325,15 @@ class newProductActivity : AppCompatActivity() {
             if (carboNewProduct.length() == 0) carboNewProduct.setText("0")
             if (fatNewProduct.length() == 0) fatNewProduct.setText("0")
             if (weightNewProduct.length() == 0) weightNewProduct.setText("0")
+            val portion:Double? = if (cb_calculate_portion.isChecked) et_porion_value.text.toString().toDouble() / 100 else null
 
             val newProduct = Product(
                 nameNewProduct.text.toString().capitalize(),
-                kcalNewProduct.text.toString().toInt(),
-                proteinNewProduct.text.toString().toDouble(),
-                carboNewProduct.text.toString().toDouble(),
-                fatNewProduct.text.toString().toDouble(),
-                weightNewProduct.text.toString().toInt(),
+                if (cb_calculate_portion.isChecked && portion != null) (kcalNewProduct.text.toString().toDouble() * portion).toInt() else kcalNewProduct.text.toString().toInt(),
+                "%.2f".format(if (cb_calculate_portion.isChecked && portion != null) proteinNewProduct.text.toString().toDouble() * portion else proteinNewProduct.text.toString().toDouble()).replace(',','.').toDouble(),
+                "%.2f".format(if (cb_calculate_portion.isChecked && portion != null) carboNewProduct.text.toString().toDouble() * portion else carboNewProduct.text.toString().toDouble()).replace(',','.').toDouble(),
+                "%.2f".format(if (cb_calculate_portion.isChecked && portion != null) fatNewProduct.text.toString().toDouble() * portion else fatNewProduct.text.toString().toDouble()).replace(',','.').toDouble(),
+                if (cb_calculate_portion.isChecked && portion != null) (portion * 100).toInt() else weightNewProduct.text.toString().toInt(),
                 if (favoriteChaek.isChecked) 1 else 0,
                 0
             )

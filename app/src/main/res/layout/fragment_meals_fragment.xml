@@ -185,10 +185,11 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/custom_red"
-        android:text="Create new dish"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/cancel_shape_color"
+        android:text="   Create new dish   "
         android:textColor="@color/design_default_color_background"
         android:textSize="16sp"
         android:textStyle="bold"

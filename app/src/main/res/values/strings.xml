@@ -74,4 +74,7 @@
     <string name="close">CLOSE</string>
     <string name="channel_name">meal_time_allert</string>
     <string name="channel_description">Notification for begin eat meal!</string>
+    <string name="calculate_nutrients_for_portion_and_save_to_base">Calculate nutrients for portion and save to base.</string>
+    <string name="current_meal">\Current meal: \</string>
+    <string name="auto_suggest_meal_list">Auto suggest meal list</string>
 </resources>

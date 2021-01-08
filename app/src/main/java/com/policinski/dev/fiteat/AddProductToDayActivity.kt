@@ -5,15 +5,12 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.Button
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.arrayMapOf
-import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_add_product_to_day.*
 import kotlinx.android.synthetic.main.activity_add_product_to_day.read_weight_tv
-import kotlinx.android.synthetic.main.product_settings_dialog.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -190,10 +187,18 @@ class AddProductToDayActivity : AppCompatActivity() {
         read_weight_tv.text = "${product.weight}"
         seekBar.progress = product.weight
 
+        //calculate nutrients after change weight
+        fun calculateNut(progress: Int){
+            calculateKcal.text = ((product.kcal * progress) / product.weight).toString()
+            calculatePro.text = "%.2f".format((product.protein * progress) / product.weight).replace(',','.')
+            calculateFat.text = "%.2f".format((product.fat * progress) / product.weight).replace(',','.')
+            calculateCarbo.text = "%.2f".format((product.carbo * progress) / product.weight).replace(',','.')
+        }
+
         // setting progress on seekBar by writing in editText
         input_weight.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-
+                seekBar.progress = if (s?.isEmpty()!!) 0 else s.toString().toInt()
             }
 
             override fun beforeTextChanged(
@@ -213,13 +218,11 @@ class AddProductToDayActivity : AppCompatActivity() {
             ) {
                 if (s.toString().isEmpty()){
                     seekBar.progress = 0
-                    read_weight_tv.text = "0 g"
                 }else {
-                    seekBar.progress = s.toString().toInt()
                     if (s.toString().toLong() > 999){
-                        read_weight_tv.text = "999 g"
+                        read_weight_tv.text = "999"
                     }else {
-                        read_weight_tv.text = "$s g"
+                        calculateNut(s.toString().toInt())
                     }
                 }
 
@@ -234,15 +237,13 @@ class AddProductToDayActivity : AppCompatActivity() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                read_weight_tv.setText("$progress g")
-                calculateKcal.text = ((product.kcal * progress) / product.weight).toString()
-                calculatePro.text = "%.2f".format((product.protein * progress) / product.weight).replace(',','.')
-                calculateFat.text = "%.2f".format((product.fat * progress) / product.weight).replace(',','.')
-                calculateCarbo.text = "%.2f".format((product.carbo * progress) / product.weight).replace(',','.')
+                read_weight_tv.setText("$progress")
+                calculateNut(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
 
+                input_weight.clearFocus()
                 x1But.setBackgroundResource(R.drawable.selected_frame_shape_but)
                 x2But.setBackgroundResource(R.drawable.frame_shape_but)
                 x3But.setBackgroundResource(R.drawable.frame_shape_but)

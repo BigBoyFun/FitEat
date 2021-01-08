@@ -356,7 +356,8 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 seeakBarWeight.progress = product.weight
                 readWeight.text = "${product.weight}"
 
-                fun calculate(weight: Int){
+                //calculate nutrients after change weight
+                fun calculateNut(weight: Int){
                     editKcal.text = ((baseProduct.kcal * weight) / 100).toString()
                     editPro.text = "%.2f".format(
                         (baseProduct.protein * (weight.toDouble() / 100.0))
@@ -389,7 +390,6 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         before: Int,
                         count: Int
                     ) {
-//                        readWeight.text = if (s?.isEmpty()!!) "0" else s
                         if(s.toString().isEmpty() || s.toString().toInt() == 0){
                             editKcal.text = "0"
                             editPro.text = "0"
@@ -399,7 +399,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                             seeakBarWeight.progress = 0
                         }else{
                             readWeight.text = s
-                            calculate(s.toString().toInt())
+                            calculateNut(s.toString().toInt())
                         }
                     }
                 })
@@ -411,7 +411,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         fromUser: Boolean
                     ) {
                         readWeight.text = "$progress"
-                        calculate(progress)
+                        calculateNut(progress)
                     }
 
                     override fun onStartTrackingTouch(seekBar: SeekBar?) {

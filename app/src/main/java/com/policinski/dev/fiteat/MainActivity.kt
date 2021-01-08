@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -20,8 +21,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.time.LocalDate
 import java.util.*
+import kotlin.math.abs
 
 class MainActivity : AppCompatActivity() {
+
+    var x1: Float = 0.0F
+    var x2: Float = 0.0F
+    var distance: Float = 150.0F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

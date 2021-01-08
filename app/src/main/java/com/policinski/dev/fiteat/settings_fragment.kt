@@ -53,6 +53,7 @@ class settings_fragment : Fragment(), View.OnClickListener {
     private val PREF_SNACKS_NOTIFICATION_TIME = "PREF_SNACKS_NOTIFICATION_TIME"
     private val PREF_TRAINING_NOTIFICATION_TIME = "PREF_TRAINING_NOTIFICATION_TIME"
 
+    private val PREF_AUTO_SUGGEST_MEAL = "PREF_AUTO_SUGEST_MEAL"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,6 +101,9 @@ class settings_fragment : Fragment(), View.OnClickListener {
         val notificationSupperTime = view.supper_notification_time
 //        val notificationSnacksTime = view.snacks_notification_time
 //        val notificationTrainingTime = view.training_notification_time
+
+        //init auto suggest product list
+        val autoSuggestProductListSwitch = view.autoSuggest_switch
 
         //set onClick for notification Time for get TImePicker
         notificationBreakfastTime.setOnClickListener(this)
@@ -156,6 +160,9 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationSupperTime.isEnabled = notificationSupperSwitch.isChecked
 //        notificationSnacksTime.isEnabled = notificationSnacksSwitch.isChecked
 //        notificationTrainingTime.isEnabled = notificationTrainingSwitch.isChecked
+
+        //set auto suggest meal list state
+        autoSuggestProductListSwitch.isChecked = readPref.getBoolean(PREF_AUTO_SUGGEST_MEAL,true)
 
         notificationBreakfastTime.text = readPref.getString(PREF_BREAKFAST_NOTIFICATION_TIME,"00:00")
         notificationSecondBreakfastTime.text = readPref.getString(PREF_SECOND_BREAKFAST_NOTIFICATION_TIME,"00:00")
@@ -240,6 +247,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
             edit.putString(PREF_SUPPER_NOTIFICATION_TIME,notificationSupperTime.text.toString())
 //            edit.putString(PREF_SNACKS_NOTIFICATION_TIME,notificationSnacksTime.text.toString())
 //            edit.putString(PREF_TRAINING_NOTIFICATION_TIME,notificationTrainingTime.text.toString())
+
+            edit.putBoolean(PREF_AUTO_SUGGEST_MEAL, autoSuggestProductListSwitch.isChecked)
 
             edit.apply()
 

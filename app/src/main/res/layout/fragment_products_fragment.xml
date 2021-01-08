@@ -8,43 +8,201 @@
     tools:context=".products_fragment">
 
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/custom_gray"
-        android:layoutDirection="rtl"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView2"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:scrollbarSize="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/light_gray_custom"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/floatingActionButton"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/cancel_shape_color"
+                android:clickable="true"
+                android:focusable="true"
+                android:foregroundGravity="center_vertical|right"
+                android:foregroundTint="#FFFFFF"
+                android:text="   New product   "
+                android:textColor="@color/design_default_color_background"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:layoutDirection="locale"
+                android:maxWidth="230dp"
+                android:queryHint="Search product" />
+
+            <Button
+                android:id="@+id/but_filter_all_products"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="All"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+            <Button
+                android:id="@+id/but_filter_breakfast"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="@string/breakfast_1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+            <Button
+                android:id="@+id/but_filter_secondbreakfast"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="@string/second_breakfast_2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+            <Button
+                android:id="@+id/but_filter_dinner"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="@string/dinner_3"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+            <Button
+                android:id="@+id/but_filter_dessert"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="@string/dessert_4"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+            <Button
+                android:id="@+id/but_filter_tea"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="@string/tea_5"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+            <Button
+                android:id="@+id/but_filter_supper"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="@string/supper_6"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+            <Button
+                android:id="@+id/but_filter_snacks"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="@string/snacks_7"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+            <Button
+                android:id="@+id/but_filter_training"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/rounded_frame_shape_but"
+                android:text="@string/training_8"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal">
+
+            </Button>
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_recycle_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
-
-    <Button
-        android:id="@+id/floatingActionButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/custom_red"
-        android:clickable="true"
-        android:focusable="true"
-        android:foregroundGravity="center_vertical|right"
-        android:foregroundTint="#FFFFFF"
-        android:text="Create new product"
-        android:textColor="@color/design_default_color_background"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/text_button_meal_name"
+        app:layout_constraintVertical_bias="0.298" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -268,5 +426,19 @@
             app:layout_constraintStart_toEndOf="@+id/textView23" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/text_button_meal_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/light_gray_custom"
+        android:enabled="false"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

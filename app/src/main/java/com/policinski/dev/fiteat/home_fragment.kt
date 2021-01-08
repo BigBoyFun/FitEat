@@ -3,21 +3,20 @@ package com.policinski.dev.fiteat
 import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.collection.arrayMapOf
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.*
-import kotlinx.android.synthetic.main.fragment_home_fragment.view.day_sum_kcal
-import kotlinx.android.synthetic.main.fragment_home_fragment.view.selected_date_tx
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.abs
+
 
 class home_fragment : Fragment() {
 
@@ -60,6 +59,9 @@ class home_fragment : Fragment() {
     var prefPro = 0.0
     var prefFat = 0.0
     var prefCarbo = 0.0
+    var x1: Float = 0.0F
+    var x2: Float = 0.0F
+    var distance: Float = 150.0F
 
     val date = LocalDate.now()
 
@@ -80,32 +82,62 @@ class home_fragment : Fragment() {
         val month = c.get(Calendar.MONTH)
         var day = c.get(Calendar.DAY_OF_MONTH)
 
-        val monthsArray = arrayOf(getString(R.string.month_01),getString(R.string.month_02),getString(
-                    R.string.month_03),getString(R.string.month_04),getString(R.string.month_05),getString(
-                                R.string.month_06),getString(R.string.month_07),getString(R.string.month_08),getString(
-                                            R.string.month_09),getString(R.string.month_10),getString(
-                                                        R.string.month_11),getString(R.string.month_12))
+        val monthsArray = arrayOf(
+            getString(R.string.month_01), getString(R.string.month_02), getString(
+                R.string.month_03
+            ), getString(R.string.month_04), getString(R.string.month_05), getString(
+                R.string.month_06
+            ), getString(R.string.month_07), getString(R.string.month_08), getString(
+                R.string.month_09
+            ), getString(R.string.month_10), getString(
+                R.string.month_11
+            ), getString(R.string.month_12)
+        )
 
         var plusDay: Long = 0 //variable for detect next day
         var minusDay: Long = 0 //variable for detect previous day
         var newDate: LocalDate
 
+        //change date by swipe on left and right
+//        v.recycle_view_meal.setOnTouchListener { v, event ->
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> x1 = event.x
+//                MotionEvent.ACTION_UP -> {
+//                    x2 = event.x
+//                    var deltaX = x2 - x1
+//                    if (abs(deltaX) > distance)
+//                        if (x2 > x1) {
+//                            backDay.callOnClick()
+//                        } else {
+//                            nextDay.callOnClick()
+//                        }
+//                }
+//            }
+//            true
+//        }
+
         selectedDayView.text = "${date.dayOfMonth} ${monthsArray[date.monthValue - 1]} ${date.year}"
 
         selectedDayView.setOnClickListener{
 
-            val datePickerDialog: DatePickerDialog = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{view, year, mothOfYear, dayOfMonth ->
+            val datePickerDialog: DatePickerDialog = DatePickerDialog(
+                requireContext(),
+                DatePickerDialog.OnDateSetListener { view, year, mothOfYear, dayOfMonth ->
 
-                selectedDayView.text = "$dayOfMonth ${monthsArray[mothOfYear]} $year "
-                plusDay = 0.toLong()
-                minusDay = 0.toLong()
-                val month = "%02d".format(mothOfYear + 1)
-                val day ="%02d".format(dayOfMonth)
-                showDayPropertis("$year-$month-$day")
-                showMeals("$year-$month-$day")
+                    selectedDayView.text = "$dayOfMonth ${monthsArray[mothOfYear]} $year "
+                    plusDay = 0.toLong()
+                    minusDay = 0.toLong()
+                    val month = "%02d".format(mothOfYear + 1)
+                    val day = "%02d".format(dayOfMonth)
+                    showDayPropertis("$year-$month-$day")
+                    showMeals("$year-$month-$day")
 
 
-            },year,month,day)
+                },
+                year,
+                month,
+                day
+            )
 
             datePickerDialog.show()
 
@@ -171,12 +203,13 @@ class home_fragment : Fragment() {
         return v
     }
 
+
     private fun showDayPropertis(date: String) {
 
         //init DB, SharedPref, read nutrients from DB to array
         val db = MyDatabaseHelper(requireContext())
         val nutrientsSumArray = db.readDayTable(date)
-        val sharedPreferences = requireContext().getSharedPreferences(MAIN_PREF,0)
+        val sharedPreferences = requireContext().getSharedPreferences(MAIN_PREF, 0)
 
 
         //read nutrients preferences at current day from database
@@ -190,21 +223,21 @@ class home_fragment : Fragment() {
 
         } else {
             //read nutrients preferences at current day from sharedPreferences and save them to database
-            prefkcal = sharedPreferences.getInt(PREF_KCAL,0)
-            prefPro = sharedPreferences.getInt(PREF_PRO,0).toDouble()
-            prefFat = sharedPreferences.getInt(PREF_FAT,0).toDouble()
-            prefCarbo = sharedPreferences.getInt(PREF_CARBO,0).toDouble()
+            prefkcal = sharedPreferences.getInt(PREF_KCAL, 0)
+            prefPro = sharedPreferences.getInt(PREF_PRO, 0).toDouble()
+            prefFat = sharedPreferences.getInt(PREF_FAT, 0).toDouble()
+            prefCarbo = sharedPreferences.getInt(PREF_CARBO, 0).toDouble()
 
         }
 
         //set value for view in homeFragment(from db and from sharedPref)
         daySumKcal?.text = "${nutrientsSumArray[0].toInt()}"
         homeUserPrefKcal?.text = "$prefkcal"
-        daySumPro?.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
+        daySumPro?.text = "%.1f".format(nutrientsSumArray[1]).replace(',', '.')
         homeUserPrefPro?.text = "${prefPro.toInt()}"
-        daySumFat?.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
+        daySumFat?.text = "%.1f".format(nutrientsSumArray[2]).replace(',', '.')
         homeUserPrefFat?.text = "${prefFat.toInt()}"
-        daySumCarbo?.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
+        daySumCarbo?.text = "%.1f".format(nutrientsSumArray[3]).replace(',', '.')
         homeUserPrefCarbo?.text = "${prefCarbo.toInt()}"
 
         circularProgressBar?.max = prefkcal
@@ -216,13 +249,13 @@ class home_fragment : Fragment() {
         //FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
              if (kcalProgress > 100) {
-                 progressInPercent?.setTextColor(resources.getColor(R.color.custom_red,null))
+                 progressInPercent?.setTextColor(resources.getColor(R.color.custom_red, null))
              } else {
-                 progressInPercent?.setTextColor(resources.getColor(R.color.colorAccent,null))
+                 progressInPercent?.setTextColor(resources.getColor(R.color.colorAccent, null))
              }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            progressInPercent?.setTextColor(resources.getColor(R.color.custom_red,null))
+            progressInPercent?.setTextColor(resources.getColor(R.color.custom_red, null))
         }
         progressInPercent?.text = "$kcalProgress%"
 
@@ -232,7 +265,7 @@ class home_fragment : Fragment() {
 
         var calculatedMealNutrients: MutableList<Product> = mutableListOf()
         var allDayMealListProduct: MutableList<MutableList<Product>> = mutableListOf()
-        var selectedMeals = mapOf<Int,String>()
+        var selectedMeals = mapOf<Int, String>()
         val db = MyDatabaseHelper(requireContext())
 
         //show selected meals if day is today, else show the meals that the user has made
@@ -267,12 +300,12 @@ class home_fragment : Fragment() {
             adapter = mealAdapter
         }
 
-        mealAdapter.submitList(calculatedMealNutrients, allDayMealListProduct, selectedMeals,date)
+        mealAdapter.submitList(calculatedMealNutrients, allDayMealListProduct, selectedMeals, date)
 
     }
 
-    private fun readMealsFromSelectedDay(mealArray: ArrayList<Int>): Map<Int,String>{
-        val meals = arrayMapOf<Int,String>()
+    private fun readMealsFromSelectedDay(mealArray: ArrayList<Int>): Map<Int, String>{
+        val meals = arrayMapOf<Int, String>()
 
         for (meal in mealArray){
             if (meal == 1) { meals[meal] = getString(R.string.breakfast_1) }
@@ -291,15 +324,15 @@ class home_fragment : Fragment() {
 
         val mealSelectedArray = arrayMapOf<Int, String>()
 
-        val sharedPreferences = requireContext().getSharedPreferences(MAIN_PREF,0)
-        val breakfast = sharedPreferences.getBoolean(PREF_MEAL_BREAKFAST,true)
-        val secondBreakfast = sharedPreferences.getBoolean(PREF_MEAL_SECOND_BREAKFAST,true)
-        val dinner = sharedPreferences.getBoolean(PREF_MEAL_DINNER,true)
-        val dessert = sharedPreferences.getBoolean(PREF_MEAL_DESSERT,true)
-        val tea = sharedPreferences.getBoolean(PREF_MEAL_TEA,true)
-        val supper = sharedPreferences.getBoolean(PREF_MEAL_SUPPER,true)
-        val snacks = sharedPreferences.getBoolean(PREF_MEAL_SNACKS,true)
-        val training = sharedPreferences.getBoolean(PREF_MEAL_TRAINING,true)
+        val sharedPreferences = requireContext().getSharedPreferences(MAIN_PREF, 0)
+        val breakfast = sharedPreferences.getBoolean(PREF_MEAL_BREAKFAST, true)
+        val secondBreakfast = sharedPreferences.getBoolean(PREF_MEAL_SECOND_BREAKFAST, true)
+        val dinner = sharedPreferences.getBoolean(PREF_MEAL_DINNER, true)
+        val dessert = sharedPreferences.getBoolean(PREF_MEAL_DESSERT, true)
+        val tea = sharedPreferences.getBoolean(PREF_MEAL_TEA, true)
+        val supper = sharedPreferences.getBoolean(PREF_MEAL_SUPPER, true)
+        val snacks = sharedPreferences.getBoolean(PREF_MEAL_SNACKS, true)
+        val training = sharedPreferences.getBoolean(PREF_MEAL_TRAINING, true)
 
         if (breakfast) mealSelectedArray[1] = getString(R.string.breakfast_1)
         if (secondBreakfast) mealSelectedArray[2] = getString(R.string.second_breakfast_2)
