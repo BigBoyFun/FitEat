@@ -18,20 +18,32 @@ private val PREF_FAT = "PREF_FAT"
 private val PREF_KCAL = "PREF_KCAL"
 private val PREF_PRO = "PREF_PRO"
 
+const val COL_PREF_CARBO = "PREF_CARBO"
+const val COL_PREF_FAT = "PREF_FAT"
+const val COL_PREF_KCAL = "PREF_KCAL"
+const val COL_PREF_PRO = "PREF_PRO"
+
 const val DATA_BASE_NAME = "PRODUCTS_SQLite_DB"
+
 const val TABLE_NAME = "Products"
 const val COL_ID_ING = "ID_pro"
 const val COL_NAME = "Name"
+const val COL_MANUFACTURER = "Manufacturer"
+const val COL_WEIGHT = "Weight"
+const val COL_LAST_WEIGHT = "Portion"
 const val COL_KCAL = "Kcal"
 const val COL_PROTEIN = "Protein"
 const val COL_FAT = "Fat"
 const val COL_CARBO = "Carbohydrates"
 const val COL_FAVORITE = "Favorite"
-const val COL_MANUFACTURER = "Manufacturer"
-const val COL_PREF_CARBO = "PREF_CARBO"
-const val COL_PREF_FAT = "PREF_FAT"
-const val COL_PREF_KCAL = "PREF_KCAL"
-const val COL_PREF_PRO = "PREF_PRO"
+const val COL_BREAKFAST = "Breakfast"
+const val COL_SECOND_BREAKFAST = "SecondBreakfast"
+const val COL_DINNER = "Dinner"
+const val COL_DESSERT = "Dessert"
+const val COL_TEA = "Tea"
+const val COL_SUPPER = "Supper"
+const val COL_SNACKS = "Snacks"
+const val COL_TRAINING = "Training"
 
 
 const val DISH_TABLE = "Dish"
@@ -43,8 +55,7 @@ const val DAY_TABLE_NAME = "DayTable"
 const val COL_DATE = "Date"
 const val COL_ID_DATE = "ID_date"
 const val COL_MEAL = "Meal"
-const val COL_WEIGHT = "Weight"
-const val COL_PORTION = "Portion"
+
 
 const val DAY_NUTRIENTS_GOAL_TABLE_NAME = "DayNutrientsGoal"
 
@@ -64,8 +75,16 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
                 COL_CARBO + " DOUBLE, " +
                 COL_FAT + " DOUBLE, " +
                 COL_WEIGHT + " INTEGER, " +
-                COL_PORTION + " INTEGER, " +
-                COL_FAVORITE + " BOOLEAN)"
+                COL_LAST_WEIGHT + " INTEGER, " +
+                COL_FAVORITE + " BOOLEAN, " +
+                COL_BREAKFAST + " INTEGER, " +
+                COL_SECOND_BREAKFAST + " INTEGER, " +
+                COL_DINNER + " INTEGER, " +
+                COL_DESSERT + " INTEGER, " +
+                COL_TEA + " INTEGER, " +
+                COL_SUPPER + " INTEGER, " +
+                COL_SNACKS + " INTEGER, " +
+                COL_TRAINING + " INTEGER)"
 
         db?.execSQL(createTable)
 
@@ -101,7 +120,17 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
 
     }
 
-    fun addProductToDay(data: String,name: String, kcal: Int, protein: Double, carbo: Double, fat: Double, meal: Int, weight: Int ){
+    fun addProductToDay(
+        data: String,
+        name: String,
+        kcal: Int,
+        protein: Double,
+        carbo: Double,
+        fat: Double,
+        meal: Int,
+        weight: Int,
+        id: Int
+    ){
 
         var cv = ContentValues()
         cv.put(COL_DATE,data)
@@ -118,6 +147,28 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
             Toast.makeText(context, context.getString(R.string.cant_add_pro_to_day), Toast.LENGTH_SHORT).show()
         else
             Toast.makeText(context, context.getString(R.string.added_to_day), Toast.LENGTH_SHORT).show()
+
+        //update information about user choices for auto suggestion function
+        fun findMealByNum(num: Int): String{
+
+            return when(num){
+                1 -> "Breakfast"
+                2 -> "SecondBreakfast"
+                3 -> "Dinner"
+                4 -> "Dessert"
+                5 -> "Tea"
+                6 -> "Supper"
+                7 -> "Snacks"
+                8 -> "Training"
+                else -> "All"
+            }
+        }
+        updateProductAutoSuggestionInfo(id,findMealByNum(meal),weight)
+    }
+
+    private fun updateProductAutoSuggestionInfo(id: Int, mealName: String, lastWeight: Int) {
+        val query = "UPDATE $TABLE_NAME SET $mealName = 1, Portion = $lastWeight WHERE $COL_ID_ING = $id"
+        dbWrite?.execSQL(query)
     }
 
     fun editProductNutrients(
@@ -142,12 +193,22 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
 
         var cv = ContentValues()
         cv.put(COL_NAME,product.name)
+        cv.put(COL_MANUFACTURER, product.manufaacturer)
         cv.put(COL_KCAL,product.kcal)
         cv.put(COL_CARBO,product.carbo)
         cv.put(COL_PROTEIN, product.protein)
         cv.put(COL_FAT,product.fat)
         cv.put(COL_WEIGHT,product.weight)
+        cv.put(COL_LAST_WEIGHT,product.lastAddedWeight)
         cv.put(COL_FAVORITE,product.favorite)
+        cv.put(COL_BREAKFAST,product.breakfast)
+        cv.put(COL_SECOND_BREAKFAST,product.secondBreakfast)
+        cv.put(COL_DINNER,product.dinner)
+        cv.put(COL_DESSERT,product.dessert)
+        cv.put(COL_TEA,product.tea)
+        cv.put(COL_SUPPER,product.supper)
+        cv.put(COL_SNACKS,product.snacks)
+        cv.put(COL_TRAINING,product.training)
 
         var result = dbWrite?.insert(TABLE_NAME,null,cv)
         if (result == -1.toLong()) {
@@ -157,6 +218,27 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
             Toast.makeText(context, context.getString(R.string.success), Toast.LENGTH_SHORT).show()
             return true
         }
+    }
+
+    fun setChangeToEditedProduct(product: Product, id: Int) {
+        val query = "UPDATE $TABLE_NAME SET $COL_NAME = '${product.name}'," +
+                " $COL_MANUFACTURER = '${product.manufaacturer}'," +
+                " $COL_WEIGHT = ${product.weight}," +
+                " $COL_KCAL = ${product.kcal}," +
+                " $COL_FAT = ${product.fat}," +
+                " $COL_CARBO = ${product.carbo}," +
+                " $COL_PROTEIN = ${product.protein}," +
+                " $COL_FAVORITE = ${product.favorite}," +
+                " $COL_BREAKFAST = ${product.breakfast}," +
+                " $COL_SECOND_BREAKFAST = ${product.secondBreakfast}," +
+                " $COL_DINNER = ${product.dinner}," +
+                " $COL_DESSERT = ${product.dessert}," +
+                " $COL_TEA = ${product.tea}," +
+                " $COL_SUPPER = ${product.supper}," +
+                " $COL_SNACKS = ${product.snacks}," +
+                " $COL_TRAINING = ${product.training} WHERE $COL_ID_ING = $id"
+
+        dbWrite?.execSQL(query)
     }
 
     fun readAllData(): Cursor{
@@ -231,6 +313,7 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
             do {
 
                 val name = cursor.getString(cursor.getColumnIndex("Name"))
+                val manufacturer = cursor.getString(cursor.getColumnIndex("Manufacturer"))
                 val kcal = cursor.getInt(cursor.getColumnIndex("Kcal"))
                 val fat = cursor.getDouble(cursor.getColumnIndex("Fat"))
                 val protein = cursor.getDouble(cursor.getColumnIndex("Protein"))
@@ -238,7 +321,7 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
                 val weight = cursor.getInt(cursor.getColumnIndex("Weight"))
                 val id = cursor.getInt(cursor.getColumnIndex("ID_date"))
 
-                productList.add(Product(name,kcal,protein,carbo,fat,weight,id = id))
+                productList.add(Product(name,manufacturer?: "Manufacturer",kcal,protein,carbo,fat,weight,id = id))
 
             }while (cursor.moveToNext())
         }
@@ -372,24 +455,41 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
         dbWrite.execSQL(wuery4)
     }
 
-    fun findEditedProduct(name: String): Product {
+    fun findEditedProductByName(name: String): Product {
         
         var baseProduct = Product()
         
         val date = dbRead.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COL_NAME = '$name'",null)
         
         if (date.moveToFirst()){
-            baseProduct.apply { 
+            baseProduct.apply {
+                this.name = date.getString(date.getColumnIndex(COL_NAME))
+                id = date.getInt(date.getColumnIndex(COL_ID_ING))
+                manufaacturer = date.getString(date.getColumnIndex(COL_MANUFACTURER))
                 kcal = date.getInt(date.getColumnIndex(COL_KCAL))
                 protein = date.getDouble(date.getColumnIndex(COL_PROTEIN))
                 fat = date.getDouble(date.getColumnIndex(COL_FAT))
                 carbo = date.getDouble(date.getColumnIndex(COL_CARBO))
                 weight = date.getInt(date.getColumnIndex(COL_WEIGHT))
+                favorite = date.getInt(date.getColumnIndex(COL_FAVORITE))
+                breakfast = date.getInt(date.getColumnIndex(COL_BREAKFAST))
+                secondBreakfast = date.getInt(date.getColumnIndex(COL_SECOND_BREAKFAST))
+                dinner = date.getInt(date.getColumnIndex(COL_DINNER))
+                dessert = date.getInt(date.getColumnIndex(COL_DESSERT))
+                tea = date.getInt(date.getColumnIndex(COL_TEA))
+                supper = date.getInt(date.getColumnIndex(COL_SUPPER))
+                snacks = date.getInt(date.getColumnIndex(COL_SNACKS))
+                training = date.getInt(date.getColumnIndex(COL_TRAINING))
             }
         } else {
             Toast.makeText(context, context.getString(R.string.product_not_found), Toast.LENGTH_SHORT).show()}
 
         return baseProduct
+    }
+
+    fun deleteProductFromList(meal: String, productId: Int){
+        val query = "UPDATE $TABLE_NAME SET $meal = 0 WHERE $COL_ID_ING = $productId"
+        dbWrite.execSQL(query)
     }
 
     fun getSelectedProduct(productName: String): Product? {
@@ -408,6 +508,8 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
                 carbo = result.getDouble(result.getColumnIndex(COL_CARBO))
                 protein = result.getDouble(result.getColumnIndex(COL_PROTEIN))
                 weight = result.getInt(result.getColumnIndex(COL_WEIGHT))
+                lastAddedWeight = result.getInt(result.getColumnIndex(COL_LAST_WEIGHT))
+                id = result.getInt(result.getColumnIndex(COL_ID_ING))
             }
         }
 

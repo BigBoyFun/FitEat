@@ -54,6 +54,7 @@ class settings_fragment : Fragment(), View.OnClickListener {
     private val PREF_TRAINING_NOTIFICATION_TIME = "PREF_TRAINING_NOTIFICATION_TIME"
 
     private val PREF_AUTO_SUGGEST_MEAL = "PREF_AUTO_SUGEST_MEAL"
+    private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created for deleting product from specific meal(not from DB)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +63,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         // Inflate the layout for this fragment
 
         val view = inflater.inflate(R.layout.fragment_settings_fragment, container, false)
+
+        view.context.getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply()
 
         val date = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDate.now()

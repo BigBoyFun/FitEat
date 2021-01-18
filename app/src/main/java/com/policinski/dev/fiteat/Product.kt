@@ -2,13 +2,23 @@ package com.policinski.dev.fiteat
 
 data class Product(
     var name: String = "",
+    var manufaacturer: String ="",
     var kcal: Int = 0,
     var protein: Double= 0.0,
     var carbo: Double = 0.0,
     var fat: Double = 0.0,
     var weight: Int = 0,
+    var lastAddedWeight : Int = 0,
     var favorite: Int = 0,
-    val id: Int = 0
+    var id: Int = 0,
+    var breakfast: Int = 0,
+    var secondBreakfast: Int = 0,
+    var dinner: Int = 0,
+    var dessert: Int = 0,
+    var tea: Int = 0,
+    var supper: Int = 0,
+    var snacks: Int = 0,
+    var training: Int = 0
 )
 
 class ProductV2(

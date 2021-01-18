@@ -333,7 +333,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 editDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
                 //find base values of editing product for calculate new nutrients values
-                var baseProduct = myDB.findEditedProduct(product.name)
+                var baseProduct = myDB.findEditedProductByName(product.name)
 
                 //init buttons and editText's
                 val productName = editDialog.findViewById(R.id.product_edit_name) as TextView

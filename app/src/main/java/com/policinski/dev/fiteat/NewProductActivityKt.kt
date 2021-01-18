@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_new_product.*
-import java.text.DecimalFormat
+import java.util.*
 
 class newProductActivity : AppCompatActivity() {
 
@@ -26,11 +27,14 @@ class newProductActivity : AppCompatActivity() {
 
         this.onPause()
 
+
         val myDataBase: MyDatabaseHelper = MyDatabaseHelper(this)
 
         var exist:Boolean = false
 
+        var titleTv = title_tv
         var nameNewProduct = name_new_product
+        var manufacturerNewProduct = manufacturer_new_product
         var kcalNewProduct = kcal_new_product
         var proteinNewProduct = protein_new_product
         var carboNewProduct = carbo_new_product
@@ -47,11 +51,75 @@ class newProductActivity : AppCompatActivity() {
         val weightTv = textView13
         val cb_calculate_portion = checkBox_calculate_portion
         val et_porion_value = et_portion_value
-        weightTv.visibility = View.GONE
-        weightNewProduct.visibility = View.INVISIBLE
+        val breakfast_but_suggest_1 = breakfast_but_suggestion_1
+        val second_breakfastbut_suggestion_2 = seccond_breakfast_but_suggestion_2
+        val dinner_but_suggestion_3 = dinner_but_suggestion_3
+        val dessert_but_suggestion_4 = dessert_but_suggestion_4
+        val tea_but_suggestion_5 = tea_but_suggestion_5
+        val supper_but_suggestion_6 = supper_but_suggestion_6
+        val snacks_but_suggestion_7 = snacks_but_suggestion_7
+        val training_but_suggestion_8 = training_but_suggestion_8
 
-//        weightNewProduct.setSelection(weightNewProduct.text.length)
-        weightNewProduct.append("100")
+        val listOfSuggestionButtons = listOf<Button>(breakfast_but_suggest_1,
+        second_breakfastbut_suggestion_2,dinner_but_suggestion_3,dessert_but_suggestion_4,
+        tea_but_suggestion_5,supper_but_suggestion_6,snacks_but_suggestion_7,training_but_suggestion_8)
+
+        val listOfSuggestionButtonState = mutableListOf<Int>(0,0,0,0,0,0,0,0)
+
+        var productForEdit = Product()
+        val editProduct = intent.getStringExtra("EditProductName")
+
+        if (editProduct != null && editProduct.isNotEmpty()){
+
+            but_portion.setBackgroundResource(R.drawable.selected_frame_shape_but)
+            but_100g.setBackgroundResource(R.drawable.frame_shape_but)
+            weightNewProduct.visibility = View.VISIBLE
+            weightTv.visibility = View.VISIBLE
+            cb_calculate_portion.isEnabled = false
+
+            productForEdit = myDataBase.findEditedProductByName(editProduct)
+
+            titleTv.text = "${productForEdit.name}"
+            nameNewProduct.setText(productForEdit.name)
+            manufacturerNewProduct.setText(productForEdit.manufaacturer)
+            weightNewProduct.setText(productForEdit.weight.toString())
+            kcalNewProduct.setText(productForEdit.kcal.toString())
+            fatNewProduct.setText(productForEdit.fat.toString())
+            carboNewProduct.setText(productForEdit.carbo.toString())
+            proteinNewProduct.setText(productForEdit.protein.toString())
+            favoriteChaek.isChecked = if(productForEdit.favorite == 1) true else false
+            listOfSuggestionButtonState[0] = productForEdit.breakfast
+            listOfSuggestionButtonState[1] = productForEdit.secondBreakfast
+            listOfSuggestionButtonState[2] = productForEdit.dinner
+            listOfSuggestionButtonState[3] = productForEdit.dessert
+            listOfSuggestionButtonState[4] = productForEdit.tea
+            listOfSuggestionButtonState[5] = productForEdit.supper
+            listOfSuggestionButtonState[6] = productForEdit.snacks
+            listOfSuggestionButtonState[7] = productForEdit.training
+
+            listOfSuggestionButtonState.forEachIndexed { index, i -> if (i > 0) listOfSuggestionButtons[index].setBackgroundResource(R.drawable.selected_frame_shape_but) }
+
+            register.text = getString(R.string.save)
+
+            println("======================================== ${productForEdit.id} ========================================")
+        } else {
+            Toast.makeText(this,"NOT FOUND",Toast.LENGTH_SHORT).show()
+            weightTv.visibility = View.GONE
+            weightNewProduct.visibility = View.INVISIBLE
+
+            weightNewProduct.append("100")
+        }
+
+        listOfSuggestionButtons.forEach { it.setOnClickListener { v ->
+            if (Objects.equals(v.background.constantState, this.resources.getDrawable(R.drawable.frame_shape_but,null).constantState)) {
+                v.setBackgroundResource(R.drawable.selected_frame_shape_but)
+                listOfSuggestionButtonState[listOfSuggestionButtons.indexOf(it)] = 1
+            } else {
+                v.setBackgroundResource(R.drawable.frame_shape_but)
+                listOfSuggestionButtonState[listOfSuggestionButtons.indexOf(it)] = 0
+            }
+        }
+        }
 
         but100.setOnClickListener {
             it.setBackgroundResource(R.drawable.selected_frame_shape_but)
@@ -293,6 +361,7 @@ class newProductActivity : AppCompatActivity() {
         if (cursor.moveToNext()){
 
             var name: String
+            var manufacturer: String
             var kcal: Int
             var fat: Double
             var protein: Double
@@ -304,6 +373,7 @@ class newProductActivity : AppCompatActivity() {
             do{
 
                 name = cursor.getString(cursor.getColumnIndex("Name"))
+                manufacturer = cursor.getString(cursor.getColumnIndex("Manufacturer"))
                 kcal = cursor.getInt(cursor.getColumnIndex("Kcal"))
                 fat = cursor.getDouble(cursor.getColumnIndex("Fat"))
                 protein = cursor.getDouble(cursor.getColumnIndex("Protein"))
@@ -312,7 +382,7 @@ class newProductActivity : AppCompatActivity() {
                 favorite = cursor.getInt(cursor.getColumnIndex("Favorite"))
                 id = cursor.getInt(cursor.getColumnIndex("ID_pro"))
 
-                productList.add(Product(name,kcal,protein,carbo,fat,weight,favorite, id))
+                productList.add(Product(name,manufacturer,kcal,protein,carbo,fat,weight,favorite, id))
 
             }while (cursor.moveToNext())
         }
@@ -320,6 +390,7 @@ class newProductActivity : AppCompatActivity() {
         register.setOnClickListener {
 
             if (nameNewProduct.length() == 0) nameNewProduct.setText("Item")
+            if (manufacturerNewProduct.length() == 0) manufacturerNewProduct.setText("Manufacturer")
             if (kcalNewProduct.length() == 0) kcalNewProduct.setText("0")
             if (proteinNewProduct.length() == 0) proteinNewProduct.setText("0")
             if (carboNewProduct.length() == 0) carboNewProduct.setText("0")
@@ -329,36 +400,56 @@ class newProductActivity : AppCompatActivity() {
 
             val newProduct = Product(
                 nameNewProduct.text.toString().capitalize(),
+                manufacturerNewProduct.text.toString().capitalize(),
                 if (cb_calculate_portion.isChecked && portion != null) (kcalNewProduct.text.toString().toDouble() * portion).toInt() else kcalNewProduct.text.toString().toInt(),
                 "%.2f".format(if (cb_calculate_portion.isChecked && portion != null) proteinNewProduct.text.toString().toDouble() * portion else proteinNewProduct.text.toString().toDouble()).replace(',','.').toDouble(),
                 "%.2f".format(if (cb_calculate_portion.isChecked && portion != null) carboNewProduct.text.toString().toDouble() * portion else carboNewProduct.text.toString().toDouble()).replace(',','.').toDouble(),
                 "%.2f".format(if (cb_calculate_portion.isChecked && portion != null) fatNewProduct.text.toString().toDouble() * portion else fatNewProduct.text.toString().toDouble()).replace(',','.').toDouble(),
                 if (cb_calculate_portion.isChecked && portion != null) (portion * 100).toInt() else weightNewProduct.text.toString().toInt(),
+                if (cb_calculate_portion.isChecked && portion != null) (portion * 100).toInt() else weightNewProduct.text.toString().toInt(),
                 if (favoriteChaek.isChecked) 1 else 0,
-                0
+                0,
+                listOfSuggestionButtonState[0],
+                listOfSuggestionButtonState[1],
+                listOfSuggestionButtonState[2],
+                listOfSuggestionButtonState[3],
+                listOfSuggestionButtonState[4],
+                listOfSuggestionButtonState[5],
+                listOfSuggestionButtonState[6],
+                listOfSuggestionButtonState[7]
             )
 
-            for (product in productList) {
-                if (newProduct.name.equals(product.name)){
-                    exist = true
-                    break
-                }else{
-                    exist = false
-                }
-            }
+            if (editProduct != null && editProduct.isNotEmpty()){
 
-            if (exist){
-                Toast.makeText(this,getString(R.string.already_exist), Toast.LENGTH_SHORT).show()
-            }else if (!exist){
-                Toast.makeText(this,getString(R.string.product_registered), Toast.LENGTH_SHORT).show()
+                dbManager.setChangeToEditedProduct(newProduct,productForEdit.id)
                 val intent = Intent()
-                myDataBase.insertData(newProduct)
-                    .let { it -> if (it)
-                        intent.putExtra("newProductCreated",it)
-                        setResult(Activity.RESULT_OK,intent)
-                        finish()
-                    }
+                setResult(Activity.RESULT_OK,intent) // FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK
+                finish()
 
+            } else {
+                for (product in productList) {
+                    if (newProduct.name == product.name){
+                        exist = true
+                        break
+                    }else{
+                        exist = false
+                    }
+                }
+
+                if (exist){
+                    Toast.makeText(this,getString(R.string.already_exist), Toast.LENGTH_SHORT).show()
+                } else if (!exist){
+                    Toast.makeText(this,getString(R.string.product_registered), Toast.LENGTH_SHORT).show()
+                    val intent = Intent()
+                    myDataBase.insertData(newProduct)
+                        .let {
+                            if (it)
+                                intent.putExtra("newProductCreated",it)
+                            setResult(Activity.RESULT_OK,intent) // FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK FOR CHECK
+                            finish()
+                        }
+
+                }
             }
 
         }
@@ -367,6 +458,5 @@ class newProductActivity : AppCompatActivity() {
         cancel.setOnClickListener {
             super.onBackPressed()
         }
-
     }
 }

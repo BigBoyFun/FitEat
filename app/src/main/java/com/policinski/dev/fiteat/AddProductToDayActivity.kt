@@ -183,9 +183,9 @@ class AddProductToDayActivity : AppCompatActivity() {
         calculatePro.text = product.protein.toString()
         calculateFat.text = product.fat.toString()
         calculateCarbo.text = product.carbo.toString()
-        input_weight.setText("${product.weight}")
-        read_weight_tv.text = "${product.weight}"
-        seekBar.progress = product.weight
+        input_weight.setText("${product.lastAddedWeight}")
+        read_weight_tv.text = "${product.lastAddedWeight}"
+        seekBar.progress = product.lastAddedWeight
 
         //calculate nutrients after change weight
         fun calculateNut(progress: Int){
@@ -271,7 +271,9 @@ class AddProductToDayActivity : AppCompatActivity() {
                 calculatePro.text.toString().replace(',','.').toDouble(),
                 calculateCarbo.text.toString().replace(',','.').toDouble(),
                 calculateFat.text.toString().replace(',','.').toDouble(),
-                meal,seekBar.progress)
+                meal,
+                seekBar.progress,
+                product.id)
 
             setResult(Activity.RESULT_OK, intent)
             finish()

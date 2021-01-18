@@ -77,4 +77,5 @@
     <string name="calculate_nutrients_for_portion_and_save_to_base">Calculate nutrients for portion and save to base.</string>
     <string name="current_meal">\Current meal: \</string>
     <string name="auto_suggest_meal_list">Auto suggest meal list</string>
+    <string name="save">Save</string>
 </resources>

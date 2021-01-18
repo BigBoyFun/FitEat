@@ -23,6 +23,9 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.math.abs
 
+private val MAIN_PREF = "MAIN_PREF"
+private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created for deleting product from specific meal(not from DB)
+
 class MainActivity : AppCompatActivity() {
 
     var x1: Float = 0.0F
@@ -44,6 +47,8 @@ class MainActivity : AppCompatActivity() {
         for (name in mealArray){
             createNotificationChannel(name)
         }
+
+        getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply()
 
     }
 

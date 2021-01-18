@@ -38,6 +38,9 @@ class home_fragment : Fragment() {
     private val PREF_MEAL_SUPPER = "PREF_MEAL_SUPPER"
     private val PREF_MEAL_SNACKS = "PREF_MEAL_SNACKS"
     private val PREF_MEAL_TRAINING = "PREF_MEAL_TRAINING"
+
+    private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created for deleting product from specific meal(not from DB)
+
     private val header: MutableList<String> = ArrayList()
     private lateinit var mealAdapter: MealRecycleListAdapter
     private lateinit var mealList: MutableList<Meal>
@@ -72,6 +75,8 @@ class home_fragment : Fragment() {
 
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_home_fragment, container, false)
+
+        v.context.getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply()
 
         val nextDay = v.next_date_bt
         val backDay = v.bcak_date_bt

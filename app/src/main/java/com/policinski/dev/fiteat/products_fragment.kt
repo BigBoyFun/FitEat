@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products_fragment.*
 import kotlinx.android.synthetic.main.fragment_products_fragment.view.*
@@ -25,7 +26,7 @@ import java.time.LocalTime
 import java.util.*
 import kotlin.properties.Delegates
 
-class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnClickListener {
+class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnClickListener{
 
     private lateinit var adapterProduct: MyAdapter
     private lateinit var productList: MutableList<Product>
@@ -56,6 +57,7 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
     private val PREF_TRAINING_NOTIFICATION = "PREF_TRAINING_NOTIFICATION"
 
     private val PREF_AUTO_SUGGEST_MEAL = "PREF_AUTO_SUGEST_MEAL"
+    private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created for deleting product from specific meal(not from DB)
 
     private var current_kcal = 0
     private var current_pro = 0.0
@@ -83,6 +85,7 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
 
         autoSuggestMeal = this.requireContext().getSharedPreferences(MAIN_PREF,0).getBoolean(PREF_AUTO_SUGGEST_MEAL,true)
 
+        this.requireContext().getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply() //necessarily for correctly refresh fragment when user click on button "Products" in bottom menu
         loadingProductListWithAutoSuggest()
 
         // Inflate the layout for this fragment
@@ -96,11 +99,12 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         view.current_fat.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
         view.current_carbo.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
 
-        //show dialog in you can add new product to data base
+        //show activity in you can add new product to data base
         view.floatingActionButton.setOnClickListener {
             //createProductDialog()
             val intent: Intent = Intent(requireContext(), newProductActivity::class.java) //FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK FOR REWORK
             startActivityForResult(intent,100,null)
+//            startActivity(intent)
 
             }
 
@@ -148,7 +152,6 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         } else {
             setBackgroundForButtonShowingCurrentMeal(buttonFilterList, meal)
         }
-
         //show name of current meal and make text double color
         view?.text_button_meal_name?.text = doubleColoredText(getString(R.string.current_meal),buttonFilterList[meal].text.toString())
 
@@ -167,7 +170,7 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         buttonFilterList: List<Button>,
         meal: Int
     ) {
-        buttonFilterList[meal].setBackgroundResource(R.drawable.rounded_selected_frame_shape_but)
+        buttonFilterList[meal].setBackgroundResource(R.drawable.selected_frame_shape_but)
     }
 
     private fun doubleColoredText(text1: String, text2: String): SpannableString{
@@ -260,7 +263,6 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
 
         Handler().postDelayed({
             productList.clear()
-            Toast.makeText(requireContext(), "Fragment has beet refreshed", Toast.LENGTH_SHORT).show()
             loadingProductListWithAutoSuggest()
             refreshFragment()
         },100)
@@ -278,33 +280,69 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         if (cursor.moveToNext()){
 
             var name: String
+            var manufacturer: String
             var kcal: Int
             var fat: Double
             var protein: Double
             var carbo: Double
             var weight: Int
+            var lastAddedWeight: Int
             var favorite: Int
             var id: Int
 
             do{
 
                 name = cursor.getString(cursor.getColumnIndex("Name"))
+                manufacturer = cursor.getString(cursor.getColumnIndex("Manufacturer"))
                 kcal = cursor.getInt(cursor.getColumnIndex("Kcal"))
                 fat = cursor.getDouble(cursor.getColumnIndex("Fat"))
                 protein = cursor.getDouble(cursor.getColumnIndex("Protein"))
                 carbo = cursor.getDouble(cursor.getColumnIndex("Carbohydrates"))
                 weight = cursor.getInt(cursor.getColumnIndex("Weight"))
+                lastAddedWeight = cursor.getInt(cursor.getColumnIndex("Portion"))
                 favorite = cursor.getInt(cursor.getColumnIndex("Favorite"))
                 id = cursor.getInt(cursor.getColumnIndex("ID_pro"))
 
                 if (!autoSuggest && currentMeal == 9) {
-                    productList.add(Product(name, kcal, protein, carbo, fat, weight, favorite, id))
-                } else if (currentMeal in 1..8){
-                    if (cursor.getInt(cursor.getColumnIndex(currentMeal.toString())) > 0) {
-                        productList.add(Product(name, kcal, protein, carbo, fat, weight, favorite, id))
+                    if (this.requireContext().getSharedPreferences(MAIN_PREF, 0)
+                            .getString(PREF_CURRENTLY_VIEWED_LIST, "All") == "All"
+                    ) { //load list of all product from DB when autosuggestion is off
+                        productList.add(
+                            Product(name, manufacturer, kcal, protein, carbo, fat, weight,lastAddedWeight, favorite, id)
+                        )
+                    } else if (!autoSuggest && cursor.getInt(
+                            cursor.getColumnIndex(
+                                this.requireContext().getSharedPreferences(MAIN_PREF, 0)
+                                    .getString(PREF_CURRENTLY_VIEWED_LIST, "All")
+                            )
+                        ) > 0
+                    ) { //loading the product list of the last viewed meal when autosuggestion is off
+                        productList.add(
+                            Product(name, manufacturer, kcal, protein, carbo, fat, weight,lastAddedWeight, favorite, id)
+                        )
+                    }
+                } else if (currentMeal in 1..8 ){
+                    if (this.requireContext().getSharedPreferences(MAIN_PREF, 0)
+                            .getString(PREF_CURRENTLY_VIEWED_LIST, "All") == "All"
+                    ) { //load list of product from suggested meal when autosuggestion is on
+                        if (cursor.getInt(cursor.getColumnIndex(findMealByNum(currentMeal))) > 0) {
+                            productList.add(
+                                Product(name, manufacturer, kcal, protein, carbo, fat, weight,lastAddedWeight, favorite, id)
+                            )
+
+                        }
+                    } else if (cursor.getInt(
+                            cursor.getColumnIndex(
+                                this.requireContext().getSharedPreferences(MAIN_PREF, 0)
+                                    .getString(PREF_CURRENTLY_VIEWED_LIST, "All")
+                            )
+                        ) > 0
+                    ) { //load list of product from meal PREF_CURRENTLY_VIEWED_LIST when autosuggestion is on
+                        productList.add(
+                            Product(name, manufacturer, kcal, protein, carbo, fat, weight,lastAddedWeight, favorite, id)
+                        )
                     }
                 }
-
             } while (cursor.moveToNext())
 
             var groupSort = this.productList.groupBy { it.favorite }
@@ -360,13 +398,11 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
             if (data?.getBooleanExtra("newProductCreated",false) == true) {
                 Handler().postDelayed({
                     productList.clear()
-                    Toast.makeText(requireContext(), "Fragment has beet refreshed", Toast.LENGTH_SHORT).show()
                     loadProdactsFromDataBase(meal+1, autoSuggestMeal)
                     refreshFragment()
                 },100)
             }
             Handler().postDelayed({
-                Toast.makeText(context,"REFRESH ACTIVITY", Toast.LENGTH_SHORT).show()
                 //read any product added to current day and calculate all nutrients
                 val nutrientsSumArray = dbManager.readDayTable(date.toString())
 
@@ -383,10 +419,18 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         v as Button
 
         for (but in buttonFilterList){
-            if (v == but) v.setBackgroundResource(R.drawable.rounded_selected_frame_shape_but) else but.setBackgroundResource(R.drawable.rounded_frame_shape_but)
+            if (v == but) v.setBackgroundResource(R.drawable.selected_frame_shape_but) else but.setBackgroundResource(
+                R.drawable.light_gray_bt_shape
+            )
         }
 
+        view?.context?.getSharedPreferences(MAIN_PREF, 0)?.edit()
+            ?.putString(PREF_CURRENTLY_VIEWED_LIST, findMealByNum(findMealByTitle(v)))?.apply()
+
+        autoSuggestMeal = false //Change state because i need load list with all product after add from this list (all product list) product to the day when autosuggestion is on - this operation don't change settings
+
         loadProdactsFromDataBase(findMealByTitle(v),false)
+
 
         refreshFragment()
     }
@@ -406,6 +450,20 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
             but_filter_training -> 8
             else -> 9
         }
+    }
 
+    private fun findMealByNum(num: Int): String{
+
+        return when(num){
+            1 -> "Breakfast"
+            2 -> "SecondBreakfast"
+            3 -> "Dinner"
+            4 -> "Dessert"
+            5 -> "Tea"
+            6 -> "Supper"
+            7 -> "Snacks"
+            8 -> "Training"
+            else -> "All"
+        }
     }
 }
