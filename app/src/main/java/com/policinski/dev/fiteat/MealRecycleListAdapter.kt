@@ -1,9 +1,6 @@
 package com.policinski.dev.fiteat
 
-import android.app.AlarmManager
-import android.app.Dialog
-import android.app.PendingIntent
-import android.app.TimePickerDialog
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -13,8 +10,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
 import kotlinx.android.synthetic.main.delate_layout.*
@@ -23,6 +20,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.abs
 
 class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -31,7 +29,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     var selectedMeals = ArrayList<String>()
     var date: String = ""
 
-    class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val MAIN_PREF = "MAIN_PREF"
 
@@ -70,6 +68,25 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private var mealTimePicker = itemView.meal_time_tv
         private var state: Boolean = false
         lateinit var item: ExpandingItem
+
+        //edit dilog views
+        lateinit var editDialog: Dialog
+        lateinit var baseProduct: Product
+        lateinit var productName: TextView
+        lateinit var butOK: Button
+        lateinit var butDelete: Button
+        lateinit var editKcal: TextView
+        lateinit var editPro: TextView
+        lateinit var editFat: TextView
+        lateinit var editCarbo: TextView
+        lateinit var editWeight: TextView
+        lateinit var addOneGr: Button
+        lateinit var removeOneGr: Button
+        lateinit var btSetWeight: ToggleButton
+        lateinit var btSetPortion: ToggleButton
+        lateinit var tvGx: TextView
+        private var editProductWeight1: Int = 0
+        private var editProductPortion: Int = 0
 
 
         fun bind(
@@ -328,24 +345,43 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             (view.findViewById(R.id.expanding_sub_item_edit_product_bt) as Button).setOnClickListener{
 
                 //create dialog for editing product from selected day and meal
-                val editDialog = Dialog(itemView.context)
+                editDialog = Dialog(itemView.context)
                 editDialog.setContentView(R.layout.product_settings_dialog)
                 editDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
                 //find base values of editing product for calculate new nutrients values
-                var baseProduct = myDB.findEditedProductByName(product.name)
+                baseProduct = myDB.findEditedProductByName(product.name)
+
+                //set product weight to new variable for editing and init multiplier
+                editProductWeight1 = product.weight
+                editProductPortion = product.weight / baseProduct.weight
 
                 //init buttons and editText's
-                val productName = editDialog.findViewById(R.id.product_edit_name) as TextView
-                val butOK = editDialog.findViewById(R.id.ok_product_settings_dialog) as Button
-                val butDelete = editDialog.findViewById(R.id.delete_product_settings_dialog) as Button
-                val editKcal = editDialog.findViewById(R.id.kcal_product_settings_dialog) as TextView
-                val editPro = editDialog.findViewById(R.id.pro_user_product_settings_dialog) as TextView
-                val editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog) as TextView
-                val editCarbo = editDialog.findViewById(R.id.carbo_user_product_settings_dialog) as TextView
-                var editWeight = editDialog.findViewById(R.id.product_edit_weight) as EditText
-                val seeakBarWeight = editDialog.findViewById(R.id.seak_bar_product_settings) as SeekBar
-                var readWeight = editDialog.findViewById(R.id.read_weight_tv) as TextView
+                productName = editDialog.findViewById(R.id.product_edit_name)
+                butOK = editDialog.findViewById(R.id.ok_product_settings_dialog)
+                butDelete = editDialog.findViewById(R.id.delete_product_settings_dialog)
+                editKcal = editDialog.findViewById(R.id.kcal_product_settings_dialog)
+                editPro = editDialog.findViewById(R.id.pro_user_product_settings_dialog)
+                editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog)
+                editCarbo = editDialog.findViewById(R.id.carbo_user_product_settings_dialog)
+                editWeight = editDialog.findViewById(R.id.product_edit_weight)
+                addOneGr = editDialog.findViewById(R.id.add_one_gr_bt)
+                removeOneGr = editDialog.findViewById(R.id.remove_one_gr_bt)
+                btSetWeight = editDialog.findViewById(R.id.bt_weight_edit_product)
+                btSetPortion = editDialog.findViewById(R.id.bt_portion_edit_product)
+                tvGx = editDialog.findViewById(R.id.tv_g_x)
+
+                if (editProductWeight1 % baseProduct.weight == 0){
+                    btSetPortion.isChecked = true
+                    btSetWeight.isChecked = false
+                    editWeight.text = editProductPortion.toString()
+                    tvGx.text = "x"
+                } else {
+                    btSetPortion.isChecked = false
+                    btSetWeight.isChecked = true
+                    editWeight.text = editProductWeight1.toString()
+                    tvGx.text = ".g"
+                }
 
                 //set current nutrients from selected product
                 productName.text = "${product.name}"
@@ -353,26 +389,54 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 editPro.text = "${product.protein}"
                 editFat.text = "${product.fat}"
                 editCarbo.text = "${product.carbo}"
-                seeakBarWeight.progress = product.weight
-                readWeight.text = "${product.weight}"
 
                 //calculate nutrients after change weight
                 fun calculateNut(weight: Int){
-                    editKcal.text = ((baseProduct.kcal * weight) / 100).toString()
+                    editKcal.text = ((baseProduct.kcal * weight) / baseProduct.weight).toString()
                     editPro.text = "%.2f".format(
-                        (baseProduct.protein * (weight.toDouble() / 100.0))
+                        (baseProduct.protein * (weight.toDouble() / baseProduct.weight))
                     ).replace(',', '.')
                     editFat.text = "%.2f".format(
-                        (baseProduct.fat * (weight.toDouble() / 100.0))
+                        (baseProduct.fat * (weight.toDouble() / baseProduct.weight))
                     ).replace(',', '.')
                     editCarbo.text = "%.2f".format(
-                        (baseProduct.carbo * (weight.toDouble() / 100.0))
+                        (baseProduct.carbo * (weight.toDouble() / baseProduct.weight))
                     ).replace(',', '.')
                 }
 
-                editWeight.addTextChangedListener(object : TextWatcher{
+                //set listener for btSetWeight and brSetPortion
+                btSetWeight.setOnCheckedChangeListener { buttonView, isChecked ->
+
+                    if (isChecked) {
+                        btSetPortion.isChecked = false
+                        tvGx.text = ".g"
+                        editProductWeight1 = product.weight
+                        editWeight.text = editProductWeight1.toString()
+                    } else {
+                        btSetPortion.isChecked = true
+                    }
+
+                    closeSoftKeyboard(view.context,editWeight)
+
+                }
+                btSetPortion.setOnCheckedChangeListener { buttonView, isChecked ->
+
+                    if (isChecked) {
+                        btSetWeight.isChecked = false
+                        tvGx.text = "x"
+                        editProductPortion = product.weight / baseProduct.weight
+                        editWeight.text = editProductPortion.toString()
+                    } else {
+                        btSetWeight.isChecked = true
+                    }
+
+                    closeSoftKeyboard(view.context,editWeight)
+
+                }
+
+                editWeight.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(s: Editable?) {
-                        seeakBarWeight.progress = if (s?.isEmpty()!!) 0 else s.toString().toInt()
+
                     }
 
                     override fun beforeTextChanged(
@@ -390,71 +454,86 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         before: Int,
                         count: Int
                     ) {
-                        if(s.toString().isEmpty() || s.toString().toInt() == 0){
+                        if (s.toString().isEmpty() || s.toString().toInt() == 0) {
                             editKcal.text = "0"
                             editPro.text = "0"
                             editFat.text = "0"
                             editCarbo.text = "0"
-                            readWeight.text = "0"
-                            seeakBarWeight.progress = 0
-                        }else{
-                            readWeight.text = s
-                            calculateNut(s.toString().toInt())
+                        } else {
+                            if (btSetWeight.isChecked) {
+                                calculateNut(s.toString().toInt())
+                            }else if (btSetPortion.isChecked){
+                                calculateNut(baseProduct.weight * s.toString().toInt())
+                            }
                         }
                     }
                 })
 
-                seeakBarWeight.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(
-                        seekBar: SeekBar?,
-                        progress: Int,
-                        fromUser: Boolean
-                    ) {
-                        readWeight.text = "$progress"
-                        calculateNut(progress)
+                addOneGr.setOnClickListener {
+
+                    if (btSetWeight.isChecked && editProductWeight1 + 1 <= 999) {
+                        editProductWeight1 += 1
+                        editWeight.text = editProductWeight1.toString()
+                    } else if (btSetPortion.isChecked && (editWeight.text.toString().toInt() + 1) * baseProduct.weight < 999){
+                        editProductPortion += 1
+                        editWeight.text = editProductPortion.toString()
                     }
 
-                    override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                        editWeight.clearFocus()
+                    closeSoftKeyboard(view.context,editWeight)
+
+                }
+
+                removeOneGr.setOnClickListener {
+
+                    if (btSetWeight.isChecked && editProductWeight1 - 1 >= 0) {
+                        editProductWeight1 -= 1
+                        editWeight.text = editProductWeight1.toString()
+                    } else if (btSetPortion.isChecked && editProductPortion -1 >= 0){
+                        editProductPortion -= 1
+                        editWeight.text = editProductPortion.toString()
                     }
 
-                    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    closeSoftKeyboard(view.context,editWeight)
 
-                    }
-
-                })
+                }
 
 
                 //save new product parameter
                 butOK.setOnClickListener {
-                    myDB.editProductNutrients(
-                        editKcal.text.toString().toInt(),
-                        editPro.text.toString().toDouble(),
-                        editFat.text.toString().toDouble(),
-                        editCarbo.text.toString().toDouble(),
-                        editWeight.text.toString().toInt(),
-                        product.id
-                    )
 
-                    refreshNutrientsValuesInExpandingLayoutTitle(date)
+                    if (editWeight.text.toString().toInt() > 0) {
+                        myDB.editProductNutrients(
+                            editKcal.text.toString().toInt(),
+                            editPro.text.toString().toDouble(),
+                            editFat.text.toString().toDouble(),
+                            editCarbo.text.toString().toDouble(),
+                            if (btSetPortion.isChecked) baseProduct.weight * editWeight.text.toString()
+                                .toInt() else editWeight.text.toString().toInt(),
+                            product.id
+                        )
 
-                    //set new values for product
-                    product.kcal = editKcal.text.toString().toInt()
-                    product.protein = editPro.text.toString().toDouble()
-                    product.fat = editFat.text.toString().toDouble()
-                    product.carbo = editCarbo.text.toString().toDouble()
-                    product.weight = editWeight.text.toString().toInt()
+                        refreshNutrientsValuesInExpandingLayoutTitle(date)
 
-
-
-                    //set new values in list
-                    view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text =
-                        "${product.weight}.g | K: ${product.kcal} | F: ${product.fat} | C: ${product.carbo} | P: ${product.protein}" //Set Nutrients
+                        //set new values for product
+                        product.kcal = editKcal.text.toString().toInt()
+                        product.protein = editPro.text.toString().toDouble()
+                        product.fat = editFat.text.toString().toDouble()
+                        product.carbo = editCarbo.text.toString().toDouble()
+                        product.weight = editWeight.text.toString().toInt()
 
 
-                    editDialog.dismiss()
+                        //set new values in list
+                        view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text =
+                            "${product.weight}.g | K: ${product.kcal} | F: ${product.fat} | C: ${product.carbo} | P: ${product.protein}" //Set Nutrients
 
-                    refreshActivity()
+
+                        editDialog.dismiss()
+
+                        notifyDataSetChanged()
+                    } else {
+                        Toast.makeText(itemView.context, R.string.set_weight_portion_more_them_zero,Toast.LENGTH_SHORT).show()
+                    }
+
                 }
 
                 //delete product from current day
@@ -476,7 +555,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         //refresh Nutrients Values In Expanding Layout Title
                         refreshNutrientsValuesInExpandingLayoutTitle(date)
 
-                        refreshActivity()
+                        notifyDataSetChanged()
 
                         editDialog.dismiss()
 
@@ -495,6 +574,12 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 editDialog.show()
 
             }
+        }
+
+        private fun closeSoftKeyboard(context: Context, v: View) {
+            val iMm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            iMm.hideSoftInputFromWindow(v.windowToken, 0)
+            v.clearFocus()
         }
 
         private fun refreshNutrientsValuesInExpandingLayoutTitle(date: String){
@@ -516,11 +601,6 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             mealRowCarbo.text = "C: %.1f".format(calculatedProduct.carbo).replace(',','.')
             mealRowFat.text = "F: %.1f".format(calculatedProduct.fat).replace(',','.')
             mealRowPro.text = "P: %.1f".format(calculatedProduct.protein).replace(',','.')
-        }
-
-        private fun refreshActivity() {
-            val intent = Intent(itemView.context, RefreshtActivity::class.java)
-            ContextCompat.startActivity(itemView.context,intent,null)
         }
 
         private fun findMealByTitle(title: String): Int{
@@ -569,4 +649,5 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
         }
     }
+
 }

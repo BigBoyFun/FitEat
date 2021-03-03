@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/products_fragment"
-        android:name="com.policinski.dev.fiteat.products_fragment"
+        android:name="com.policinski.dev.fiteat.ProductsFragment"
         android:label="fragment_products_fragment"
         tools:layout="@layout/fragment_products_fragment" >
         <action

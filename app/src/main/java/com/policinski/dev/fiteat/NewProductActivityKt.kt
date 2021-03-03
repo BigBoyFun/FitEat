@@ -52,7 +52,7 @@ class newProductActivity : AppCompatActivity() {
         val cb_calculate_portion = checkBox_calculate_portion
         val et_porion_value = et_portion_value
         val breakfast_but_suggest_1 = breakfast_but_suggestion_1
-        val second_breakfastbut_suggestion_2 = seccond_breakfast_but_suggestion_2
+        val second_breakfastbut_suggestion_2 = second_breakfast_but_suggestion_2
         val dinner_but_suggestion_3 = dinner_but_suggestion_3
         val dessert_but_suggestion_4 = dessert_but_suggestion_4
         val tea_but_suggestion_5 = tea_but_suggestion_5
@@ -150,27 +150,28 @@ class newProductActivity : AppCompatActivity() {
             proteinNewProduct.isEnabled = true
         }
 
-        fatNewProduct.setOnFocusChangeListener {view, b ->
-            if (fatNewProduct.length() == 0 && carboNewProduct.length() > 0 && proteinNewProduct.length() > 0){
-                val calcFat = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 9.0
-                fatNewProduct.setText("$calcFat")
-        }}
-
-        carboNewProduct.setOnFocusChangeListener {view, b ->
-            if (carboNewProduct.length() == 0 && proteinNewProduct.length() > 0 && fatNewProduct.length() > 0){
-                val calcCarbo = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 4.0
-                carboNewProduct.setText("$calcCarbo")
-            }
-        }
-
-        proteinNewProduct.setOnFocusChangeListener { view, b ->
-
-            if (proteinNewProduct.length() == 0 && carboNewProduct.length() > 0 && fatNewProduct.length() > 0){
-                val calcPro = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 4.0
-                proteinNewProduct.setText("$calcPro")
-            }
-
-        }
+//        fatNewProduct.setOnFocusChangeListener {view, b ->
+//            if (carboNewProduct.toString().isNotEmpty() && proteinNewProduct.toString().isNotEmpty()){
+//                val calcFat = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 7.0
+//                fatNewProduct.setText("$calcFat")
+//            }
+//        }
+//
+//        carboNewProduct.setOnFocusChangeListener {view, b ->
+//            if (proteinNewProduct.toString().isNotEmpty() && fatNewProduct.toString().isNotEmpty()
+//            ){
+//                val calcCarbo = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 3.0
+//                carboNewProduct.setText("$calcCarbo")
+//            }
+//        }
+//
+//        proteinNewProduct.setOnFocusChangeListener { view, b ->
+//
+//            if (carboNewProduct.toString().isNotEmpty() && fatNewProduct.toString().isNotEmpty()){
+//                val calcPro = (kcalNewProduct.text.toString().toDouble() - leftKcal) / 3.0
+//                proteinNewProduct.setText("$calcPro")
+//            }
+//        }
 
 
         kcalNewProduct.addTextChangedListener(object : TextWatcher{
@@ -240,13 +241,13 @@ class newProductActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
 
-                leftKcal = (if (carboNewProduct.text?.isEmpty()!!) {0.0 * 4.0} else carboNewProduct.text.toString().toDouble() * 4.0) +
-                        (if (fatNewProduct.text?.isEmpty()!!){0.0 * 9.0} else fatNewProduct.text.toString().toDouble() * 9.0) +
-                        (if (proteinNewProduct.text?.isEmpty()!!){0.0 * 4.0} else proteinNewProduct.text.toString().toDouble() * 4.0)
+                leftKcal = (if (carboNewProduct.text?.isEmpty()!!) {0.0 * 3.0} else carboNewProduct.text.toString().toDouble() * 3.0) +
+                        (if (fatNewProduct.text?.isEmpty()!!){0.0 * 7.0} else fatNewProduct.text.toString().toDouble() * 7.0) +
+                        (if (proteinNewProduct.text?.isEmpty()!!){0.0 * 3.0} else proteinNewProduct.text.toString().toDouble() * 3.0)
 
-                leftWeight = if (carboNewProduct.text?.isEmpty()!!) {0.0} else(carboNewProduct.text.toString().toDouble()) +
-                        if (fatNewProduct.text?.isEmpty()!!) { 0.0 } else fatNewProduct.text.toString().toDouble() +
-                        if (proteinNewProduct.text?.isEmpty()!!) { 0.0 } else proteinNewProduct.text.toString().toDouble()
+                leftWeight = (if (carboNewProduct.text?.isEmpty()!!) {0.0} else carboNewProduct.text.toString().toDouble()) +
+                        (if (fatNewProduct.text?.isEmpty()!!) { 0.0 } else fatNewProduct.text.toString().toDouble()) +
+                        (if (proteinNewProduct.text?.isEmpty()!!) { 0.0 } else proteinNewProduct.text.toString().toDouble())
 
                 if (leftKcal > if (kcalNewProduct.length() <= 0){0.0} else kcalNewProduct.text.toString().toDouble()){
                     if (carboNewProduct.isFocused) {
@@ -261,7 +262,7 @@ class newProductActivity : AppCompatActivity() {
                     Toast.makeText(this@newProductActivity, "the sum of carbohydrates, fats and proteins must not exceed the declared weight.", Toast.LENGTH_SHORT).show()
                 }
 
-                sumKcalSample.setText("$leftKcal")
+                sumKcalSample.setText("$leftWeight")
 
             }
 
@@ -279,13 +280,13 @@ class newProductActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
 
-                leftKcal = (if (carboNewProduct.text?.isEmpty()!!) {0.0 * 4.0} else carboNewProduct.text.toString().toDouble() * 4.0) +
-                        (if (fatNewProduct.text?.isEmpty()!!){0.0 * 9.0} else fatNewProduct.text.toString().toDouble() * 9.0) +
-                        (if (proteinNewProduct.text?.isEmpty()!!){0.0 * 4.0} else proteinNewProduct.text.toString().toDouble() * 4.0)
+                leftKcal = (if (carboNewProduct.text?.isEmpty()!!) {0.0 * 3.0} else carboNewProduct.text.toString().toDouble() * 3.0) +
+                        (if (fatNewProduct.text?.isEmpty()!!){0.0 * 7.0} else fatNewProduct.text.toString().toDouble() * 7.0) +
+                        (if (proteinNewProduct.text?.isEmpty()!!){0.0 * 3.0} else proteinNewProduct.text.toString().toDouble() * 3.0)
 
-                leftWeight = if (carboNewProduct.text?.isEmpty()!!) {0.0} else(carboNewProduct.text.toString().toDouble()) +
-                        if (fatNewProduct.text?.isEmpty()!!) { 0.0 } else fatNewProduct.text.toString().toDouble() +
-                                if (proteinNewProduct.text?.isEmpty()!!) { 0.0 } else proteinNewProduct.text.toString().toDouble()
+                leftWeight = (if (carboNewProduct.text?.isEmpty()!!) {0.0} else carboNewProduct.text.toString().toDouble()) +
+                        (if (fatNewProduct.text?.isEmpty()!!) { 0.0 } else fatNewProduct.text.toString().toDouble()) +
+                        (if (proteinNewProduct.text?.isEmpty()!!) { 0.0 } else proteinNewProduct.text.toString().toDouble())
 
                 if (leftKcal > if (kcalNewProduct.length() <= 0){0.0} else kcalNewProduct.text.toString().toDouble()){
                     if (fatNewProduct.isFocused) {
@@ -300,7 +301,7 @@ class newProductActivity : AppCompatActivity() {
                     Toast.makeText(this@newProductActivity, "the sum of carbohydrates, fats and proteins must not exceed the declared weight.", Toast.LENGTH_SHORT).show()
                 }
 
-                sumKcalSample.setText("$leftKcal")
+                sumKcalSample.setText("$leftWeight")
 
             }
 
@@ -317,13 +318,13 @@ class newProductActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
-                leftKcal = (if (carboNewProduct.text?.isEmpty()!!) {0.0 * 4.0} else carboNewProduct.text.toString().toDouble() * 4.0) +
-                        (if (fatNewProduct.text?.isEmpty()!!){0.0 * 9.0} else fatNewProduct.text.toString().toDouble() * 9.0) +
-                        (if (proteinNewProduct.text?.isEmpty()!!){0.0 * 4.0} else proteinNewProduct.text.toString().toDouble() * 4.0)
+                leftKcal = (if (carboNewProduct.text?.isEmpty()!!) {0.0 * 3.0} else carboNewProduct.text.toString().toDouble() * 3.0) +
+                        (if (fatNewProduct.text?.isEmpty()!!){0.0 * 7.0} else fatNewProduct.text.toString().toDouble() * 7.0) +
+                        (if (proteinNewProduct.text?.isEmpty()!!){0.0 * 3.0} else proteinNewProduct.text.toString().toDouble() * 3.0)
 
-                leftWeight = if (carboNewProduct.text?.isEmpty()!!) {0.0} else(carboNewProduct.text.toString().toDouble()) +
-                        if (fatNewProduct.text?.isEmpty()!!) { 0.0 } else fatNewProduct.text.toString().toDouble() +
-                                if (proteinNewProduct.text?.isEmpty()!!) { 0.0 } else proteinNewProduct.text.toString().toDouble()
+                leftWeight = (if (carboNewProduct.text?.isEmpty()!!) {0.0} else carboNewProduct.text.toString().toDouble()) +
+                        (if (fatNewProduct.text?.isEmpty()!!) { 0.0 } else fatNewProduct.text.toString().toDouble()) +
+                        (if (proteinNewProduct.text?.isEmpty()!!) { 0.0 } else proteinNewProduct.text.toString().toDouble())
 
                 if (leftKcal > if (kcalNewProduct.length() <= 0) { 0.0 } else kcalNewProduct.text.toString().toDouble()){
                     if (proteinNewProduct.isFocused) {
@@ -338,7 +339,7 @@ class newProductActivity : AppCompatActivity() {
                     Toast.makeText(this@newProductActivity, "the sum of carbohydrates, fats and proteins must not exceed the declared weight.", Toast.LENGTH_SHORT).show()
                 }
 
-                sumKcalSample.setText("$leftKcal")
+                sumKcalSample.setText("$leftWeight")
 
             }
 

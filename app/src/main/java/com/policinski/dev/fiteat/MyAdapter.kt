@@ -42,6 +42,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
         val delate: Button = itemView.delate_product_fomr_db
         val addToDay: Button = itemView.add_to_day_button_row
         val editProduct: Button = itemView.edit_product_bt
+        val lastAddedWeight: TextView = itemView.last_added_weight
         var meal = 1
         lateinit var array: ArrayList<Button>
         private val MAIN_PREF = "MAIN_PREF"
@@ -71,6 +72,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
             name.text = product.name
             manufacturer.text = product.manufaacturer
             weight.text = "${product.weight}g."
+            lastAddedWeight.text = "${product.lastAddedWeight}g."
             kcal.text = "Kc: ${product.kcal}"
             carbo.text = "Ca: ${product.carbo}"
             fat.text = "Fa: ${product.fat}"
@@ -119,8 +121,6 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                     deleteDialog.dismiss()
                     itemList.remove(product)
                     notifyDataSetChanged()
-//                    val intent = Intent(itemView.context, RefreshtActivity::class.java)
-//                    ContextCompat.startActivity(itemView.context,intent,null)
                 }
                 deleteDialog.delate_but_cancel.setOnClickListener { deleteDialog.dismiss() }
 
@@ -131,12 +131,12 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
             //remove from the currently viewed list
             delate.setOnLongClickListener{
                 sharedPreferences.getString(PREF_CURRENTLY_VIEWED_LIST,"All")?.let { it1 ->
-                    if (it1 != "All") {
-                        db.deleteProductFromList(
-                            it1, product.id)
-                        Toast.makeText(itemView.context,"${product.name} is deleted from $it1",Toast.LENGTH_SHORT).show()
+                    if (db.deleteProductFromList(it1, product.id)) {
                         itemList.remove(product)
                         notifyDataSetChanged()
+                        Toast.makeText(itemView.context,"${product.name} is deleted from $it1",Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(itemView.context,"${product.name} ca't be deleted from $it1 by long press.",Toast.LENGTH_SHORT).show()
                     }
                 }
                 true

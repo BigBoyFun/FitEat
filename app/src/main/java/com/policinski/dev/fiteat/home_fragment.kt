@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.collection.arrayMapOf
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
@@ -15,15 +14,8 @@ import kotlinx.android.synthetic.main.fragment_home_fragment.view.*
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.abs
-
 
 class home_fragment : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     private val MAIN_PREF = "MAIN_PREF"
     private val PREF_CARBO = "PREF_CARBO"
@@ -66,7 +58,11 @@ class home_fragment : Fragment() {
     var x2: Float = 0.0F
     var distance: Float = 150.0F
 
+    private val calendar = Calendar.getInstance()
+    private var currentMonth = 0
+
     val date = LocalDate.now()
+    lateinit var selectedDayView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,14 +74,18 @@ class home_fragment : Fragment() {
 
         v.context.getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply()
 
+        selectedDayView = v.selected_date_tx
         val nextDay = v.next_date_bt
         val backDay = v.bcak_date_bt
-        var selectedDayView = v.selected_date_tx
 
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         var day = c.get(Calendar.DAY_OF_MONTH)
+
+        var plusDay: Long = 0 //variable for detect next day
+        var minusDay: Long = 0 //variable for detect previous day
+        var newDate: LocalDate
 
         val monthsArray = arrayOf(
             getString(R.string.month_01), getString(R.string.month_02), getString(
@@ -99,29 +99,9 @@ class home_fragment : Fragment() {
             ), getString(R.string.month_12)
         )
 
-        var plusDay: Long = 0 //variable for detect next day
-        var minusDay: Long = 0 //variable for detect previous day
-        var newDate: LocalDate
+        selectedDayView.text = "$day ${monthsArray[month].capitalize()} $year "
 
-        //change date by swipe on left and right
-//        v.recycle_view_meal.setOnTouchListener { v, event ->
-//            when (event.action) {
-//                MotionEvent.ACTION_DOWN -> x1 = event.x
-//                MotionEvent.ACTION_UP -> {
-//                    x2 = event.x
-//                    var deltaX = x2 - x1
-//                    if (abs(deltaX) > distance)
-//                        if (x2 > x1) {
-//                            backDay.callOnClick()
-//                        } else {
-//                            nextDay.callOnClick()
-//                        }
-//                }
-//            }
-//            true
-//        }
-
-        selectedDayView.text = "${date.dayOfMonth} ${monthsArray[date.monthValue - 1]} ${date.year}"
+//        selectedDayView.text = "${date.dayOfMonth} ${monthsArray[date.monthValue - 1]} ${date.year}"
 
         selectedDayView.setOnClickListener{
 
@@ -166,8 +146,8 @@ class home_fragment : Fragment() {
 
         showDayPropertis(date.toString())
 
-        //select date by button
-        //one day back
+//        select date by button
+//        one day back
         nextDay.setOnClickListener {
             if (minusDay > 0) {
                 minusDay -= 1
@@ -186,7 +166,7 @@ class home_fragment : Fragment() {
             }
         }
 
-        //one day forward
+//        one day forward
         backDay.setOnClickListener {
             if (plusDay > 0){
                 plusDay -= 1
@@ -208,6 +188,46 @@ class home_fragment : Fragment() {
         return v
     }
 
+    private fun getDatesOfNextMonth(): List<Date> {
+        currentMonth++ // + because we want next month
+        if (currentMonth == 12) {
+            // we will switch to january of next year, when we reach last month of year
+            calendar.set(Calendar.YEAR, calendar[Calendar.YEAR] + 1)
+            currentMonth = 0 // 0 == january
+        }
+        return getDates(mutableListOf())
+    }
+
+    private fun getDatesOfPreviousMonth(): List<Date> {
+        currentMonth-- // - because we want previous month
+        if (currentMonth == -1) {
+            // we will switch to december of previous year, when we reach first month of year
+            calendar.set(Calendar.YEAR, calendar[Calendar.YEAR] - 1)
+            currentMonth = 11 // 11 == december
+        }
+        return getDates(mutableListOf())
+    }
+
+    private fun getFutureDatesOfCurrentMonth(): List<Date> {
+        // get all next dates of current month
+        currentMonth = calendar[Calendar.MONTH]
+        return getDates(mutableListOf())
+    }
+
+
+    private fun getDates(list: MutableList<Date>): List<Date> {
+        // load dates of whole month
+        calendar.set(Calendar.MONTH, currentMonth)
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        list.add(calendar.time)
+        while (currentMonth == calendar[Calendar.MONTH]) {
+            calendar.add(Calendar.DATE, +1)
+            if (calendar[Calendar.MONTH] == currentMonth)
+                list.add(calendar.time)
+        }
+        calendar.add(Calendar.DATE, -1)
+        return list
+    }
 
     private fun showDayPropertis(date: String) {
 

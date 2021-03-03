@@ -56,6 +56,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
     private val PREF_AUTO_SUGGEST_MEAL = "PREF_AUTO_SUGEST_MEAL"
     private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created for deleting product from specific meal(not from DB)
 
+    lateinit var saveBt: Button //lateinit for make access to onClick function from onPause to make auto save by exit from settings activity
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,8 +95,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         val notificationDessertSwitch = view.dessert_notification_switch
         val notificationTeaSwitch = view.notification_tea_switch
         val notificationSupperSwitch = view.notification_supper_switch
-        val notificationSnacksSwitch = view.notification_snacks_switch
-        val notificationTrainingSwitch = view.notification_training_switch
+//        val notificationSnacksSwitch = view.notification_snacks_switch
+//        val notificationTrainingSwitch = view.notification_training_switch
 
         val notificationBreakfastTime = view.breakfast_notification_time
         val notificationSecondBreakfastTime = view.second_breakfast_notification_time
@@ -151,8 +153,8 @@ class settings_fragment : Fragment(), View.OnClickListener {
         notificationDessertSwitch.isChecked = readPref.getBoolean(PREF_DESSERT_NOTIFICATION,false)
         notificationTeaSwitch.isChecked = readPref.getBoolean(PREF_TEA_NOTIFICATION,false)
         notificationSupperSwitch.isChecked = readPref.getBoolean(PREF_SUPPER_NOTIFICATION,false)
-        notificationSnacksSwitch.isChecked = readPref.getBoolean(PREF_SNACKS_NOTIFICATION,false)
-        notificationTrainingSwitch.isChecked = readPref.getBoolean(PREF_TRAINING_NOTIFICATION,false)
+//        notificationSnacksSwitch.isChecked = readPref.getBoolean(PREF_SNACKS_NOTIFICATION,false)
+//        notificationTrainingSwitch.isChecked = readPref.getBoolean(PREF_TRAINING_NOTIFICATION,false)
 
         //set time picker enables based on the notification swift state
         notificationBreakfastTime.isEnabled = notificationBreakfastSwitch.isChecked
@@ -195,12 +197,12 @@ class settings_fragment : Fragment(), View.OnClickListener {
         supper.setOnCheckedChangeListener { buttonView, isChecked ->
             notificationSupperSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
         }
-        snacks.setOnCheckedChangeListener { buttonView, isChecked ->
-            notificationSnacksSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
-        }
-        training.setOnCheckedChangeListener { buttonView, isChecked ->
-            notificationTrainingSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
-        }
+//        snacks.setOnCheckedChangeListener { buttonView, isChecked ->
+//            notificationSnacksSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+//        }
+//        training.setOnCheckedChangeListener { buttonView, isChecked ->
+//            notificationTrainingSwitch.apply { this.isChecked = false; this.isEnabled = isChecked }
+//        }
 
         notificationBreakfastSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationBreakfastTime.isEnabled = isChecked }
         notificationSecondBreakfastSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationSecondBreakfastTime.isEnabled = isChecked }
@@ -212,7 +214,7 @@ class settings_fragment : Fragment(), View.OnClickListener {
 //        notificationTrainingSwitch.setOnCheckedChangeListener { buttonView, isChecked -> notificationTrainingTime.isEnabled = isChecked }
 
         //save settings button
-        val saveBt = view.findViewById<Button>(R.id.ok_product_settings_dialog)
+        saveBt = view.findViewById<Button>(R.id.ok_product_settings_dialog)
         saveBt.setOnClickListener{
 
             val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences(MAIN_PREF, 0 )
@@ -357,4 +359,9 @@ class settings_fragment : Fragment(), View.OnClickListener {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+
+//        saveBt.callOnClick() //auto save setting when user exit from settings
+    }
 }

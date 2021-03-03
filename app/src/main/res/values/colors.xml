@@ -7,4 +7,12 @@
     <color name="custom_red">#FF5252</color>
     <color name="separatorColor">#18102C</color>
     <color name="light_gray_custom">#F1F1F1</color>
+
+    <color name="grey">#7a7a7a</color>
+    <color name="lightGrey">#aaaaaa</color>
+    <color name="veryLightGrey">#f0f0f0</color>
+    <color name="purple">#7d64e6</color>
+    <color name="yellow">#ffee00</color>
+    <color name="material_text_light">#697574</color>
+
 </resources>

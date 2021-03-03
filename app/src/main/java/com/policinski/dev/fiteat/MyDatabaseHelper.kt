@@ -4,10 +4,14 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -55,7 +59,6 @@ const val DAY_TABLE_NAME = "DayTable"
 const val COL_DATE = "Date"
 const val COL_ID_DATE = "ID_date"
 const val COL_MEAL = "Meal"
-
 
 const val DAY_NUTRIENTS_GOAL_TABLE_NAME = "DayNutrientsGoal"
 
@@ -487,9 +490,15 @@ class MyDatabaseHelper(var context: Context): SQLiteOpenHelper(context, DATA_BAS
         return baseProduct
     }
 
-    fun deleteProductFromList(meal: String, productId: Int){
-        val query = "UPDATE $TABLE_NAME SET $meal = 0 WHERE $COL_ID_ING = $productId"
-        dbWrite.execSQL(query)
+    fun deleteProductFromList(meal: String, productId: Int): Boolean{
+
+        try {
+            val query = "UPDATE $TABLE_NAME SET $meal = 0 WHERE $COL_ID_ING = $productId"
+            dbWrite.execSQL(query)
+        } catch (s: SQLiteException){
+            return false
+        }
+        return true
     }
 
     fun getSelectedProduct(productName: String): Product? {

@@ -75,7 +75,29 @@
     <string name="channel_name">meal_time_allert</string>
     <string name="channel_description">Notification for begin eat meal!</string>
     <string name="calculate_nutrients_for_portion_and_save_to_base">Calculate nutrients for portion and save to base.</string>
-    <string name="current_meal">\Current meal: \</string>
+    <string name="current_meal">\Meal: \</string>
     <string name="auto_suggest_meal_list">Auto suggest meal list</string>
     <string name="save">Save</string>
+    <string name="no_less_them_zero">You cant set weight less them zero</string>
+    <string name="automatic_prompting">Automatic prompting</string>
+    <string name="select_meals_and_notification"><![CDATA[Select meals & Notification]]></string>
+    <string name="title_activity_main_new">MainActivityNew</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="weight">Weight</string>
+    <string name="portion">Portion</string>
+    <string name="add_last_weight_portion">Set last added weight / portion</string>
+    <string name="newr_added_no_last_weight">You have never added this product before.</string>
+    <string name="add_weight_or_portion">Add weight or portion</string>
+    <string name="set_weight">Set weight</string>
+    <string name="set_weight_portion_more_them_zero">If u want delete this product push DELETE button, else set weight/portion on value more them 0.</string>
+    <string name="set_weight_portion_mor_them_zero">You must set weight / portion mor tem 0 to add this product to the day.</string>
 </resources>

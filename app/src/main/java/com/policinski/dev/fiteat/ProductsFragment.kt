@@ -15,18 +15,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.preference.PreferenceManager
+import androidx.annotation.RequiresApi
+import androidx.constraintlayout.solver.widgets.Rectangle
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products_fragment.*
-import kotlinx.android.synthetic.main.fragment_products_fragment.view.*
-import kotlinx.android.synthetic.main.fragment_products_fragment.view.current_kcal
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_all_products
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_breakfast
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_dessert
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_dinner
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_secondbreakfast
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_snacks
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_supper
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_tea
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_training
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.currently_viewed_list_of_product
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.floatingActionButton
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.products_recycle_view
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.searchView
+import kotlinx.android.synthetic.main.fragment_products_fragment.view.text_meal_name
+import kotlinx.android.synthetic.main.fragment_products_fragment_copy.view.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
 import kotlin.properties.Delegates
 
-class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnClickListener{
+class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, View.OnClickListener{
 
     private lateinit var adapterProduct: MyAdapter
     private lateinit var productList: MutableList<Product>
@@ -57,7 +71,8 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
     private val PREF_TRAINING_NOTIFICATION = "PREF_TRAINING_NOTIFICATION"
 
     private val PREF_AUTO_SUGGEST_MEAL = "PREF_AUTO_SUGEST_MEAL"
-    private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created for deleting product from specific meal(not from DB)
+    private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created to show the correct meal list and correctly select the filter button
+    private val PREF_DELETE_PRODUCT_FROM_LIST = "PREF_DELETE_PRODUCT_FROM_LIST" //created for deleting product from specific meal(not from DB)
 
     private var current_kcal = 0
     private var current_pro = 0.0
@@ -66,6 +81,7 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
     private var autoSuggestMeal by Delegates.notNull<Boolean>()
     private var meal: Int = 0
     lateinit var date: Any
+    lateinit var mealScrollView: HorizontalScrollView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,17 +103,21 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
 
         this.requireContext().getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply() //necessarily for correctly refresh fragment when user click on button "Products" in bottom menu
         loadingProductListWithAutoSuggest()
+        this.requireContext().getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,findMealByNum(meal)).apply() //necessarily for correctly refresh fragment when user click on button "Products" in bottom menu
 
         // Inflate the layout for this fragment
-        var view = inflater.inflate(R.layout.fragment_products_fragment, container, false)
+        var view = inflater.inflate(R.layout.fragment_products_fragment_copy, container, false)
 
         //read any product added to current day and calculate all nutrients
         val nutrientsSumArray = dbManager.readDayTable(date.toString())
 
-        view.current_kcal.text = nutrientsSumArray[0].toInt().toString()
-        view.current_pro.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
-        view.current_fat.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
-        view.current_carbo.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
+        view.day_sum_kcal.text = nutrientsSumArray[0].toInt().toString()
+        view.day_sum_fat.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
+        view.day_sum_carbo.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
+        view.day_sum_pro.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
+
+        //init scrollView with meal list name
+        mealScrollView = view.findViewById(R.id.horizontalScrollView2)
 
         //show activity in you can add new product to data base
         view.floatingActionButton.setOnClickListener {
@@ -119,10 +139,10 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
 
         adapterProduct.submitList(productList)
 
-        val kcalUserPref = view.kcal_user_pref
-        val fatUserPref = view.fat_uset_pref
-        val proUserPref = view.pro_user_pref
-        val carboUserPref = view.carbo_user_pref
+        val kcalUserPref = view.home_user_pref_kcal
+        val fatUserPref = view.home_user_pref_fat
+        val proUserPref = view.home_user_pref_carbo
+        val carboUserPref = view.home_user_pref_pro
 
         readData(kcalUserPref,fatUserPref,proUserPref,carboUserPref)
 
@@ -136,6 +156,7 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         val but6 = view.but_filter_supper
         val but7 = view.but_filter_snacks
         val but8 = view.but_filter_training
+        var curretlyViewedProductList = view.currently_viewed_list_of_product
 
         //create listOf buttons for eases editing them in future
         buttonFilterList = listOf<Button>(
@@ -152,8 +173,11 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         } else {
             setBackgroundForButtonShowingCurrentMeal(buttonFilterList, meal)
         }
-        //show name of current meal and make text double color
-        view?.text_button_meal_name?.text = doubleColoredText(getString(R.string.current_meal),buttonFilterList[meal].text.toString())
+        //show name of current meal
+        view?.text_meal_name?.text = getString(R.string.current_meal).plus("\n${buttonFilterList[meal].text}")
+        if (autoSuggestMeal) view?.currently_viewed_list_of_product?.text =
+            "List of: ".plus("\n${buttonFilterList[meal].text.toString()}") else view?.currently_viewed_list_of_product?.text =
+            "List of:\nAll"
 
         return view
     }
@@ -171,6 +195,10 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         meal: Int
     ) {
         buttonFilterList[meal].setBackgroundResource(R.drawable.selected_frame_shape_but)
+        mealScrollView.post { kotlin.run {
+            mealScrollView.scrollTo(buttonFilterList[meal].x.toInt(),0)
+        }
+        }
     }
 
     private fun doubleColoredText(text1: String, text2: String): SpannableString{
@@ -256,17 +284,10 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         //read any product added to current day and calculate all nutrients
         val nutrientsSumArray = dbManager.readDayTable(date.toString())
 
-        view?.current_kcal?.text = nutrientsSumArray[0].toInt().toString()
-        view?.current_pro?.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
-        view?.current_fat?.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
-        view?.current_carbo?.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
-
-        Handler().postDelayed({
-            productList.clear()
-            loadingProductListWithAutoSuggest()
-            refreshFragment()
-        },100)
-
+        view?.day_sum_kcal?.text = nutrientsSumArray[0].toInt().toString()
+        view?.day_sum_fat?.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
+        view?.day_sum_carbo?.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
+        view?.day_sum_pro?.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
 
     }
 
@@ -406,10 +427,10 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
                 //read any product added to current day and calculate all nutrients
                 val nutrientsSumArray = dbManager.readDayTable(date.toString())
 
-                view?.current_kcal?.text = nutrientsSumArray[0].toInt().toString()
-                view?.current_pro?.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
-                view?.current_fat?.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
-                view?.current_carbo?.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
+                view?.home_user_pref_kcal?.text = nutrientsSumArray[0].toInt().toString()
+                view?.home_user_pref_pro?.text = "%.1f".format(nutrientsSumArray[1]).replace(',','.')
+                view?.home_user_pref_fat?.text = "%.1f".format(nutrientsSumArray[2]).replace(',','.')
+                view?.home_user_pref_carbo?.text = "%.1f".format(nutrientsSumArray[3]).replace(',','.')
             },2000)
         }
 
@@ -419,9 +440,16 @@ class products_fragment : Fragment(), SearchView.OnQueryTextListener, View.OnCli
         v as Button
 
         for (but in buttonFilterList){
-            if (v == but) v.setBackgroundResource(R.drawable.selected_frame_shape_but) else but.setBackgroundResource(
-                R.drawable.light_gray_bt_shape
-            )
+            if (v == but) {
+                v.setBackgroundResource(R.drawable.selected_frame_shape_but)
+//                view?.text_meal_name?.text = doubleColoredText(getString(R.string.current_meal), buttonFilterList[meal].text.toString())
+                view?.text_meal_name?.text = getString(R.string.current_meal).plus("\n${buttonFilterList[meal].text}")
+//                view?.currently_viewed_list_of_product?.text = doubleColoredText("List of: ", v.text.toString())
+                view?.currently_viewed_list_of_product?.text = "List of: ".plus("\n${v.text}")
+
+            } else {
+                but.setBackgroundResource(R.drawable.light_gray_bt_shape)
+            }
         }
 
         view?.context?.getSharedPreferences(MAIN_PREF, 0)?.edit()

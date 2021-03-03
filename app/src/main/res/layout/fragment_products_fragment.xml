@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:foregroundGravity="center_vertical|center"
-    tools:context=".products_fragment">
+    tools:context=".ProductsFragment">
 
 
     <HorizontalScrollView
@@ -212,8 +212,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_button_meal_name"
-        app:layout_constraintVertical_bias="0.298" />
+        app:layout_constraintTop_toBottomOf="@+id/text_meal_name"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -443,18 +443,32 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/text_button_meal_name"
+        android:id="@+id/text_meal_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/custom_gray"
+        android:background="@color/colorAccent"
         android:enabled="false"
-        android:text="TextView"
+        android:text="Meal: "
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/currently_viewed_list_of_product"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <TextView
+        android:id="@+id/currently_viewed_list_of_product"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/custom_red"
+        android:text="List of:"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/text_meal_name"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
