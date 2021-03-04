@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.abs
 
 class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -80,6 +79,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         lateinit var editFat: TextView
         lateinit var editCarbo: TextView
         lateinit var editWeight: TextView
+        lateinit var currentWeight: TextView
         lateinit var addOneGr: Button
         lateinit var removeOneGr: Button
         lateinit var btSetWeight: ToggleButton
@@ -365,6 +365,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 editFat = editDialog.findViewById(R.id.fat_user_product_settings_dialog)
                 editCarbo = editDialog.findViewById(R.id.carbo_user_product_settings_dialog)
                 editWeight = editDialog.findViewById(R.id.product_edit_weight)
+                currentWeight = editDialog.findViewById(R.id.tv_current_product_weight)
                 addOneGr = editDialog.findViewById(R.id.add_one_gr_bt)
                 removeOneGr = editDialog.findViewById(R.id.remove_one_gr_bt)
                 btSetWeight = editDialog.findViewById(R.id.bt_weight_edit_product)
@@ -389,6 +390,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 editPro.text = "${product.protein}"
                 editFat.text = "${product.fat}"
                 editCarbo.text = "${product.carbo}"
+                currentWeight.text = product.weight.toString()
 
                 //calculate nutrients after change weight
                 fun calculateNut(weight: Int){
@@ -461,8 +463,10 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                             editCarbo.text = "0"
                         } else {
                             if (btSetWeight.isChecked) {
+                                currentWeight.text = s.toString()
                                 calculateNut(s.toString().toInt())
                             }else if (btSetPortion.isChecked){
+                                currentWeight.text = (baseProduct.weight * s.toString().toInt()).toString()
                                 calculateNut(baseProduct.weight * s.toString().toInt())
                             }
                         }

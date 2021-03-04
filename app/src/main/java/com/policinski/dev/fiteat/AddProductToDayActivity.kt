@@ -49,6 +49,7 @@ private val PREF_TRAINING_NOTIFICATION = "PREF_TRAINING_NOTIFICATION"
 
 var meal = 1
 var editProductWeight: Int = 1
+lateinit var currentProductWeight: TextView
 lateinit var productName: TextView
 lateinit var calculateKcal: TextView
 lateinit var calculatePro: TextView
@@ -80,6 +81,7 @@ class AddProductToDayActivity : AppCompatActivity() {
 
         //init views
         productName = product_name
+        currentProductWeight = tv_current_product_weigth
         calculateKcal = calculate_kcal
         calculatePro = calculate_pro
         calculateFat = calculate_fat
@@ -94,21 +96,22 @@ class AddProductToDayActivity : AppCompatActivity() {
         tvMultiplierWeight = tv_multiplier_weight
         btLastWeightPortion = bt_last_weight_portion
 
-        //set product name to top text view
+        //set product name to top text view and show weight
         productName.text = product.name
+        currentProductWeight.text = product.weight.toString()
 
         //set state for portion and weight bt based on product weight
         //if btSetWeight isChecked = true editProductWeight = Product.Weight else set 1 like a multiplier
         if (product.weight != 100) {
             btSetPortion.isChecked = true
             btSetWeight.isChecked = false
-            inputWeight.setText(editProductWeight.toString()) //set inputWeight on editProductWeight like a multiplier
+            inputWeight.setText("1") //set inputWeight on editProductWeight like a multiplier
             tvMultiplierWeight.text = "x"
         } else {
             btSetPortion.isChecked = false
             btSetWeight.isChecked = true
             editProductWeight = product.weight
-            inputWeight.setText(editProductWeight.toString()) //set inputWeight on product weight
+            inputWeight.setText(product.weight.toString()) //set inputWeight on product weight
             tvMultiplierWeight.text = ".g"
         }
 
@@ -252,8 +255,10 @@ class AddProductToDayActivity : AppCompatActivity() {
                         inputWeight.setText("999")
                     } else {
                         if (btSetPortion.isChecked && !btSetWeight.isChecked) {
+                            currentProductWeight.text = (product.weight * s.toString().toInt()).toString()
                             calculateNut(product.weight * s.toString().toInt())
                         } else if (btSetWeight.isChecked && !btSetPortion.isChecked) {
+                            currentProductWeight.text = s.toString()
                             calculateNut(s.toString().toInt())
                         }
                     }
