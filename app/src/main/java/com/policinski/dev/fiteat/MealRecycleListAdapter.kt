@@ -414,6 +414,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         tvGx.text = ".g"
                         editProductWeight1 = product.weight
                         editWeight.text = editProductWeight1.toString()
+                        currentWeight.text = editProductWeight1.toString()
                     } else {
                         btSetPortion.isChecked = true
                     }
@@ -428,6 +429,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         tvGx.text = "x"
                         editProductPortion = product.weight / baseProduct.weight
                         editWeight.text = editProductPortion.toString()
+                        currentWeight.text = editProductPortion.toString()
                     } else {
                         btSetWeight.isChecked = true
                     }
@@ -461,6 +463,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                             editPro.text = "0"
                             editFat.text = "0"
                             editCarbo.text = "0"
+                            currentWeight.text ="0"
                         } else {
                             if (btSetWeight.isChecked) {
                                 currentWeight.text = s.toString()

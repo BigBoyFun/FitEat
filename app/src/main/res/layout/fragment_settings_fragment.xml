@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/veryLightGrey"
     android:isScrollContainer="true"
     tools:context=".settings_fragment">
 
@@ -28,27 +29,29 @@
         android:id="@+id/scrollView4"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toTopOf="@id/ok_product_settings_dialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view">
+        app:layout_constraintTop_toBottomOf="@+id/button4">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/veryLightGrey">
 
 
             <TextView
                 android:id="@+id/textView39"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/select_meals_and_notification"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/cardView3"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/cardView3"
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
@@ -56,11 +59,13 @@
                 android:id="@+id/textView31"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/nutrients_goal"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/cardView"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/cardView"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,11 +73,13 @@
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/automatic_prompting"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/cardView5"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/cardView5"
                 app:layout_constraintTop_toBottomOf="@+id/cardView3" />
 
@@ -85,7 +92,7 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="8dp"
                 app:cardCornerRadius="5dp"
-                app:cardElevation="1dp"
+                app:cardElevation="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -99,9 +106,9 @@
                         android:id="@+id/autoSuggest_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginEnd="24dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -128,7 +135,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
                 app:cardCornerRadius="5dp"
-                app:cardElevation="1dp"
+                app:cardElevation="3dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView39">
@@ -142,7 +149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:checked="true"
                         android:elevation="1dp"
                         android:text="@string/nummeret_breakfast_1"
@@ -155,7 +162,7 @@
                         android:id="@+id/second_breakfast_check_box"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:checked="true"
                         android:elevation="1dp"
                         android:text="@string/nummeret_breakfast_2"
@@ -168,7 +175,7 @@
                         android:id="@+id/dinner_check_box"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:checked="true"
                         android:elevation="1dp"
                         android:text="@string/dinner_3"
@@ -181,7 +188,7 @@
                         android:id="@+id/dessert_check_box"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:checked="true"
                         android:elevation="1dp"
                         android:text="@string/dessert_4"
@@ -194,7 +201,7 @@
                         android:id="@+id/tea_check_box"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:checked="true"
                         android:elevation="1dp"
                         android:text="@string/tea_5"
@@ -207,7 +214,7 @@
                         android:id="@+id/supper_check_box"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:checked="true"
                         android:elevation="1dp"
                         android:text="@string/supper_6"
@@ -220,7 +227,7 @@
                         android:id="@+id/snacks_check_box"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:checked="true"
                         android:elevation="1dp"
                         android:text="@string/snacks_7"
@@ -233,8 +240,8 @@
                         android:id="@+id/training_check_box"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
                         android:checked="true"
                         android:elevation="1dp"
                         android:text="@string/training_8"
@@ -364,83 +371,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/notification_supper_switch" />
 
-                    <ImageView
-                        android:id="@+id/imageView12"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/training_check_box"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/snacks_check_box" />
-
-                    <ImageView
-                        android:id="@+id/imageView11"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/snacks_check_box"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/supper_check_box" />
-
-                    <ImageView
-                        android:id="@+id/imageView10"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/supper_check_box"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tea_check_box" />
-
-                    <ImageView
-                        android:id="@+id/imageView9"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/tea_check_box"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/dessert_check_box" />
-
-                    <ImageView
-                        android:id="@+id/imageView7"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/dessert_check_box"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/dinner_check_box" />
-
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/dinner_check_box"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/second_breakfast_check_box" />
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/second_breakfast_check_box"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/breakfast_check_box" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -452,7 +382,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
                 app:cardCornerRadius="5dp"
-                app:cardElevation="1dp"
+                app:cardElevation="3dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView31">
@@ -461,64 +391,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/textView9"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/textView11"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/custom_gray"
-                        app:layout_constraintBottom_toTopOf="@+id/textView10"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
                     <TextView
                         android:id="@+id/textView8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:elevation="1dp"
                         android:text="Kcal"
                         android:textColor="@android:color/tertiary_text_dark"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="@+id/imageView"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/kcal_product_settings_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:background="@drawable/calendar_item_background"
+                        android:ems="3"
+                        android:inputType="numberSigned|number|phone"
+                        android:maxEms="4"
+                        android:maxLength="4"
+                        android:paddingVertical="2dp"
                         android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="@+id/textView8"
-                        app:layout_constraintStart_toStartOf="@+id/pro_user_product_settings_dialog"
+                        app:layout_constraintEnd_toEndOf="@+id/fat_user_product_settings_dialog"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/textView8"
                         app:layout_constraintTop_toTopOf="@+id/textView8" />
 
                     <TextView
                         android:id="@+id/textView10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:elevation="1dp"
                         android:text="Fat"
                         android:textColor="@android:color/tertiary_text_dark"
@@ -530,7 +439,7 @@
                         android:id="@+id/textView11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:elevation="1dp"
                         android:text="Carbo"
                         android:textColor="@android:color/tertiary_text_dark"
@@ -542,8 +451,8 @@
                         android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
                         android:elevation="1dp"
                         android:text="Protein"
                         android:textColor="@android:color/tertiary_text_dark"
@@ -552,36 +461,95 @@
                         app:layout_constraintStart_toStartOf="@+id/textView11"
                         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pro_user_product_settings_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:inputType="number"
+                        android:layout_marginEnd="2dp"
+                        android:background="@drawable/calendar_item_background"
+                        android:ems="3"
+                        android:inputType="numberSigned|number|phone"
+                        android:maxEms="3"
+                        android:maxLength="3"
+                        android:paddingVertical="2dp"
                         android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="@+id/textView9"
+                        app:layout_constraintEnd_toStartOf="@+id/textView67"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toEndOf="@+id/textView9"
                         app:layout_constraintTop_toTopOf="@+id/textView9" />
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/carbo_user_product_settings_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:layout_marginEnd="2dp"
+                        android:background="@drawable/calendar_item_background"
+                        android:ems="3"
+                        android:inputType="numberSigned|number|phone"
+                        android:maxEms="3"
+                        android:maxLength="3"
+                        android:paddingVertical="2dp"
                         android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="@+id/textView11"
-                        app:layout_constraintStart_toStartOf="@+id/pro_user_product_settings_dialog"
+                        app:layout_constraintEnd_toStartOf="@+id/textView66"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/textView11"
                         app:layout_constraintTop_toTopOf="@+id/textView11" />
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/fat_user_product_settings_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:layout_marginEnd="2dp"
+                        android:background="@drawable/calendar_item_background"
+                        android:ems="3"
+                        android:inputType="numberSigned|number|phone"
+                        android:maxEms="3"
+                        android:maxLength="3"
+                        android:paddingVertical="2dp"
                         android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="@+id/textView10"
-                        app:layout_constraintStart_toStartOf="@+id/pro_user_product_settings_dialog"
+                        app:layout_constraintEnd_toStartOf="@+id/textView65"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/textView10"
                         app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+                    <TextView
+                        android:id="@+id/textView65"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="24dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/fat_user_product_settings_dialog"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/fat_user_product_settings_dialog" />
+
+                    <TextView
+                        android:id="@+id/textView66"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="24dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/carbo_user_product_settings_dialog"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/carbo_user_product_settings_dialog" />
+
+                    <TextView
+                        android:id="@+id/textView67"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="24dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/pro_user_product_settings_dialog"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/pro_user_product_settings_dialog" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -592,22 +560,23 @@
         android:id="@+id/view"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/button4"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/button4"
-        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:background="@android:color/transparent"
         android:clickable="false"
         android:text="SETTINGS"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

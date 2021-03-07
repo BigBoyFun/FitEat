@@ -100,4 +100,9 @@
     <string name="set_weight">Set weight</string>
     <string name="set_weight_portion_more_them_zero">If u want delete this product push DELETE button, else set weight/portion on value more them 0.</string>
     <string name="set_weight_portion_mor_them_zero">You must set weight / portion mor tem 0 to add this product to the day.</string>
+    <string name="favorite_and_portion">Favorite and portion</string>
+    <string name="basic_info">Basic information</string>
+    <string name="select_basic_weight">Select basic weight</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="name">Name</string>
 </resources>

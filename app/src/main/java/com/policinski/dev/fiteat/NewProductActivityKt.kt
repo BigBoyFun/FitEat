@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
@@ -67,14 +68,10 @@ class newProductActivity : AppCompatActivity() {
         val listOfSuggestionButtonState = mutableListOf<Int>(0,0,0,0,0,0,0,0)
 
         var productForEdit = Product()
-        val editProduct = intent.getStringExtra("EditProductName")
+        val editProduct = intent.getStringExtra("EditProductName") //used when this activity is open for editing product MUST BE REWORKED!!!!!!!!!!!!!!!!!!
 
         if (editProduct != null && editProduct.isNotEmpty()){
 
-            but_portion.setBackgroundResource(R.drawable.selected_frame_shape_but)
-            but_100g.setBackgroundResource(R.drawable.frame_shape_but)
-            weightNewProduct.visibility = View.VISIBLE
-            weightTv.visibility = View.VISIBLE
             cb_calculate_portion.isEnabled = false
 
             productForEdit = myDataBase.findEditedProductByName(editProduct)
@@ -87,7 +84,7 @@ class newProductActivity : AppCompatActivity() {
             fatNewProduct.setText(productForEdit.fat.toString())
             carboNewProduct.setText(productForEdit.carbo.toString())
             proteinNewProduct.setText(productForEdit.protein.toString())
-            favoriteChaek.isChecked = if(productForEdit.favorite == 1) true else false
+            favoriteChaek.isChecked = productForEdit.favorite == 1
             listOfSuggestionButtonState[0] = productForEdit.breakfast
             listOfSuggestionButtonState[1] = productForEdit.secondBreakfast
             listOfSuggestionButtonState[2] = productForEdit.dinner
@@ -104,10 +101,6 @@ class newProductActivity : AppCompatActivity() {
             println("======================================== ${productForEdit.id} ========================================")
         } else {
             Toast.makeText(this,"NOT FOUND",Toast.LENGTH_SHORT).show()
-            weightTv.visibility = View.GONE
-            weightNewProduct.visibility = View.INVISIBLE
-
-            weightNewProduct.append("100")
         }
 
         listOfSuggestionButtons.forEach { it.setOnClickListener { v ->
@@ -121,23 +114,30 @@ class newProductActivity : AppCompatActivity() {
         }
         }
 
-        but100.setOnClickListener {
-            it.setBackgroundResource(R.drawable.selected_frame_shape_but)
-            portion.setBackgroundResource(R.drawable.frame_shape_but)
-            weightNewProduct.setText("100")
-            weightNewProduct.visibility = View.INVISIBLE
-            weightTv.visibility = View.GONE
-            cb_calculate_portion.isEnabled = true
+        weightNewProduct.isEnabled = false
+        weightNewProduct.append("100")
+
+        but100.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                but_portion.isChecked = false
+                weightNewProduct.setText("100")
+                weightNewProduct.isEnabled = false
+                cb_calculate_portion.isEnabled = true
+            } else {
+                but_portion.isChecked = true
+            }
         }
 
-        but_portion.setOnClickListener {
-            it.setBackgroundResource(R.drawable.selected_frame_shape_but)
-            but_100g.setBackgroundResource(R.drawable.frame_shape_but)
-//            weightNewProduct.setText("")
-            weightNewProduct.visibility = View.VISIBLE
-            weightNewProduct.setText("")
-            weightTv.visibility = View.VISIBLE
-            cb_calculate_portion.isEnabled = false
+        but_portion.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                but100.isChecked = false
+                weightNewProduct.isEnabled = true
+                weightNewProduct.setText("")
+                cb_calculate_portion.isChecked = false
+                cb_calculate_portion.isEnabled = false
+            } else {
+                but100.isChecked = true
+            }
         }
 
         if (kcalNewProduct.length() <= 0){
@@ -346,9 +346,12 @@ class newProductActivity : AppCompatActivity() {
         })
 
         cb_calculate_portion.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
+            if (isChecked && buttonView.isEnabled){
                 et_porion_value.isEnabled = true
-            }else{
+                et_porion_value.requestFocus()
+                val mi = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                mi.showSoftInput(et_porion_value,0)
+            } else {
                 et_porion_value.isEnabled = false
                 et_porion_value.setText("")
             }
