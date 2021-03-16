@@ -219,11 +219,11 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:background="#33D7D7D7"
                         app:layout_constraintBottom_toBottomOf="@+id/textView99"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/textView99"
-                        app:layout_constraintTop_toTopOf="@+id/textView99"
-                        android:background="#33D7D7D7" />
+                        app:layout_constraintTop_toTopOf="@+id/textView99" />
 
                     <TextView
                         android:id="@+id/textView35"

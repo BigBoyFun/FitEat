@@ -47,6 +47,8 @@ private val PREF_SUPPER_NOTIFICATION = "PREF_SUPPER_NOTIFICATION"
 private val PREF_SNACKS_NOTIFICATION = "PREF_SNACKS_NOTIFICATION"
 private val PREF_TRAINING_NOTIFICATION = "PREF_TRAINING_NOTIFICATION"
 
+private val UPDATE_MEAL_SELECTED_BY_USER = "UPDATE_MEAL_SELECTED_BY_USER"
+
 var meal = 1
 var editProductWeight: Int = 1
 lateinit var currentProductWeight: TextView
@@ -74,10 +76,12 @@ class AddProductToDayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_product_to_day)
 
 
-        var selectedProductName: String = intent.getStringExtra("PRODUCT_NAME")
+        var selectedProductName: String? = intent.getStringExtra("PRODUCT_NAME")
 
         val db = MyDatabaseHelper(this)
-        product = db.getSelectedProduct(selectedProductName)!!
+        product = selectedProductName?.let { db.getSelectedProduct(it) }!!
+
+        val updateSelectedMealByUser = this.getSharedPreferences(MAIN_PREF,0).getInt(UPDATE_MEAL_SELECTED_BY_USER,9)
 
         //init views
         productName = product_name
@@ -201,7 +205,7 @@ class AddProductToDayActivity : AppCompatActivity() {
         for (i in mealArray.keys) array[i - 1].isEnabled = true
 
         //searching meal with should be upgraded by selected product
-        meal = readNotificationAlertTime() + 1
+        meal = if (updateSelectedMealByUser != 9) updateSelectedMealByUser else readNotificationAlertTime() + 1
         //highlights the button that is responsible for selecting a meal that should be enriched with the selected product
         array[if (meal > 0) meal - 1 else 0].isChecked = true
 
@@ -291,6 +295,21 @@ class AddProductToDayActivity : AppCompatActivity() {
                     product.id
                 )
 
+                var updateMeal = when(meal){
+                    1 -> product.breakfast
+                    2 -> product.secondBreakfast
+                    3 -> product.dinner
+                    4 -> product.dessert
+                    5 -> product.tea
+                    6 -> product.supper
+                    7 -> product.snacks
+                    8 -> product.training
+                    else -> 0
+                }
+                db.updateProduct(product.id,meal, updateMeal)
+
+                db.addNewProductToShoppingList(product.name,"")
+
                 setResult(Activity.RESULT_OK, intent)
                 finish()
 
@@ -304,6 +323,7 @@ class AddProductToDayActivity : AppCompatActivity() {
 
         //close dialog with no adding meal to current day
         cancel_bt.setOnClickListener {
+            editProductWeight = 0
             this.finish()
         }
 

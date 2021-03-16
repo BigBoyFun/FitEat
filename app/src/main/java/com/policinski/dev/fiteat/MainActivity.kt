@@ -19,6 +19,10 @@ import androidx.navigation.navOptions
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 import java.time.LocalDate
 import java.util.*
 import kotlin.math.abs
@@ -36,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if (!File("${this.applicationInfo.dataDir}/databases/PRODUCTS_SQLite_DB").exists()) copyDataBaseFromFile()
+
+        val readDatabase = MyDatabaseHelper(this)
+        readDatabase.readAllData()
+
         //create and setup bottom nav controller
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         val navController = findNavController(R.id.fragment)
@@ -50,6 +59,32 @@ class MainActivity : AppCompatActivity() {
 
         getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply()
 
+    }
+
+    fun copyDataBaseFromFile(){
+
+        val appDataPath = this.applicationInfo.dataDir
+
+        val dbFolder = File("$appDataPath/databases") //Make sure the /databases folder exists
+
+        dbFolder.mkdir() //This can be called multiple times.
+
+        val dbFilePath = File("$appDataPath/databases/PRODUCTS_SQLite_DB")
+
+        try {
+            val inputStream = this.assets.open("PRODUCTS_SQLite_DB")
+            val outputStream: OutputStream = FileOutputStream(dbFilePath)
+            val buffer = ByteArray(1024)
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } > 0) {
+                outputStream.write(buffer, 0, length)
+            }
+            outputStream.flush()
+            outputStream.close()
+            inputStream.close()
+        } catch (e: IOException) {
+            //handle
+        }
     }
 
     private fun createNotificationChannel(mealName: String) {

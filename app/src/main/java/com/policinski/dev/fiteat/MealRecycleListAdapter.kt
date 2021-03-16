@@ -12,6 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.diegodobelo.expandingview.ExpandingItem
 import kotlinx.android.synthetic.main.delate_layout.*
@@ -53,6 +58,8 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private val PREF_SNACKS_NOTIFICATION_TIME = "PREF_SNACKS_NOTIFICATION_TIME"
         private val PREF_TRAINING_NOTIFICATION_TIME = "PREF_TRAINING_NOTIFICATION_TIME"
 
+        private val UPDATE_MEAL_SELECTED_BY_USER = "UPDATE_MEAL_SELECTED_BY_USER"
+
         private val mealRowTitleMeal = itemView.meal_row_title_meal!!
         private val mealRowKcal = itemView.meal_row_kcal_tv!!
         private val mealRowPro = itemView.meal_row_pro_tv!!
@@ -66,6 +73,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private var notificationState =itemView.notification_meal_state_but
         private var mealTimePicker = itemView.meal_time_tv
         private var state: Boolean = false
+        private var addProductToMeal = itemView.bt_add_product_to_meal
         lateinit var item: ExpandingItem
 
         //edit dilog views
@@ -169,6 +177,12 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
             }
 
+            addProductToMeal.setOnClickListener { v ->
+
+                sharedPreferences.edit().putInt(UPDATE_MEAL_SELECTED_BY_USER, findMealByTitle(mealTitle)).commit()
+                Navigation.findNavController(itemView).navigate(R.id.products_fragment)
+            }
+
             if (expandableListView.itemsCount == 0) { //security created to prevent duplication of the drop-down list view when recycleView is scrolling
                 createItem("", position1,date,productMeal, mealTitle)
             }
@@ -246,6 +260,8 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         }
 
         private fun readMealNotificationState(title: String){
+
+            sharedPreferences.edit().putString(UPDATE_MEAL_SELECTED_BY_USER,"All")
 
             when(title){
                 itemView.context.getString(R.string.breakfast_1) -> state = sharedPreferences.getBoolean(PREF_BREAKFAST_NOTIFICATION,false)
@@ -429,7 +445,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         tvGx.text = "x"
                         editProductPortion = product.weight / baseProduct.weight
                         editWeight.text = editProductPortion.toString()
-                        currentWeight.text = editProductPortion.toString()
+                        currentWeight.text = (editProductPortion.toString().toInt() * baseProduct.weight).toString()
                     } else {
                         btSetWeight.isChecked = true
                     }
@@ -531,12 +547,12 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
                         //set new values in list
                         view.findViewById<TextView>(R.id.expanding_sub_item_product_nutrients_tv).text =
-                            "${product.weight}.g | K: ${product.kcal} | F: ${product.fat} | C: ${product.carbo} | P: ${product.protein}" //Set Nutrients
-
+                            "${currentWeight.text}.g | K: ${product.kcal} | F: ${product.fat} | C: ${product.carbo} | P: ${product.protein}" //Set Nutrients
 
                         editDialog.dismiss()
 
-                        notifyDataSetChanged()
+                        startActivity(item.context,Intent(item.context,RefreshtActivity::class.java),null)
+
                     } else {
                         Toast.makeText(itemView.context, R.string.set_weight_portion_more_them_zero,Toast.LENGTH_SHORT).show()
                     }
@@ -562,11 +578,12 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                         //refresh Nutrients Values In Expanding Layout Title
                         refreshNutrientsValuesInExpandingLayoutTitle(date)
 
-                        notifyDataSetChanged()
+                        deleteDialog.dismiss()
 
                         editDialog.dismiss()
 
-                        deleteDialog.dismiss()
+                        startActivity(item.context,Intent(item.context,RefreshtActivity::class.java),null)
+
                     }
 
                     deleteDialog.delate_but_cancel.setOnClickListener { deleteDialog.dismiss() }

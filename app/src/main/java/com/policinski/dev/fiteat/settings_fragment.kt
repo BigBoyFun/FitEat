@@ -87,6 +87,7 @@ class settings_fragment : Fragment(), View.OnClickListener {
         val supper = view.findViewById<CheckBox>(R.id.supper_check_box)
         val snacks = view.findViewById<CheckBox>(R.id.snacks_check_box)
         val training = view.findViewById<CheckBox>(R.id.training_check_box)
+        val clearUserHoises = view.findViewById<Button>(R.id.bt_clear_user_hoises)
 
         //init notification views
         val notificationBreakfastSwitch = view.notification_breakfast_switch
@@ -275,6 +276,11 @@ class settings_fragment : Fragment(), View.OnClickListener {
 
             Toast.makeText(requireContext(), getString(R.string.data_has_been_saved), Toast.LENGTH_SHORT).show()
 
+        }
+
+        clearUserHoises.setOnLongClickListener {
+            val dbManager = MyDatabaseHelper(requireContext())
+            dbManager.deleteUserHoses()
         }
 
         return view

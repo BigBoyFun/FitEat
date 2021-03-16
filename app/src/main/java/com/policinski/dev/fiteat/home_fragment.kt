@@ -5,12 +5,14 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.collection.arrayMapOf
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home_fragment.view.*
+import java.io.File
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,6 +34,8 @@ class home_fragment : Fragment() {
     private val PREF_MEAL_TRAINING = "PREF_MEAL_TRAINING"
 
     private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created for deleting product from specific meal(not from DB)
+
+    private val UPDATE_MEAL_SELECTED_BY_USER = "UPDATE_MEAL_SELECTED_BY_USER"
 
     private val header: MutableList<String> = ArrayList()
     private lateinit var mealAdapter: MealRecycleListAdapter
@@ -73,6 +77,9 @@ class home_fragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_home_fragment, container, false)
 
         v.context.getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply()
+
+        //this variable responsible for edit meal selected by user in home fragment, and show list of products with are assigned to this meal (if auto suggestion is turned off, the list includes all products in the database)
+        val updateSelectedMealByUser = this.requireContext().getSharedPreferences(MAIN_PREF,0).edit().putInt(UPDATE_MEAL_SELECTED_BY_USER,9).apply()
 
         selectedDayView = v.selected_date_tx
         val nextDay = v.next_date_bt
@@ -129,6 +136,8 @@ class home_fragment : Fragment() {
         }
 
         val db = MyDatabaseHelper(requireContext())
+//        db.openDataBase()
+
         val nutrientsSumArray = db.readDayTable(date.toString())
 
         //find view in homeFragment
@@ -186,6 +195,18 @@ class home_fragment : Fragment() {
         showMeals(date.toString())
 
         return v
+    }
+
+    fun checkDataBaseExist(): File? {
+
+        val fileDb = requireContext().getDatabasePath("PRODUCTS_SQLite_DB")
+        return if (fileDb.exists()){
+            Toast.makeText(context, "DB EXIST!!!!", Toast.LENGTH_SHORT).show()
+            fileDb
+        } else {
+            Toast.makeText(context, "DB DON'T EXIST", Toast.LENGTH_SHORT).show()
+            null
+        }
     }
 
     private fun getDatesOfNextMonth(): List<Date> {
@@ -248,10 +269,10 @@ class home_fragment : Fragment() {
 
         } else {
             //read nutrients preferences at current day from sharedPreferences and save them to database
-            prefkcal = sharedPreferences.getInt(PREF_KCAL, 0)
-            prefPro = sharedPreferences.getInt(PREF_PRO, 0).toDouble()
-            prefFat = sharedPreferences.getInt(PREF_FAT, 0).toDouble()
-            prefCarbo = sharedPreferences.getInt(PREF_CARBO, 0).toDouble()
+            prefkcal = sharedPreferences.getInt(PREF_KCAL, 2100)
+            prefPro = sharedPreferences.getInt(PREF_PRO, 170).toDouble()
+            prefFat = sharedPreferences.getInt(PREF_FAT, 120).toDouble()
+            prefCarbo = sharedPreferences.getInt(PREF_CARBO, 350).toDouble()
 
         }
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fit&amp;Eat</string>
+    <string name="app_name">DiMa</string>
     <string name="products">Produkty</string>
     <string name="meals">Posiłki</string>
     <string name="scanner">Skaner</string>
     <string name="cant_insert_product">NIe można dodać nowego produktu!</string>
     <string name="success">Sukces!</string>
     <string name="add_new_product">Dodaj nowy produkt.</string>
-    <string name="register">Zarejestruj.</string>
+    <string name="register">Zarejestruj</string>
     <string name="added_to_day">Produkt został dodany do dnia.</string>
     <string name="cant_add_pro_to_day">Nie powiodło się dodawanie wybranego produktu do dnia.</string>
     <string name="month_01">Styczeń</string>

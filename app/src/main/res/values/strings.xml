@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fit&amp;Eat</string>
+    <string name="app_name">DiMa</string>
     <string name="home">Home</string>
     <string name="products">Products</string>
     <string name="meals">Meals</string>
@@ -105,4 +105,10 @@
     <string name="select_basic_weight">Select basic weight</string>
     <string name="manufacturer">Manufacturer</string>
     <string name="name">Name</string>
+    <string name="clear_products_table">Clear products table</string>
+    <string name="clear_user_hoises">Clear user hoises(prompting products)</string>
+    <string name="shopping_list">Shopping list</string>
+    <string name="product_name">Product name</string>
+    <string name="delete_selected">Delete selected</string>
+    <string name="enter_the_name_of_the_new_product">Enter the name of the new product</string>
 </resources>

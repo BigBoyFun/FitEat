@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/veryLightGrey"
+    tools:context=".AddProductToDayActivity">
+
+
+    <Button
+        android:id="@+id/ok_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/green_bt_shape"
+        android:text="@android:string/ok"
+        app:layout_constraintBottom_toBottomOf="@+id/cancel_bt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/cancel_bt" />
+
+    <Button
+        android:id="@+id/cancel_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/red_bt_shape"
+        android:text="@android:string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ok_bt"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/cancel_bt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_nutrients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="4dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="3dp"
+                app:layout_constraintBottom_toTopOf="@+id/textView18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_name">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView18"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="#33FF4444"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView14"
+                        app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+                    <ImageView
+                        android:id="@+id/imageView19"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="#33FFBB33"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/textView16"
+                        app:layout_constraintTop_toTopOf="@+id/textView16"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <ImageView
+                        android:id="@+id/imageView20"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="#33AA66CC"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView17"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView17"
+                        app:layout_constraintTop_toTopOf="@+id/textView17" />
+
+                    <ImageView
+                        android:id="@+id/imageView21"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="#3333B5E5"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/textView15"
+                        app:layout_constraintTop_toTopOf="@+id/textView15"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/calculate_kcal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView18"
+                        app:layout_constraintStart_toStartOf="@+id/guideline6" />
+
+                    <TextView
+                        android:id="@+id/calculate_carbo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView17"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView20"
+                        app:layout_constraintStart_toStartOf="@+id/guideline6" />
+
+                    <TextView
+                        android:id="@+id/calculate_fat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView16"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView19"
+                        app:layout_constraintStart_toStartOf="@+id/guideline6" />
+
+                    <TextView
+                        android:id="@+id/calculate_pro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView21"
+                        app:layout_constraintStart_toStartOf="@+id/guideline6" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/red_bt_shape"
+                        android:text="Kcal"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toTopOf="@+id/textView16"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/blue_bt_shape"
+                        android:text="Protein"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/yelow_bt_shape"
+                        android:text="Fat"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toTopOf="@+id/textView17"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/purple_bt_shape"
+                        android:text="Carbo"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toTopOf="@+id/textView15"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <TextView
+                        android:id="@+id/textView49"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/calculate_kcal"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView18"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/calculate_kcal"
+                        app:layout_constraintTop_toTopOf="@+id/calculate_kcal" />
+
+                    <TextView
+                        android:id="@+id/textView50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/calculate_fat"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView19"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/calculate_fat"
+                        app:layout_constraintTop_toTopOf="@+id/calculate_fat" />
+
+                    <TextView
+                        android:id="@+id/textView51"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/calculate_carbo"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView20"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/calculate_carbo"
+                        app:layout_constraintTop_toTopOf="@+id/calculate_carbo" />
+
+                    <TextView
+                        android:id="@+id/textView52"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/calculate_pro"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView21"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/calculate_pro"
+                        app:layout_constraintTop_toTopOf="@+id/calculate_pro" />
+
+                    <ImageView
+                        android:id="@+id/imageView24"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="#33D7D7D7"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView48"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView48"
+                        app:layout_constraintTop_toTopOf="@+id/textView48" />
+
+                    <TextView
+                        android:id="@+id/textView48"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/gray_bt_shape"
+                        android:text="@string/weight"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_current_product_weigth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView24"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView24"
+                        app:layout_constraintStart_toStartOf="@+id/guideline6"
+                        app:layout_constraintTop_toTopOf="@+id/imageView24" />
+
+                    <TextView
+                        android:id="@+id/textView57"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView24"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView24"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/tv_current_product_weigth"
+                        app:layout_constraintTop_toTopOf="@+id/imageView24" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Set weight"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/card_view_set_weight_portion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_view_meal_selection" />
+
+            <ImageView
+                android:id="@+id/imageView23"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/product_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/background_home_fragment" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Select meal"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/card_view_meal_selection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_view_nutrients" />
+
+            <TextView
+                android:id="@+id/product_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:text="Product Name"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/card_view_nutrients"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_meal_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="3dp"
+                app:layout_constraintBottom_toTopOf="@+id/textView41"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView18">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meal_selection_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/tea_but_suggestion_5"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoSizeTextType="none"
+                        android:background="@drawable/meal_selection_button_state"
+                        android:checked="false"
+                        android:enabled="true"
+                        android:freezesText="false"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textIsSelectable="false"
+                        android:textOff="@string/tea_5"
+                        android:textOn="@string/tea_5"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/supper_but_suggestion_6"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/breakfast_but_suggestion_1" />
+
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/supper_but_suggestion_6"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoSizeTextType="none"
+                        android:background="@drawable/meal_selection_button_state"
+                        android:checked="false"
+                        android:enabled="true"
+                        android:freezesText="false"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textIsSelectable="false"
+                        android:textOff="@string/supper_6"
+                        android:textOn="@string/supper_6"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/snacks_but_suggestion_7"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tea_but_suggestion_5"
+                        app:layout_constraintTop_toBottomOf="@+id/second_breakfast_but_suggestion_2" />
+
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/snacks_but_suggestion_7"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoSizeTextType="none"
+                        android:background="@drawable/meal_selection_button_state"
+                        android:checked="false"
+                        android:enabled="true"
+                        android:freezesText="false"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textIsSelectable="false"
+                        android:textOff="@string/snacks_7"
+                        android:textOn="@string/snacks_7"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/training_but_suggestion_8"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/supper_but_suggestion_6"
+                        app:layout_constraintTop_toBottomOf="@+id/dinner_but_suggestion_3" />
+
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/training_but_suggestion_8"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoSizeTextType="none"
+                        android:background="@drawable/meal_selection_button_state"
+                        android:checked="false"
+                        android:enabled="true"
+                        android:freezesText="false"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textIsSelectable="false"
+                        android:textOff="@string/training_8"
+                        android:textOn="@string/training_8"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/snacks_but_suggestion_7"
+                        app:layout_constraintTop_toBottomOf="@+id/dessert_but_suggestion_4" />
+
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/breakfast_but_suggestion_1"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoSizeTextType="none"
+                        android:background="@drawable/meal_selection_button_state"
+                        android:checked="false"
+                        android:freezesText="false"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textIsSelectable="false"
+                        android:textOff="@string/breakfast_1"
+                        android:textOn="@string/breakfast_1"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@+id/tea_but_suggestion_5"
+                        app:layout_constraintEnd_toStartOf="@+id/second_breakfast_but_suggestion_2"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/second_breakfast_but_suggestion_2"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoSizeTextType="none"
+                        android:background="@drawable/meal_selection_button_state"
+                        android:checked="false"
+                        android:enabled="true"
+                        android:freezesText="false"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textIsSelectable="false"
+                        android:textOff="@string/second_breakfast_2"
+                        android:textOn="@string/second_breakfast_2"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@+id/supper_but_suggestion_6"
+                        app:layout_constraintEnd_toStartOf="@+id/dinner_but_suggestion_3"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/breakfast_but_suggestion_1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/dinner_but_suggestion_3"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoSizeTextType="none"
+                        android:background="@drawable/meal_selection_button_state"
+                        android:checked="false"
+                        android:enabled="true"
+                        android:freezesText="false"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textIsSelectable="false"
+                        android:textOff="@string/dinner_3"
+                        android:textOn="@string/dinner_3"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@+id/snacks_but_suggestion_7"
+                        app:layout_constraintEnd_toStartOf="@+id/dessert_but_suggestion_4"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/second_breakfast_but_suggestion_2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/dessert_but_suggestion_4"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoSizeTextType="none"
+                        android:background="@drawable/meal_selection_button_state"
+                        android:checked="false"
+                        android:enabled="true"
+                        android:freezesText="false"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textIsSelectable="false"
+                        android:textOff="@string/dessert_4"
+                        android:textOn="@string/dessert_4"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@+id/training_but_suggestion_8"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/dinner_but_suggestion_3"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_set_weight_portion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView41">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView22"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toTopOf="@+id/bt_last_weight_portion"
+                        app:layout_constraintEnd_toStartOf="@+id/bt_one_more"
+                        app:layout_constraintStart_toEndOf="@+id/bt_one_less"
+                        app:layout_constraintTop_toTopOf="@+id/bt_one_less"
+                        app:srcCompat="@drawable/calendar_item_background" />
+
+                    <Button
+                        android:id="@+id/bt_one_more"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/ic_baseline_add_24"
+                        android:foreground="@drawable/add_remove_bt_background_change_on_click"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView22"
+                        app:layout_constraintDimensionRatio="w,1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/button_set_portion" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:selectAllOnFocus="true"
+                        android:text="0"
+                        android:ems="2"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_text_light"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView22"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView22"
+                        app:layout_constraintStart_toStartOf="@+id/imageView22"
+                        app:layout_constraintTop_toTopOf="@+id/imageView22" />
+
+                    <Button
+                        android:id="@+id/bt_one_less"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/ic_baseline_remove_24"
+                        android:foreground="@drawable/add_remove_bt_background_change_on_click"
+                        app:layout_constraintDimensionRatio="w,1:1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/button_set_weight" />
+
+                    <ToggleButton
+                        android:id="@+id/button_set_weight"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/toggle_button_weight_shape_left"
+                        android:checked="true"
+                        android:textOff="@string/weight"
+                        android:textOn="@string/weight"
+                        app:layout_constraintDimensionRatio="4:1"
+                        app:layout_constraintEnd_toStartOf="@+id/button_set_portion"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ToggleButton
+                        android:id="@+id/button_set_portion"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/toggle_button_portion_shape_right"
+                        android:checked="false"
+                        android:textOff="@string/portion"
+                        android:textOn="@string/portion"
+                        app:layout_constraintDimensionRatio="4:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/button_set_weight"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_multiplier_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text=".g"
+                        app:layout_constraintBottom_toBottomOf="@+id/input_weight"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView22"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/input_weight"
+                        app:layout_constraintTop_toTopOf="@+id/input_weight" />
+
+                    <Button
+                        android:id="@+id/bt_last_weight_portion"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/add_remove_bt_background_change_on_click"
+                        android:text="@string/add_last_weight_portion"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/bt_one_more"
+                        app:layout_constraintStart_toStartOf="@+id/bt_one_less" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

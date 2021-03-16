@@ -15,8 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.RequiresApi
-import androidx.constraintlayout.solver.widgets.Rectangle
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products_fragment.*
 import kotlinx.android.synthetic.main.fragment_products_fragment.view.but_filter_all_products
@@ -34,6 +32,12 @@ import kotlinx.android.synthetic.main.fragment_products_fragment.view.products_r
 import kotlinx.android.synthetic.main.fragment_products_fragment.view.searchView
 import kotlinx.android.synthetic.main.fragment_products_fragment.view.text_meal_name
 import kotlinx.android.synthetic.main.fragment_products_fragment_copy.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -74,6 +78,8 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, View.OnClic
     private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created to show the correct meal list and correctly select the filter button
     private val PREF_DELETE_PRODUCT_FROM_LIST = "PREF_DELETE_PRODUCT_FROM_LIST" //created for deleting product from specific meal(not from DB)
 
+    private val UPDATE_MEAL_SELECTED_BY_USER = "UPDATE_MEAL_SELECTED_BY_USER"
+
     private var current_kcal = 0
     private var current_pro = 0.0
     private var current_fat = 0.0
@@ -94,8 +100,11 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, View.OnClic
 
         }
 
+        //this variable responsible for edit meal selected by user in home fragment, and show list of products with are assigned to this meal (if auto suggestion is turned off, the list includes all products in the database)
+        val updateSelectedMealByUser = this.requireContext().getSharedPreferences(MAIN_PREF,0).getInt(UPDATE_MEAL_SELECTED_BY_USER,9)
+
         //read from sharedPref information about current meal that should be updated
-        meal = readNotificationAlertTime()
+        meal = if ( updateSelectedMealByUser != 9) updateSelectedMealByUser -1 else readNotificationAlertTime()
 
         productList = mutableListOf() //initialization of the list that will contain products
 
@@ -103,7 +112,7 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, View.OnClic
 
         this.requireContext().getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,"All").apply() //necessarily for correctly refresh fragment when user click on button "Products" in bottom menu
         loadingProductListWithAutoSuggest()
-        this.requireContext().getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,findMealByNum(meal)).apply() //necessarily for correctly refresh fragment when user click on button "Products" in bottom menu
+        this.requireContext().getSharedPreferences(MAIN_PREF,0).edit().putString(PREF_CURRENTLY_VIEWED_LIST,findMealByNum(meal + 1)).apply() //necessarily for correctly refresh fragment when user click on button "Products" in bottom menu
 
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_products_fragment_copy, container, false)
@@ -131,13 +140,16 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, View.OnClic
         //searching product recycle list view
         view.searchView.setOnQueryTextListener(this)
 
-        view.products_recycle_view.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapterProduct = MyAdapter()
-            adapter = adapterProduct
-        }
+        CoroutineScope(IO).launch{
 
-        adapterProduct.submitList(productList)
+            view.products_recycle_view.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapterProduct = MyAdapter()
+                adapter = adapterProduct
+            }
+
+            adapterProduct.submitList(productList)
+        }
 
         val kcalUserPref = view.home_user_pref_kcal
         val fatUserPref = view.home_user_pref_fat
@@ -291,7 +303,7 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, View.OnClic
 
     }
 
-    private fun loadProdactsFromDataBase(currentMeal: Int, autoSuggest: Boolean) {
+    fun loadProdactsFromDataBase(currentMeal: Int, autoSuggest: Boolean) {
 
         if(productList.size > 0) productList.clear()
 
@@ -387,10 +399,10 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, View.OnClic
     ) {
 
         val shader = requireContext().getSharedPreferences(MAIN_PREF,0)
-        kcalUserPref.text = shader?.getInt(PREF_KCAL,0).toString()
-        fatUserPref.text = shader?.getInt(PREF_FAT,0).toString()
-        carboUserPref.text = shader?.getInt(PREF_CARBO,0).toString()
-        proUserPref.text = shader?.getInt(PREF_PRO,0).toString()
+        kcalUserPref.text = shader?.getInt(PREF_KCAL,2100).toString()
+        fatUserPref.text = shader?.getInt(PREF_FAT,120).toString()
+        carboUserPref.text = shader?.getInt(PREF_CARBO,350).toString()
+        proUserPref.text = shader?.getInt(PREF_PRO,170).toString()
 //        autoSuggestMeal = shader!!.getBoolean(PREF_AUTO_SUGGEST_MEAL,true)
 
     }

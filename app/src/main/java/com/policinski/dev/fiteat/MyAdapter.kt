@@ -30,7 +30,6 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val viewBackground = itemView.view_background_cardView
         val name: TextView = itemView.product_name_row
         val manufacturer: TextView = itemView.product_manufacturer_row
         val kcal: TextView = itemView.product_kcal_row
@@ -44,12 +43,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
         val editProduct: Button = itemView.edit_product_bt
         val lastAddedWeight: TextView = itemView.last_added_weight
         var meal = 1
-        lateinit var array: ArrayList<Button>
         private val MAIN_PREF = "MAIN_PREF"
-        private val SUM_KCAL = "SumKcal"
-        private val SUM_PRO = "SumPro"
-        private val SUM_FAT = "SumFat"
-        private val SUM_CARBO = "SumCarbo"
         private val PREF_MEAL_BREAKFAST = "PREF_BREAKFAST"
         private val PREF_MEAL_SECOND_BREAKFAST = "PREF_MEAL_SECOND_BREAKFAST"
         private val PREF_MEAL_DINNER = "PREF_MEAL_DINNER"
@@ -60,8 +54,6 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
         private val PREF_MEAL_TRAINING = "PREF_MEAL_TRAINING"
 
         private val PREF_CURRENTLY_VIEWED_LIST = "PREF_CURRENTLY_VIEWED_LIST" //created for deleting product from specific meal(not from DB)
-
-        private val deleteDialog = Dialog(itemView.context)
 
         fun bind(product: Product){
 
@@ -81,11 +73,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
             //find biggest nutrient and set background for view -> created for show user what kind off meal is this product
             val nutrientListOf = listOf<Double>(product.fat,product.carbo,product.protein)
-//            when(nutrientListOf.indexOf(nutrientListOf.max())){
-//                0 -> viewBackground.setBackgroundResource(R.drawable.rounded_frame_yelow)
-//                1 -> viewBackground.setBackgroundResource(R.drawable.rounded_frame_purple)
-//                2 -> viewBackground.setBackgroundResource(R.drawable.rounded_frame_blue)
-//            }
+
             when(nutrientListOf.indexOf(nutrientListOf.max())){
                 0 -> addToDay.setBackgroundResource(R.drawable.yelow_bt_shape)
                 1 -> addToDay.setBackgroundResource(R.drawable.purple_bt_shape)
