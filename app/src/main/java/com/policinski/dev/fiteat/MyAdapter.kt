@@ -139,7 +139,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
             }
 
             editProduct.setOnClickListener {
-                val intent = Intent(itemView.context, newProductActivity::class.java)
+                val intent = Intent(itemView.context, ProductSettingsClass::class.java)
                 intent.putExtra("EditProductName",product.name)
                 ContextCompat.startActivities(itemView.context, arrayOf(intent),null)
             }

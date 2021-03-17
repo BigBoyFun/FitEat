@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.opengl.Visibility
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -130,6 +131,7 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             //set visible if date is today, else set invisible(cant change past and future )
             notificationState.visibility = if (date == LocalDate.now().toString() && mealTitle != itemView.context.getString(R.string.snacks_7) && mealTitle != itemView.context.getString(R.string.training_8)) View.VISIBLE else View.GONE
             mealTimePicker.visibility = if (date == LocalDate.now().toString() && mealTitle != itemView.context.getString(R.string.snacks_7) && mealTitle != itemView.context.getString(R.string.training_8)) View.VISIBLE else View.GONE
+            addProductToMeal.visibility = if (date == LocalDate.now().toString()) View.VISIBLE else View.INVISIBLE
 
             notificationState.setOnClickListener {
                 when(state){

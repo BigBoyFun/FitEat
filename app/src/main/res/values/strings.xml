@@ -26,7 +26,7 @@
     <string name="month_12">December</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
-    <string name="are_you_sure_you_want_delete">Are you sure, you want delete:</string>
+    <string name="are_you_sure_you_want_delete">If you want to delete this product from currently viewed list, you must press and hold trash cun icon, otherwise  if you want to delete this product from database, click on "Delete" button in this window.</string>
     <string name="product_not_found">Product not found.</string>
     <string name="breakfast_1">Breakfast</string>
     <string name="second_breakfast_2">Second breakfast</string>

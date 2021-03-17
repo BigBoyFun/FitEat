@@ -13,19 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <uses-library
-            android:name="com.google.android.wearable"
+            android:name="com.google.android.telephony"
             android:required="false" />
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
         <meta-data
-            android:name="com.google.android.wearable.standalone"
+            android:name="com.google.android.telephony.standalone"
             android:value="true" />
 
         <activity android:name=".RefreshtActivity" />
         <activity android:name=".AddProductToDayActivity" />
         <activity android:name=".newProductActivity" />
+        <activity android:name=".ProductSettingsClass" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

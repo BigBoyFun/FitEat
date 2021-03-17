@@ -24,7 +24,7 @@
     <string name="month_12">Gródzień</string>
     <string name="cancel">Anuluj</string>
     <string name="delete">Usuń</string>
-    <string name="are_you_sure_you_want_delete">Czy na pewno chcesz usunąć:</string>
+    <string name="are_you_sure_you_want_delete">Jeśli chcesz usunąć ten produkt z aktualnie przeglądanej listy, musisz wcisnąć i przytrzymać ikonę kosza, w przeciwnym razie, jeśli chcesz usunąć ten produkt z bazy danych, kliknij przycisk "'Usuń'" w tym oknie</string>
     <string name="product_not_found">Produkt nie znaleziony.</string>
     <string name="breakfast_1">Śniadanie</string>
     <string name="second_breakfast_2">Drugie śniadanie</string>
