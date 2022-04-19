@@ -3,6 +3,7 @@ package com.policinski.dev.fiteat
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.*
@@ -23,10 +24,11 @@ import kotlinx.android.synthetic.main.product_row_view.view.product_protein_row
 import kotlinx.android.synthetic.main.product_row_view.view.product_row_weight_tv
 import kotlinx.android.synthetic.main.product_row_view_copy.view.*
 
-class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+class MyAdapter(_mealFromProductFragment: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     var itemList = mutableListOf<Product>()
     var filterItem = mutableListOf<Product>()
+    var mealFromProductFragment = _mealFromProductFragment //read meal that should be consume now(based on alarm time)
 
     inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -103,12 +105,37 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
                 deleteDialog.setContentView(R.layout.delate_layout)
                 deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+                var mealName: String
+                sharedPreferences.getString(PREF_CURRENTLY_VIEWED_LIST,"All").toString()
+                    .also { mealName = when (it){
+                        "Breakfast" -> deleteDialog.context.getString(R.string.breakfast_1)
+                        "SecondBreakfast" -> deleteDialog.context.getString(R.string.second_breakfast_2)
+                        "Dinner" -> deleteDialog.context.getString(R.string.dinner_3)
+                        "Dessert" -> deleteDialog.context.getString(R.string.dessert_4)
+                        "Tea" -> deleteDialog.context.getString(R.string.tea_5)
+                        "Supper" -> deleteDialog.context.getString(R.string.supper_6)
+                        "Snacks" -> deleteDialog.context.getString(R.string.snacks_7)
+                        "Training" -> deleteDialog.context.getString(R.string.training_8)
+                        else -> "All"
+                    }
+                    }
+
+                deleteDialog.textView12.text = if (mealName == "All") deleteDialog.context.getString(R.string.are_you_sure_you_want_to_delete_this_product_from_database) else "${deleteDialog.context.getString(R.string.are_you_sure_you_want_delete)} \n ( $mealName )"
                 deleteDialog.delate_dialog_product_name_tv.text = product.name
                 deleteDialog.delate_dialog_delate_but.setOnClickListener {
-                    db.deleteProduct(product.id)
-                    deleteDialog.dismiss()
-                    itemList.remove(product)
-                    notifyDataSetChanged()
+                    if (mealName != "All" ) {
+                        db.deleteProductFromList(mealName, product.id)
+                        itemList.remove(product)
+                        notifyDataSetChanged()
+                        deleteDialog.dismiss()
+                        Toast.makeText(itemView.context,"${product.name} is deleted from $mealName",Toast.LENGTH_SHORT).show()
+                    } else {
+                        db.deleteProduct(product.id)
+                        itemList.remove(product)
+                        notifyDataSetChanged()
+                        deleteDialog.dismiss()
+                        Toast.makeText(itemView.context,"${product.name} is deleted from $mealName",Toast.LENGTH_SHORT).show()
+                    }
                 }
                 deleteDialog.delate_but_cancel.setOnClickListener { deleteDialog.dismiss() }
 
@@ -134,6 +161,7 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
                 val intent = Intent(itemView.context,AddProductToDayActivity::class.java)
                 intent.putExtra("PRODUCT_NAME",product.name)
+                intent.putExtra("MEAL",mealFromProductFragment)
                 ContextCompat.startActivity(itemView.context,intent,null)
 
             }

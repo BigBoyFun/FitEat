@@ -285,7 +285,6 @@ class MealRecycleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 itemView.context.getString(R.string.supper_6) -> mealTimePicker.text = sharedPreferences.getString(PREF_SUPPER_NOTIFICATION_TIME,"00:00")
                 itemView.context.getString(R.string.snacks_7) -> mealTimePicker.text = sharedPreferences.getString(PREF_SNACKS_NOTIFICATION_TIME,"00:00")
 //                itemView.context.getString(R.string.training_8) -> mealTimePicker.text = sharedPreferences.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
-//                itemView.context.getString(R.string.training_8) -> mealTimePicker.text = sharedPreferences.getString(PREF_TRAINING_NOTIFICATION_TIME,"00:00")
             }
 
             when(state){

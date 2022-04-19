@@ -8,13 +8,13 @@
     android:foregroundGravity="fill"
     tools:context=".meals_fragment">
 
-    <ImageView
+    <View
         android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/background_home_fragment"
-        app:layout_constraintBottom_toTopOf="@+id/textView26"
+        android:background="@drawable/background_home_fragment"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,9 +24,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/shopping_list"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +38,6 @@
         android:id="@+id/scrollView5"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:background="@color/light_gray_custom"
         app:layout_constraintBottom_toTopOf="@+id/name_product_add_shopping_list"

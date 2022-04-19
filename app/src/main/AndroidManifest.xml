@@ -23,14 +23,18 @@
             android:name="com.google.android.telephony.standalone"
             android:value="true" />
 
-        <activity android:name=".RefreshtActivity" />
-        <activity android:name=".AddProductToDayActivity" />
-        <activity android:name=".newProductActivity" />
-        <activity android:name=".ProductSettingsClass" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".RefreshtActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AddProductToDayActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".newProductActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ProductSettingsClass"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

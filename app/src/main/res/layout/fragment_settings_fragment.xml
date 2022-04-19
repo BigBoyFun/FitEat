@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/veryLightGrey"
     android:isScrollContainer="true"
-    tools:context=".settings_fragment">
+    tools:context=".SettingsFragment">
 
     <Button
         android:id="@+id/ok_product_settings_dialog"
@@ -17,7 +17,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/green_bt_shape"
-        android:text="SAVE"
+        android:text="@string/save"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:visibility="visible"
@@ -102,28 +102,109 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <Button
+                        android:id="@+id/bt_clear_user_hoises"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/red_bt_shape"
+                        android:text="@string/clear"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+                    <Button
+                        android:id="@+id/bt_clear_products_table"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/red_bt_shape"
+                        android:text="@string/clear"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView38" />
+
                     <Switch
                         android:id="@+id/autoSuggest_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:layout_marginEnd="24dp"
-                        android:layout_marginBottom="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView33"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@+id/textView33" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView33"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
                         android:elevation="1dp"
                         android:text="@string/auto_suggest_meal_list"
                         android:textColor="@android:color/tertiary_text_dark"
                         android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/autoSuggest_switch"
+                        app:layout_constraintEnd_toStartOf="@+id/autoSuggest_switch"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/autoSuggest_switch"></TextView>
+                        app:layout_constraintTop_toBottomOf="@+id/textView36"></TextView>
+
+                    <TextView
+                        android:id="@+id/textView36"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/advertising_tv"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@+id/advertising_swith"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Switch
+                        android:id="@+id/advertising_swith"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView36"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/textView36" />
+
+                    <TextView
+                        android:id="@+id/textView37"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/clear_user_hoises"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView33" />
+
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/clear_data_base_but"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bt_clear_user_hoises" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -397,8 +478,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:elegantTextHeight="false"
                         android:elevation="1dp"
-                        android:text="Kcal"
+                        android:inputType="textCapSentences"
+                        android:text="@string/kcal"
                         android:textColor="@android:color/tertiary_text_dark"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -414,6 +497,7 @@
                         android:maxEms="4"
                         android:maxLength="4"
                         android:paddingVertical="2dp"
+                        android:selectAllOnFocus="true"
                         android:text="0"
                         android:textAlignment="center"
                         android:textSize="18sp"
@@ -429,7 +513,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:elevation="1dp"
-                        android:text="Fat"
+                        android:text="@string/fat"
                         android:textColor="@android:color/tertiary_text_dark"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/textView8"
@@ -452,12 +536,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="16dp"
                         android:elevation="1dp"
-                        android:text="Protein"
+                        android:text="@string/protein_with_tabs"
                         android:textColor="@android:color/tertiary_text_dark"
                         android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/textView11"
                         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
@@ -465,7 +547,7 @@
                         android:id="@+id/pro_user_product_settings_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="2dp"
+                        android:layout_marginEnd="4dp"
                         android:background="@drawable/calendar_item_background"
                         android:ems="3"
                         android:inputType="numberSigned|number|phone"
@@ -485,7 +567,7 @@
                         android:id="@+id/carbo_user_product_settings_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="2dp"
+                        android:layout_marginEnd="4dp"
                         android:background="@drawable/calendar_item_background"
                         android:ems="3"
                         android:inputType="numberSigned|number|phone"
@@ -505,7 +587,7 @@
                         android:id="@+id/fat_user_product_settings_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="2dp"
+                        android:layout_marginEnd="4dp"
                         android:background="@drawable/calendar_item_background"
                         android:ems="3"
                         android:inputType="numberSigned|number|phone"
@@ -550,6 +632,130 @@
                         app:layout_constraintBottom_toBottomOf="@+id/pro_user_product_settings_dialog"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/pro_user_product_settings_dialog" />
+
+                    <TextView
+                        android:id="@+id/textView27"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="%"
+                        app:layout_constraintBottom_toBottomOf="@+id/fat_user_product_settings_dialog"
+                        app:layout_constraintEnd_toStartOf="@+id/fat_user_product_settings_dialog" />
+
+                    <TextView
+                        android:id="@+id/textView28"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="%"
+                        app:layout_constraintBottom_toBottomOf="@+id/carbo_user_product_settings_dialog"
+                        app:layout_constraintEnd_toStartOf="@+id/carbo_user_product_settings_dialog" />
+
+                    <TextView
+                        android:id="@+id/textView29"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="%"
+                        app:layout_constraintBottom_toBottomOf="@+id/pro_user_product_settings_dialog"
+                        app:layout_constraintEnd_toStartOf="@+id/pro_user_product_settings_dialog" />
+
+                    <EditText
+                        android:id="@+id/set_fat_in_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/calendar_item_background"
+                        android:ems="3"
+                        android:inputType="number"
+                        android:maxEms="2"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp"
+                        android:selectAllOnFocus="true"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView27"
+                        app:layout_constraintEnd_toStartOf="@+id/textView27"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/textView10" />
+
+                    <EditText
+                        android:id="@+id/set_carbo_in_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/calendar_item_background"
+                        android:ems="3"
+                        android:inputType="number"
+                        android:maxEms="2"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp"
+                        android:selectAllOnFocus="true"
+                        android:textAlignment="center"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView28"
+                        app:layout_constraintEnd_toStartOf="@+id/textView28"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/textView11" />
+
+                    <EditText
+                        android:id="@+id/set_protein_in_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/calendar_item_background"
+                        android:ems="3"
+                        android:inputType="number"
+                        android:maxEms="2"
+                        android:maxLength="2"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp"
+                        android:selectAllOnFocus="true"
+                        android:textAlignment="center"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView29"
+                        app:layout_constraintEnd_toStartOf="@+id/textView29"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/textView9" />
+
+                    <TextView
+                        android:id="@+id/textView32"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/left_percent"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView9"
+                        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+                    <TextView
+                        android:id="@+id/left_percent_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/calendar_item_background"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView32"
+                        app:layout_constraintEnd_toStartOf="@+id/textView34"
+                        app:layout_constraintStart_toStartOf="@+id/set_protein_in_percent"
+                        app:layout_constraintTop_toTopOf="@+id/textView32" />
+
+                    <TextView
+                        android:id="@+id/textView34"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="%"
+                        app:layout_constraintBottom_toBottomOf="@+id/left_percent_tv"
+                        app:layout_constraintEnd_toStartOf="@+id/pro_user_product_settings_dialog" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -569,36 +775,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/bt_clear_user_hoises"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/gray_bt_shape"
-                        android:text="@string/clear_user_hoises"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/bt_clear_products_table"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="@drawable/gray_bt_shape"
-                        android:text="Clear products  table"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/bt_clear_user_hoises" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="match_parent"/>
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -609,8 +786,8 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
+        android:background="@drawable/background_home_fragment"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -620,11 +797,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
         android:clickable="false"
-        android:text="SETTINGS"
+        android:text="@string/action_settings"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

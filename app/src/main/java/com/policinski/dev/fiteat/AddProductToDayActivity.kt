@@ -12,6 +12,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.arrayMapOf
+import androidx.viewbinding.ViewBinding
+import com.policinski.dev.fiteat.databinding.ActivityAddProductToDayBinding
 import kotlinx.android.synthetic.main.activity_add_product_to_day.*
 import kotlinx.android.synthetic.main.fragment_settings_fragment.*
 import java.text.SimpleDateFormat
@@ -71,17 +73,21 @@ lateinit var btLastWeightPortion: Button
 
 class AddProductToDayActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityAddProductToDayBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_product_to_day)
+        binding = ActivityAddProductToDayBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
 
         var selectedProductName: String? = intent.getStringExtra("PRODUCT_NAME")
+        val updateSelectedMealByUser: Int = intent.getIntExtra("MEAL",9)
 
         val db = MyDatabaseHelper(this)
         product = selectedProductName?.let { db.getSelectedProduct(it) }!!
 
-        val updateSelectedMealByUser = this.getSharedPreferences(MAIN_PREF,0).getInt(UPDATE_MEAL_SELECTED_BY_USER,9)
 
         //init views
         productName = product_name
@@ -207,7 +213,7 @@ class AddProductToDayActivity : AppCompatActivity() {
         //searching meal with should be upgraded by selected product
         meal = if (updateSelectedMealByUser != 9) updateSelectedMealByUser else readNotificationAlertTime() + 1
         //highlights the button that is responsible for selecting a meal that should be enriched with the selected product
-        array[if (meal > 0) meal - 1 else 0].isChecked = true
+        array[meal].isChecked = true
 
 
         //changing highlights on button which response for selected meal and shows meal name in textView
@@ -289,7 +295,7 @@ class AddProductToDayActivity : AppCompatActivity() {
                     calculatePro.text.toString().replace(',', '.').toDouble(),
                     calculateCarbo.text.toString().replace(',', '.').toDouble(),
                     calculateFat.text.toString().replace(',', '.').toDouble(),
-                    meal,
+                    meal + 1,
                     if (btSetPortion.isChecked) product.weight * inputWeight.text.toString()
                         .toInt() else inputWeight.text.toString().toInt(),
                     product.id
@@ -461,7 +467,9 @@ class AddProductToDayActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-
-
+        /* restart this counter after close this activity
+           (sometime happens it don't restart
+           and after next open this activity counter start from last used value) */
+        editProductWeight = 1
     }
 }
